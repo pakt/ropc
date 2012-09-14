@@ -1,0 +1,108 @@
+### fn: a.out, data_s: 0x0804a060, data_e: 0x0841a980
+LoadConst(ebx, 0x0), (s: 0x8048488, e: 0x804848a), modified: [;ebx], stack_fix: 8
+LoadConst(ebx, 0x8), (s: 0x8048485, e: 0x804848a), modified: [;ebx], stack_fix: 16
+LoadConst(ebp, 0x0), (s: 0x80489f8, e: 0x80489fa), modified: [;ebp], stack_fix: 8
+LoadConst(ebx, 0x0), (s: 0x80489f7, e: 0x80489fa), modified: [;ebx;ebp], stack_fix: 12
+LoadConst(ebp, 0x4), (s: 0x80489f7, e: 0x80489fa), modified: [;ebx;ebp], stack_fix: 12
+LoadConst(ebp, 0x0), (s: 0x80489f6, e: 0x80489fa), modified: [;eax;ebp], stack_fix: 8
+LoadConst(ebx, 0x4), (s: 0x80489f4, e: 0x80489fa), modified: [;ebx;ebp], stack_fix: 16
+LoadConst(ebp, 0x8), (s: 0x80489f4, e: 0x80489fa), modified: [;ebx;ebp], stack_fix: 16
+LoadConst(ebx, 0x0), (s: 0x80489f1, e: 0x80489fa), modified: [;ebx;ebp], stack_fix: 12
+LoadConst(ebp, 0x4), (s: 0x80489f1, e: 0x80489fa), modified: [;ebx;ebp], stack_fix: 12
+LoadConst(ebx, 0x0), (s: 0x80489f0, e: 0x80489fa), modified: [;ebx;ebp], stack_fix: 12
+LoadConst(ebp, 0x4), (s: 0x80489f0, e: 0x80489fa), modified: [;ebx;ebp], stack_fix: 12
+LoadConst(ebx, 0x0), (s: 0x80489c2, e: 0x80489c6), modified: [;ebx], stack_fix: 4
+LoadConst(ebp, 0x0), (s: 0x80489af, e: 0x80489b1), modified: [;ebp], stack_fix: 8
+LoadConst(edi, 0x0), (s: 0x80489ae, e: 0x80489b1), modified: [;edi;ebp], stack_fix: 12
+LoadConst(ebp, 0x4), (s: 0x80489ae, e: 0x80489b1), modified: [;edi;ebp], stack_fix: 12
+LoadConst(esi, 0x0), (s: 0x80489ad, e: 0x80489b1), modified: [;esi;edi;ebp], stack_fix: 16
+LoadConst(edi, 0x4), (s: 0x80489ad, e: 0x80489b1), modified: [;esi;edi;ebp], stack_fix: 16
+LoadConst(ebp, 0x8), (s: 0x80489ad, e: 0x80489b1), modified: [;esi;edi;ebp], stack_fix: 16
+LoadConst(ebx, 0x0), (s: 0x80489ac, e: 0x80489b1), modified: [;ebx;esi;edi;ebp], stack_fix: 20
+LoadConst(esi, 0x4), (s: 0x80489ac, e: 0x80489b1), modified: [;ebx;esi;edi;ebp], stack_fix: 20
+LoadConst(edi, 0x8), (s: 0x80489ac, e: 0x80489b1), modified: [;ebx;esi;edi;ebp], stack_fix: 20
+LoadConst(ebp, 0xc), (s: 0x80489ac, e: 0x80489b1), modified: [;ebx;esi;edi;ebp], stack_fix: 20
+LoadConst(esi, 0x0), (s: 0x80489ab, e: 0x80489b1), modified: [;eax;esi;edi;ebp], stack_fix: 16
+LoadConst(edi, 0x4), (s: 0x80489ab, e: 0x80489b1), modified: [;eax;esi;edi;ebp], stack_fix: 16
+LoadConst(ebp, 0x8), (s: 0x80489ab, e: 0x80489b1), modified: [;eax;esi;edi;ebp], stack_fix: 16
+LoadConst(ebx, 0x1c), (s: 0x80489a9, e: 0x80489b1), modified: [;ebx;esi;edi;ebp], stack_fix: 48
+LoadConst(esi, 0x20), (s: 0x80489a9, e: 0x80489b1), modified: [;ebx;esi;edi;ebp], stack_fix: 48
+BinOp(eax, eax, ^, edx), (s: 0x8048739, e: 0x804873c), modified: [;eax], stack_fix: 4
+BinOp(eax, eax, ^, ecx), (s: 0x8048736, e: 0x8048739), modified: [;eax], stack_fix: 4
+BinOp(eax, eax, ^, ebx), (s: 0x8048733, e: 0x8048736), modified: [;eax], stack_fix: 4
+BinOp(eax, eax, /, ebx), (s: 0x804872e, e: 0x8048733), modified: [;eax;edx], stack_fix: 4
+LoadConst(ecx, 0x0), (s: 0x804872c, e: 0x804872e), modified: [;ecx], stack_fix: 8
+BinOp(eax, eax, +, ecx), (s: 0x8048729, e: 0x804872c), modified: [;eax], stack_fix: 4
+BinOp(ebx, ebx, +, ecx), (s: 0x8048726, e: 0x8048729), modified: [;ebx], stack_fix: 4
+BinOp(eax, eax, *, edx), (s: 0x8048723, e: 0x8048726), modified: [;eax;edx], stack_fix: 4
+BinOp(eax, eax, *, ecx), (s: 0x8048720, e: 0x8048723), modified: [;eax;edx], stack_fix: 4
+BinOp(eax, eax, *, ebx), (s: 0x804871d, e: 0x8048720), modified: [;eax;edx], stack_fix: 4
+BinOp(ebx, ebx, &, edx), (s: 0x804871a, e: 0x804871d), modified: [;ebx], stack_fix: 4
+BinOp(eax, eax, &, edx), (s: 0x8048717, e: 0x804871a), modified: [;eax], stack_fix: 4
+BinOp(ebx, ebx, &, ecx), (s: 0x8048714, e: 0x8048717), modified: [;ebx], stack_fix: 4
+BinOp(ecx, ecx, &, edx), (s: 0x8048711, e: 0x8048714), modified: [;ecx], stack_fix: 4
+BinOp(eax, eax, &, ebx), (s: 0x804870e, e: 0x8048711), modified: [;eax], stack_fix: 4
+BinOp(eax, eax, |, ebx), (s: 0x804870b, e: 0x804870e), modified: [;eax], stack_fix: 4
+BinOp(eax, eax, +, ebx), (s: 0x8048708, e: 0x804870b), modified: [;eax], stack_fix: 4
+BinOp(eax, eax, -, ebx), (s: 0x8048705, e: 0x8048708), modified: [;eax], stack_fix: 4
+ReadMem(edx = [ebx+0x0]), (s: 0x8048702, e: 0x8048705), modified: [;edx], stack_fix: 4
+WriteMem([eax+0x0] = ecx), (s: 0x80486ff, e: 0x8048702), modified: [], stack_fix: 4
+WriteMem([ebx+0x0] = eax), (s: 0x80486fc, e: 0x80486ff), modified: [], stack_fix: 4
+WriteMem([eax+0x0] = eax), (s: 0x80486f9, e: 0x80486fc), modified: [], stack_fix: 4
+ReadMem(ebx = [eax+0x0]), (s: 0x80486f6, e: 0x80486f9), modified: [;ebx], stack_fix: 4
+ReadMem(eax = [eax+0x0]), (s: 0x80486f3, e: 0x80486f6), modified: [;eax], stack_fix: 4
+ReadMem(edx = [edx+0x0]), (s: 0x80486f0, e: 0x80486f3), modified: [;edx], stack_fix: 4
+ReadMem(ecx = [edx+0x0]), (s: 0x80486ed, e: 0x80486f0), modified: [;ecx], stack_fix: 4
+ReadMem(ecx = [ecx+0x0]), (s: 0x80486ea, e: 0x80486ed), modified: [;ecx], stack_fix: 4
+BinOp(ecx, ecx, -, edx), (s: 0x80486e7, e: 0x80486ea), modified: [;ecx], stack_fix: 4
+BinOp(ecx, ecx, +, edx), (s: 0x80486e4, e: 0x80486e7), modified: [;ecx], stack_fix: 4
+BinOp(edx, ebx, +, edx), (s: 0x80486e1, e: 0x80486e4), modified: [;edx], stack_fix: 4
+BinOp(ecx, eax, +, ecx), (s: 0x80486de, e: 0x80486e1), modified: [;ecx], stack_fix: 4
+ReadMem(edx = [ecx+0x0]), (s: 0x80486db, e: 0x80486de), modified: [;edx], stack_fix: 4
+WriteMem([ecx+0x0] = edx), (s: 0x80486d8, e: 0x80486db), modified: [], stack_fix: 4
+LoadConst(edx, 0x0), (s: 0x80486d6, e: 0x80486d8), modified: [;edx], stack_fix: 8
+LoadConst(ecx, 0x0), (s: 0x80486d4, e: 0x80486d6), modified: [;ecx], stack_fix: 8
+LoadConst(ebx, 0x0), (s: 0x80486d2, e: 0x80486d4), modified: [;ebx], stack_fix: 8
+LoadConst(eax, 0x0), (s: 0x80486d0, e: 0x80486d2), modified: [;eax], stack_fix: 8
+BinOp(eax, eax, +, ebx), (s: 0x80486cd, e: 0x80486d0), modified: [;eax], stack_fix: 4
+LoadConst(edx, 0x0), (s: 0x80486cb, e: 0x80486cd), modified: [;edx], stack_fix: 8
+LoadConst(ecx, 0x0), (s: 0x80486ca, e: 0x80486cd), modified: [;ecx;edx], stack_fix: 12
+LoadConst(edx, 0x4), (s: 0x80486ca, e: 0x80486cd), modified: [;ecx;edx], stack_fix: 12
+OpEsp(+, ebx, 12), (s: 0x80486c8, e: 0x80486cd), modified: [;ecx;edx], stack_fix: 12
+CopyReg(eax, esp), (s: 0x80486c5, e: 0x80486c8), modified: [;eax], stack_fix: 4
+OpEsp(+, eax, 4), (s: 0x80486c2, e: 0x80486c5), modified: [], stack_fix: 4
+WriteMem([eax+0x0] = ebx), (s: 0x80486bf, e: 0x80486c2), modified: [], stack_fix: 4
+ReadMem(eax = [ebx+0x0]), (s: 0x80486bc, e: 0x80486bf), modified: [;eax], stack_fix: 4
+LoadConst(ebx, 0x0), (s: 0x80486ba, e: 0x80486bc), modified: [;ebx], stack_fix: 8
+Lahf, (s: 0x80486b8, e: 0x80486ba), modified: [;eax], stack_fix: 4
+CopyReg(eax, ebx), (s: 0x80486b5, e: 0x80486b8), modified: [;eax], stack_fix: 4
+BinOp(eax, eax, +, ebx), (s: 0x80486b2, e: 0x80486b5), modified: [;eax], stack_fix: 4
+BinOp(edx, ecx, +, edx), (s: 0x80486a2, e: 0x80486a5), modified: [;edx], stack_fix: 4
+LoadConst(ecx, 0x0), (s: 0x80486a0, e: 0x80486a2), modified: [;ecx], stack_fix: 8
+LoadConst(ecx, 0x0), (s: 0x804869f, e: 0x80486a2), modified: [;ecx], stack_fix: 8
+LoadConst(ecx, 0x0), (s: 0x804869e, e: 0x80486a2), modified: [;ecx;ebp], stack_fix: 8
+CopyReg(ebp, edi), (s: 0x804869e, e: 0x80486a2), modified: [;ecx;ebp], stack_fix: 8
+LoadConst(ecx, 0x0), (s: 0x804869c, e: 0x80486a2), modified: [;eax;ecx;ebp], stack_fix: 8
+CopyReg(ebp, edi), (s: 0x804869c, e: 0x80486a2), modified: [;eax;ecx;ebp], stack_fix: 8
+LoadConst(ecx, 0x0), (s: 0x804869a, e: 0x80486a2), modified: [;ecx;esi;ebp], stack_fix: 8
+LoadConst(esi, 0x8), (s: 0x804869a, e: 0x80486a2), modified: [;ecx;esi;ebp], stack_fix: 8
+CopyReg(ebp, edi), (s: 0x804869a, e: 0x80486a2), modified: [;ecx;esi;ebp], stack_fix: 8
+LoadConst(ecx, 0x0), (s: 0x8048698, e: 0x80486a2), modified: [;eax;ecx;esi;ebp], stack_fix: 8
+LoadConst(esi, 0x8), (s: 0x8048698, e: 0x80486a2), modified: [;eax;ecx;esi;ebp], stack_fix: 8
+BinOp(eax, eax, ^, edx), (s: 0x8048698, e: 0x80486a2), modified: [;eax;ecx;esi;ebp], stack_fix: 8
+CopyReg(ebp, edi), (s: 0x8048698, e: 0x80486a2), modified: [;eax;ecx;esi;ebp], stack_fix: 8
+WriteMemOp([eax+0xbeef] ^= ebx), (s: 0x804868d, e: 0x8048698), modified: [;eax;ebx], stack_fix: 4
+WriteMem([ebx+0xbadc0de] = ecx), (s: 0x8048686, e: 0x804868d), modified: [], stack_fix: 4
+WriteMem([ebx+0xbadc0de] = ecx), (s: 0x8048684, e: 0x804868d), modified: [;edx], stack_fix: 4
+ReadMemOp(eax ^= [ebx+0xf00d]), (s: 0x8048675, e: 0x804867c), modified: [;eax], stack_fix: 4
+ReadMem(edx = [ecx+0xbadf00d]), (s: 0x804866e, e: 0x8048675), modified: [;edx], stack_fix: 4
+LoadConst(eax, 0x0), (s: 0x8048666, e: 0x8048668), modified: [;eax], stack_fix: 8
+LoadConst(ebp, 0x0), (s: 0x8048603, e: 0x8048605), modified: [;ebp], stack_fix: 8
+LoadConst(ebx, 0x0), (s: 0x8048602, e: 0x8048605), modified: [;ebx;ebp], stack_fix: 12
+LoadConst(ebp, 0x4), (s: 0x8048602, e: 0x8048605), modified: [;ebx;ebp], stack_fix: 12
+LoadConst(ebp, 0x0), (s: 0x8048601, e: 0x8048605), modified: [;eax;ebp], stack_fix: 8
+LoadConst(ebx, 0x4), (s: 0x80485ff, e: 0x8048605), modified: [;ebx;ebp], stack_fix: 16
+LoadConst(ebp, 0x8), (s: 0x80485ff, e: 0x8048605), modified: [;ebx;ebp], stack_fix: 16
+WriteMemOp([ebx+0x5d5b04c4] += eax), (s: 0x80485fe, e: 0x8048605), modified: [], stack_fix: 4
+LoadConst(ebx, 0x0), (s: 0x8048a14, e: 0x8048a16), modified: [;ebx], stack_fix: 8
+LoadConst(ebx, 0x8), (s: 0x8048a11, e: 0x8048a16), modified: [;ebx], stack_fix: 16
