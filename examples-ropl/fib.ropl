@@ -1,0 +1,31 @@
+fun fib(n, out){
+    x = 0
+    y = 0
+
+    cmp n, 0
+    je copy
+    cmp n, 1
+    je copy
+    
+    fib(n-1, @x)
+    fib(n-2, @y)
+
+    [out] = x+y
+    jmp exit
+copy:
+    [out] = n
+exit:
+}
+
+fun main(){
+    fmt = "%d\n"
+    i = 0
+    x = 0
+print:
+    fib(i, @x)
+    !printf(fmt, x)
+    i = i+1
+    cmp i, 11
+    jne print
+}
+

@@ -1,0 +1,11 @@
+fun main(){
+    fmt = "%d\n"
+    x = 1+1+1
+print:
+    !printf(fmt, x)
+    x = x+1
+    cmp x, 10
+    jne print
+}
+
+

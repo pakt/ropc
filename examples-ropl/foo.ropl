@@ -1,0 +1,26 @@
+fun foo(){
+    x = 1;
+}
+
+fun main(){
+    one = 1
+    odd = 0
+    even = 0
+    i = 0
+    n = 10
+sum:
+    ;foo()
+    r = i & 1
+    cmp r, 1
+    je odd
+    even = even+i
+    jmp skip
+odd:
+    odd = odd+i
+skip:
+    i = i+1
+    cmp i, n
+    jne sum
+    total = odd + even
+}
+
