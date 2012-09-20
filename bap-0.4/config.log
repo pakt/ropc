@@ -607,6 +607,7 @@ config.status:902: creating libasmir/Makefile
 config.status:902: creating libasmir/apps/Makefile
 config.status:902: creating libasmir/src/Makefile
 config.status:902: creating libasmir/config.h
+config.status:1082: libasmir/config.h is unchanged
 config.status:1130: executing depfiles commands
 
 ## ---------------- ##
@@ -701,15 +702,15 @@ am_cv_CXX_dependencies_compiler_type=gcc3
 ## Output variables. ##
 ## ----------------- ##
 
-ACLOCAL='${SHELL} /home/p/bap-0.4/missing --run aclocal-1.11'
+ACLOCAL='${SHELL} /home/p/ropc-repo/bap-0.4/missing --run aclocal-1.11'
 AMDEPBACKSLASH='\'
 AMDEP_FALSE='#'
 AMDEP_TRUE=''
-AMTAR='${SHELL} /home/p/bap-0.4/missing --run tar'
-ASMIR_DIR='/home/p/bap-0.4/libasmir'
-AUTOCONF='${SHELL} /home/p/bap-0.4/missing --run autoconf'
-AUTOHEADER='${SHELL} /home/p/bap-0.4/missing --run autoheader'
-AUTOMAKE='${SHELL} /home/p/bap-0.4/missing --run automake-1.11'
+AMTAR='${SHELL} /home/p/ropc-repo/bap-0.4/missing --run tar'
+ASMIR_DIR='/home/p/ropc-repo/bap-0.4/libasmir'
+AUTOCONF='${SHELL} /home/p/ropc-repo/bap-0.4/missing --run autoconf'
+AUTOHEADER='${SHELL} /home/p/ropc-repo/bap-0.4/missing --run autoheader'
+AUTOMAKE='${SHELL} /home/p/ropc-repo/bap-0.4/missing --run automake-1.11'
 AWK='mawk'
 CAMLIDL='/usr/bin/camlidl'
 CC='gcc'
@@ -737,7 +738,7 @@ LDFLAGS=''
 LIBOBJS=''
 LIBS='-liberty -lbfd '
 LTLIBOBJS=''
-MAKEINFO='${SHELL} /home/p/bap-0.4/missing --run makeinfo'
+MAKEINFO='${SHELL} /home/p/ropc-repo/bap-0.4/missing --run makeinfo'
 MKDIR_P='/bin/mkdir -p'
 OBJEXT='o'
 OCAMLC='/usr/bin/ocamlc.opt'
@@ -769,7 +770,7 @@ STRIP=''
 TESTS_OPT_FALSE=''
 TESTS_OPT_TRUE='#'
 VERSION='0.1'
-VEX_DIR='/home/p/bap-0.4/VEX'
+VEX_DIR='/home/p/ropc-repo/bap-0.4/VEX'
 ac_ct_CC='gcc'
 ac_ct_CXX='g++'
 am__EXEEXT_FALSE=''
@@ -795,7 +796,7 @@ host_alias=''
 htmldir='${docdir}'
 includedir='${prefix}/include'
 infodir='${datarootdir}/info'
-install_sh='${SHELL} /home/p/bap-0.4/install-sh'
+install_sh='${SHELL} /home/p/ropc-repo/bap-0.4/install-sh'
 libdir='${exec_prefix}/lib'
 libexecdir='${exec_prefix}/libexec'
 localedir='${datarootdir}/locale'

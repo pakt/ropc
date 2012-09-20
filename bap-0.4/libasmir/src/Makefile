@@ -69,7 +69,7 @@ LIBRARIES = $(lib_LIBRARIES)
 AR = ar
 ARFLAGS = cru
 libasmir_a_AR = $(AR) $(ARFLAGS)
-libasmir_a_DEPENDENCIES = /home/p/bap-0.4/VEX/libvex.a
+libasmir_a_DEPENDENCIES = /home/p/ropc-repo/bap-0.4/VEX/libvex.a
 am_libasmir_a_OBJECTS = stmt.$(OBJEXT) stmt_c.$(OBJEXT) exp.$(OBJEXT) \
 	exp_c.$(OBJEXT) asm_program.$(OBJEXT) symbols.$(OBJEXT) \
 	memory_data.$(OBJEXT) irtoir_c.$(OBJEXT) irtoir.$(OBJEXT) \
@@ -97,12 +97,12 @@ DIST_SOURCES = $(libasmir_a_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/p/bap-0.4/missing --run aclocal-1.11
-AMTAR = ${SHELL} /home/p/bap-0.4/missing --run tar
-ASMIR_DIR = /home/p/bap-0.4/libasmir
-AUTOCONF = ${SHELL} /home/p/bap-0.4/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/p/bap-0.4/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/p/bap-0.4/missing --run automake-1.11
+ACLOCAL = ${SHELL} /home/p/ropc-repo/bap-0.4/missing --run aclocal-1.11
+AMTAR = ${SHELL} /home/p/ropc-repo/bap-0.4/missing --run tar
+ASMIR_DIR = /home/p/ropc-repo/bap-0.4/libasmir
+AUTOCONF = ${SHELL} /home/p/ropc-repo/bap-0.4/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/p/ropc-repo/bap-0.4/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/p/ropc-repo/bap-0.4/missing --run automake-1.11
 AWK = mawk
 CAMLIDL = /usr/bin/camlidl
 CC = gcc
@@ -131,7 +131,7 @@ LDFLAGS =
 LIBOBJS = 
 LIBS = -liberty -lbfd 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/p/bap-0.4/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/p/ropc-repo/bap-0.4/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
 OCAMLC = /usr/bin/ocamlc.opt
@@ -161,11 +161,11 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 0.1
-VEX_DIR = /home/p/bap-0.4/VEX
-abs_builddir = /home/p/bap-0.4/libasmir/src
-abs_srcdir = /home/p/bap-0.4/libasmir/src
-abs_top_builddir = /home/p/bap-0.4
-abs_top_srcdir = /home/p/bap-0.4
+VEX_DIR = /home/p/ropc-repo/bap-0.4/VEX
+abs_builddir = /home/p/ropc-repo/bap-0.4/libasmir/src
+abs_srcdir = /home/p/ropc-repo/bap-0.4/libasmir/src
+abs_top_builddir = /home/p/ropc-repo/bap-0.4
+abs_top_srcdir = /home/p/ropc-repo/bap-0.4
 ac_ct_CC = gcc
 ac_ct_CXX = g++
 am__include = include
@@ -185,7 +185,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/p/bap-0.4/install-sh
+install_sh = ${SHELL} /home/p/ropc-repo/bap-0.4/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -207,7 +207,7 @@ top_builddir = ../..
 top_srcdir = ../..
 lib_LIBRARIES = libasmir.a
 #lib_LTLIBRARIES = libasmir.la
-AM_CFLAGS = -I/home/p/bap-0.4/VEX/pub -I../include -Itraces -fPIC -DGET_OPERANDS
+AM_CFLAGS = -I/home/p/ropc-repo/bap-0.4/VEX/pub -I../include -Itraces -fPIC -DGET_OPERANDS
 AM_CXXFLAGS = $(AM_CFLAGS)
 libasmir_a_SOURCES = \
 	./old_ir/stmt.cpp \
@@ -233,7 +233,7 @@ libasmir_a_SOURCES = \
         ./traces/pin_frame.h ./traces/pin_frame.cpp \
         ./traces/pin_trace.h ./traces/pin_trace.cpp
 
-libasmir_a_LIBADD = /home/p/bap-0.4/VEX/libvex.a
+libasmir_a_LIBADD = /home/p/ropc-repo/bap-0.4/VEX/libvex.a
 all: all-am
 
 .SUFFIXES:
