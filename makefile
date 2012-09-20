@@ -6,7 +6,7 @@ BIGINT=$(BAP_DIR)/bigint-3.12/otherlibs/num
 BATT=$(BAP_DIR)/batteries-1.4.0/_build/src
 OUNIT=$(BAP_DIR)/ounit-1.1.0/_build/src/
 PCRE=$(BAP_DIR)/pcre-ocaml-release-6.2.2/lib
-INC=$(BAP_LIB_DIR) $(PCRE) $(LIBASMIR) $(BATT) $(OUNIT)
+INC=$(BAP_LIB_DIR) $(PCRE) $(LIBASMIR) $(BATT) $(OUNIT) $(BIGINT)
 INC_PARAMS=$(foreach d, $(INC), -I $d)
  
 PACKS = bigarray,str,ocamlgraph,unix,camomile,threads
