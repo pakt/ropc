@@ -1,0 +1,84 @@
+\chapter{Related Work}
+\label{vine:related}
+
+\paragraph{Other Binary Analysis Platforms.} \bap is designed to 1)
+have a formal, well-defined IL, 2) explicitly expose the semantics of
+complex assembly in terms of the simpler \bap IL, and 3) be easy to
+re-target.  There are several other binary analysis platforms which
+may have some similarity to \bap, do not fulfill all requirements.
+
+Phoenix is a program analysis environment developed by Microsoft as
+part of their next generation compiler~\cite{phoenix}. One of the
+Phoenix tools allows Microsoft compiled code to be raised up to a
+register transfer language (RTL).  A RTL is a low-level IR that
+resembles an architecture-neutral assembly.
+
+Phoenix differs from \bap in several ways. First, Phoenix can only
+lift code produced by a Microsoft compiler. Second, Phoenix requires
+debugging information, thus is not a true binary-only analysis
+platform.  Third, Phoenix lifts assembly to a low-level IR that does
+not expose the semantics of complicated instructions, e.g., register
+status flags, as part of the IR~\cite{phoenix:noflags}. Fourth, the
+semantics of the lifted IR, as well as the lifting semantics and
+goals, are not well specified~\cite{phoenix:noflags}, and thus not
+suitable for our research purposes.
+
+
+The CodeSurfer/x86 platform~\cite{balakrishnan:2005} is a proprietary
+platform for analyzing x86 programs. At the core of CodeSurfer/x86 is a
+value-set analysis (VSA)~\cite{balakrishnan:2007}.  We have also
+implemented VSA in \bap.  CodeSurfer/x86 was not made available for
+comparison, thus we do not know whether it supports a well-defined IL,
+is re-targetable, or what other comparable aspects it may share with \bap.
+
+\paragraph{Decompilation.} Decompilation is the process of inverting
+the compilation of a program back to the original source
+language. Generally, the goal of decompilation is to recover a valid
+program in the original source language that is semantically
+equivalent (though need not be exactly the same) as the original
+source program.  
+
+Program analysis is often an important component in the decompilation
+process. Cifuentes has proposed using data and control flow analyses
+as part of decompilation~\cite{cifuentes:1994}.  Van Emmerik has shown
+that analysis on SSA flow graphs is helpful in a variety of tasks such
+as reconstructing types and resolving indirect
+jumps~\cite{vanemmerik:2007}.  \bap also has SSA;  thus it should
+be straight-forward to implement Van Emmerik's algorithms. Mycroft has
+proposed type inference for recovering C types during
+decompilation~\cite{mycroft:1999}.  Adding type inference is a
+possible future direction for \bap.
+
+
+\paragraph{Binary Instrumentation.} Binary instrumentation is a
+technique to insert extra code into a binary that monitors the
+instrumented program's behavior
+(e.g.,~\cite{srivastava:1994,larus:1995,luk:2005,nethercote:2004:phd,nanda:2006,dynamorio,dyninst}). Instrumentation
+is performed by inserting jumps in the original binary code to the
+instrumentation code.  The instrumentation code then jumps back to the
+original code after executing. The instrumentation code must make sure
+that the execution state is the same before and after the jump in
+order for the instrumentation to be transparent.
+
+Although many binary instrumentation tools provide a limited amount of
+program analysis, the end-goal is instrumentation, not facilitating
+analyses.  For example, Pin~\cite{luk:2005} calculates register
+liveness information. However, general static analysis is outside the
+scope of such tools. For instance, instrumentation tools generally do
+not expose the semantics of all instructions such as register status
+flag updates.
+
+
+\paragraph{Other Program Analysis Platforms.} \bap shares many of the same
+goals, such as modularity and ease of writing correct analyses, as
+other program analysis platforms.  For example,
+CIL~\cite{necula:2002:cil} and SUIF~\cite{suif} are both excellent
+platforms for analyzing C code.  However, using higher-level program
+analysis platforms is inappropriate for binary code because binary
+code is fundamentally different. While higher-level languages have
+types, functions, pointers, loops, and local variables, assembly has
+no types, no functions, one globally addressed memory region, and
+goto's. The \bap IL and surrounding platform is designed specifically
+to meet the challenges of faithfully analyzing assembly.
+
+

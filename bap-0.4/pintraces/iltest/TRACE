@@ -1,0 +1,1 @@
+../pin/pin -t obj-ia32/gentrace.so -logone-after -logall-before -taint-start 0x3ffff000 -taint-end 0x3ffff010 -trig_addr 0x3ffff000 -- ./iltest/test

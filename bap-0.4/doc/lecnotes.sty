@@ -1,0 +1,101 @@
+% begin palatino.sty
+% copied from palatino.sty, except left ttdefault to CMTT
+% Modified from Frank Pfennings template
+\renewcommand{\rmdefault}{ppl}
+\renewcommand{\sfdefault}{phv}
+% \renewcommand{\ttdefault}{pcr}
+% end palatino.sty
+\usepackage{amssymb}
+
+\addtolength{\oddsidemargin}{30pt}
+\addtolength{\evensidemargin}{-22pt}
+\setlength{\inferLineSkip}{4pt}
+
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{falseclaim}[theorem]{False Claim}
+
+\newenvironment{proof}{\trivlist \item[\hskip \labelsep{\bf
+Proof:}]}{\hfill$\Box$ \endtrivlist}
+\newenvironment{attempt}{\trivlist \item[\hskip \labelsep{\bf
+Proof attempt:}]}{\hfill$\Diamond$ \endtrivlist}
+
+\def\thebibliography#1{%\subsection{References}
+ \list
+ {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+ \advance\leftmargin\labelsep\itemsep 0pt%
+ \usecounter{enumi}}
+ \def\newblock{\hskip .11em plus .33em minus -.07em}
+ \sloppy
+ \sfcode`\.=1000\relax}
+
+\title{{\large 18-739c: Vulnerability, Defense, and Malware Analysis}\\
+       {\large Lecture \lecnum}\\
+       \lectitle}
+\author{David Brumley}
+\date{\lecdate}
+
+\pagestyle{fancyplain}
+
+\setlength{\headheight}{14pt}
+% \renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+% \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\lhead[\fancyplain{}{\bfseries L\lecnum.\thepage}]%
+      {\fancyplain{}{\bfseries\lectitle}}
+\chead[]{}
+\rhead[\fancyplain{}{\bfseries\lectitle}]%
+      {\fancyplain{}{\bfseries L\lecnum.\thepage}}
+\lfoot[{\small\scshape Lecture Notes}]{{\small\scshape Lecture Notes}}
+\cfoot[]{}
+\rfoot[{\small\scshape\lecdate}]{{\small\scshape\lecdate}}
+
+% For code environment, to get tt-style underscore
+% \renewcommand{\_}{\char`\_}
+% \renewcommand{\{}{\char`\{}
+% \renewcommand{\}}{\char`\}}
+
+% Some pervasively used definitions
+
+\newcommand{\blankline}{\mbox{}} % for \begin{code}...\end{code}
+\newcommand{\lowered}[1]{\raisebox{-0.75\baselineskip}{#1}}
+
+\newcommand{\jtrue}{\mathit{true}}
+\newcommand{\msf}[1]{\mathsf{#1}}
+\newcommand{\z}{\msf{z}}
+\newcommand{\s}{\msf{s}}
+\newcommand{\lif}{\mathrel{\leftarrow}}
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\EE}{\mathcal{E}}
+\newcommand{\under}{\mathrel{/}}
+\newcommand{\dom}{\mathrm{dom}}
+\newcommand{\cod}{\mathrm{cod}}
+\newcommand{\FV}{\mathrm{FV}}
+\newcommand{\PP}{\mathcal{P}}
+\newcommand{\limplies}{\supset}
+\newcommand{\ldot}{.\,}
+\newcommand{\xs}{\mathbf{x}}
+\newcommand{\ys}{\mathbf{y}}
+\newcommand{\resid}{>}
+\newcommand{\jtype}{\mathit{type}}
+\newcommand{\jtypes}{\mathbf{type}}
+\newcommand{\arrow}{\rightarrow}
+\newcommand{\boldsym}[1]{\mbox{\boldmath{$#1$}}}
+\newcommand{\taus}{\boldsym{\tau}}
+\newcommand{\sigmas}{\boldsym{\sigma}}
+\newcommand{\alphas}{\boldsym{\alpha}}
+\newcommand{\betas}{\boldsym{\beta}}
+\newcommand{\jres}{\mathit{res}}
+\newcommand{\ures}{\mathit{ures}}
+\newcommand{\ldash}{\mathrel{{\vdash}\kern-0.45em{\vdash}}}
+% \newcommand{\ldash}{\mathrel{\Vdash}}
+% \newcommand{\lwith}{\mathop{\mbox{\rmfamily \&}}} % not using stmaryrd
+\newcommand{\lwith}{\mathbin{\mathrm{\&}}} % not using stmaryrd
+\newcommand{\lolli}{\mathbin{\multimap}}
+\newcommand{\lone}{\mathbf{1}}
+\newcommand{\lbang}{\mathrm{!}}
+\newcommand{\lzero}{\mathbf{0}}
+\newcommand{\linif}{\mathbin{{\raisebox{0.8pt}{$\scriptstyle{\circ}$}}\!{-}}}
+\newcommand{\lfocus}{\mathrel{\ll}}
+\newcommand{\obang}{\mathbin{{\otimes}\lbang}}
+\newcommand{\rfocus}{\mathrel{\gg}}

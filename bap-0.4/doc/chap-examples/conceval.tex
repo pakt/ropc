@@ -1,0 +1,71 @@
+\section{Concrete Evaluation}
+
+In this tutorial, we will explain how to raise a binary to the BAP IL,
+and then evaluate the resulting code inside of BAP.
+
+Let's start with the following simple C program:
+\verbatiminput{chap-examples/test.c}
+
+We can compile this source file (named test.c) to a binary using
+\cmdline{gcc -static test.c -o test} (note if you are on an x64 machine you may
+need to add the \cmdline{-m32} option).  We use the \cmdline{-static} option of
+gcc here because the BAP evaluator needs to know what code is located
+at each memory location. This means that BAP does not currently
+support self-modifying code, or dynamic linking (unless the user
+explicitly tells BAP the mapping of memory addresses to binary code).
+
+Once we have a binary, we can then raise it to the BAP IL by executing
+\cmdline{toil -bin test -o test.il}. We can now disassemble the binary
+to see where main begins and ends -- we will need this to tell BAP
+where to start and stop executing. Here is a possible disassembly of
+the main function.
+
+\begin{verbatim}
+08048267 <main>:
+ 8048267:       55                      push   %ebp
+ 8048268:       89 e5                   mov    %esp,%ebp
+ 804826a:       83 ec 04                sub    $0x4,%esp
+ 804826d:       c7 04 24 2a 00 00 00    movl   $0x2a,(%esp)
+ 8048274:       e8 d7 ff ff ff          call   8048250 <g>
+ 8048279:       c9                      leave  
+ 804827a:       c3                      ret    
+ 804827b:       90                      nop
+ 804827c:       90                      nop
+ 804827d:       90                      nop
+ 804827e:       90                      nop
+ 804827f:       90                      nop
+\end{verbatim}
+
+For this sample disassembly, we can begin execution at address
+0x8048267.  Likewise, we can halt execution at 0x804827a.  To make BAP
+halt execution, we'll manually add a halt command to the lifted IL.
+For this example, you could search for the string
+\verb!addr 0x804827a! in test.il, which marks the beginning of the ret
+instruction in the lifted IL.  Inserting \verb!halt true!  after the
+address and label statements will cause the evaluator to halt.  For
+instance:
+
+\begin{verbatim}
+addr 0x804827a @asm "ret    "
+label pc_0x804827a
+halt true
+\end{verbatim}
+
+Now, issue \cmdline{ileval -il test.il -eval-at mainaddr}, where mainaddr
+is the address to start from.  BAP will evaluate the IL program.  If
+debugging output is enabled, it will print each statement as it is
+evaluated.  After halting, BAP will print the state of registers and
+memory. Unsurprisingly, the terminal value of eax is 42.  
+
+Now let's begin execution starting from the call instruction in main
+(0x8048250). This will allow us to modify the input to the function
+g. The -init-var and -init-mem options allow the user to specify an
+initial value for a variable (register) or memory address
+respectively.  To replicate what we just did and use an input of 42,
+we can use the following the command \cmdline{ileval -il test.il
+  -init-mem R\_ESP\_1:u32 42:u32 -eval-at 0x8048274}. Notice that this
+begins execution at the call instruction instead of the beginning of
+main.  Unsurprisingly, eax has a final value of 42 again.  If we
+instead change the memory pointed to by esp to 43, by \cmdline{ileval
+  -il test.il -init-mem R\_ESP\_1:u32 43:u32 -eval-at 0x8048274}, eax has
+a final value of -1.

@@ -1,0 +1,16 @@
+\section{Functions}
+
+In this tutorial, we show how to use the get\_functions command to
+extract functions from a binary with debugging symbols.  Specifically,
+we will look at the \cmdline{/bin/ls} command.  First, make sure you
+are using a 32-bit executable; BAP does not support x86-64 yet.  If we
+know the name of a function we want to extract, such as
+\cmdline{hash\_table\_ok}, we can extract it using
+\cmdline{get\_functions -unroll /bin/ls bap hash\_table\_ok}.  This
+will produce a file called baphash\_table\_ok.il. We used the
+\cmdline{-unroll} option to remove loops by unrolling; this is
+important when generating VCs, because generating VCs is generally
+only possible for acyclic programs. If we wanted to see if the
+function can return zero, we could use topredicate:
+\cmdline{topredicate -q -il baphash\_table\_ok.il -post 'R\_EAX:u32 ==
+  0:u32' -stp-out /tmp/f -solve}.

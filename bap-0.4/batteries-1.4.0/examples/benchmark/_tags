@@ -1,0 +1,3 @@
+<t_read.*>: pkg_bitstring
+<t_*.*>:  pkg_batteries,pkg_core,debug,pkg_threads,pkg_benchmark
+<tt_*.*>:    pkg_batteries,pkg_core,pkg_threads

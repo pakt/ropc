@@ -1,0 +1,86 @@
+ocaml_helpers.o: ocaml_helpers.c ../include/asm_program.h \
+ /usr/include/bfd.h /usr/include/ansidecl.h /usr/include/symcat.h \
+ /usr/include/dis-asm.h /usr/include/stdio.h /usr/include/features.h \
+ /usr/include/i386-linux-gnu/bits/predefs.h \
+ /usr/include/i386-linux-gnu/sys/cdefs.h \
+ /usr/include/i386-linux-gnu/bits/wordsize.h \
+ /usr/include/i386-linux-gnu/gnu/stubs.h \
+ /usr/include/i386-linux-gnu/gnu/stubs-32.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6.1/include/stddef.h \
+ /usr/include/i386-linux-gnu/bits/types.h \
+ /usr/include/i386-linux-gnu/bits/typesizes.h /usr/include/libio.h \
+ /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6.1/include/stdarg.h \
+ /usr/include/i386-linux-gnu/bits/stdio_lim.h \
+ /usr/include/i386-linux-gnu/bits/sys_errlist.h \
+ /usr/include/i386-linux-gnu/bits/stdio.h \
+ /usr/include/i386-linux-gnu/bits/stdio2.h /usr/include/bfd.h \
+ ../include/common.h /usr/lib/gcc/i686-linux-gnu/4.6.1/include/stdint.h \
+ /usr/include/stdint.h /usr/include/i386-linux-gnu/bits/wchar.h \
+ ../include/vexmem.h /home/p/bap-0.4/VEX/pub/libvex.h \
+ /home/p/bap-0.4/VEX/pub/libvex_basictypes.h \
+ /home/p/bap-0.4/VEX/pub/libvex_ir.h
+
+../include/asm_program.h:
+
+/usr/include/bfd.h:
+
+/usr/include/ansidecl.h:
+
+/usr/include/symcat.h:
+
+/usr/include/dis-asm.h:
+
+/usr/include/stdio.h:
+
+/usr/include/features.h:
+
+/usr/include/i386-linux-gnu/bits/predefs.h:
+
+/usr/include/i386-linux-gnu/sys/cdefs.h:
+
+/usr/include/i386-linux-gnu/bits/wordsize.h:
+
+/usr/include/i386-linux-gnu/gnu/stubs.h:
+
+/usr/include/i386-linux-gnu/gnu/stubs-32.h:
+
+/usr/lib/gcc/i686-linux-gnu/4.6.1/include/stddef.h:
+
+/usr/include/i386-linux-gnu/bits/types.h:
+
+/usr/include/i386-linux-gnu/bits/typesizes.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/lib/gcc/i686-linux-gnu/4.6.1/include/stdarg.h:
+
+/usr/include/i386-linux-gnu/bits/stdio_lim.h:
+
+/usr/include/i386-linux-gnu/bits/sys_errlist.h:
+
+/usr/include/i386-linux-gnu/bits/stdio.h:
+
+/usr/include/i386-linux-gnu/bits/stdio2.h:
+
+/usr/include/bfd.h:
+
+../include/common.h:
+
+/usr/lib/gcc/i686-linux-gnu/4.6.1/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/usr/include/i386-linux-gnu/bits/wchar.h:
+
+../include/vexmem.h:
+
+/home/p/bap-0.4/VEX/pub/libvex.h:
+
+/home/p/bap-0.4/VEX/pub/libvex_basictypes.h:
+
+/home/p/bap-0.4/VEX/pub/libvex_ir.h:

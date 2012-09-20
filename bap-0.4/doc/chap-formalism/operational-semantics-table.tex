@@ -1,0 +1,314 @@
+
+%\renewcommand{\baselinestretch}{1.0}\normalsize
+
+\begin{table}
+{\bf Contexts}\\
+\begin{tabular}{lllp{4in}}
+  {\it Instruction} & $\Pi$ & $n$ $\mapsto$ \emphkind{instr} &
+  Maps an instruction address to an instruction.\\
+  {\it Variable} & $\Delta$ &  $id \mapsto \emphkind{var}$  &Maps
+  a variable ID to its value.\\
+  {\it Labels} & $\Lambda$ & $\emphkind{label\_kind} \mapsto n$ & Maps
+  a label to the address of the corresponding {\tt label} instruction number.
+\end{tabular}\\
+\newline
+{\bf Notation}\\
+\begin{tabular}{lp{4.2in}}
+  $\Delta \vdash e \Downarrow v$ & Expression $e$ evaluates to value
+  $v$ given variable context $\Delta$ as given by the expression
+  evaluation rules.\\
+  $\Delta' = \Delta[x \leftarrow v]$ & $\Delta'$ is the same as
+  $\Delta$ except extended to map $x$  to $v$.\\
+  $\Pi \vdash p:i$ & $\Pi$ maps instruction address $p$ to instruction
+  $i$. If $p \notin \Pi$, the machine gets stuck.\\
+  $\Lambda \vdash v:p$ & $\Lambda$ maps instruction label $v$ to instruction
+  address $p$. If $v \notin \Lambda$, then machine gets stuck. In
+  addition, a well-formed machine should have $\Pi \vdash p : i$
+  where $i = \texttt{label $v$}$, otherwise the machine is stuck.\\
+%   $(\Pi, \Delta, p, \iota)$ & An abstract machine configuration.
+%   $\Pi$ and $\Delta$ are contexts define above, $p$ is the program
+%   counter, and $\iota$ is the current instruction.\\  
+  $(\Delta, p, i) \leadsto (\Delta', p', i')$ &  An
+  execution step. $p$ and $p'$ are
+  the pre and post step program counters, $i$ and $i'$ are the pre and
+  post step  instructions, and $\Delta$ and $\Delta'$ are the pre and post
+  step variable contexts. Note $\Lambda$ and $\Pi$ are currently static, thus
+  for brevity not included in the execution context.\\
+\end{tabular}
+\caption{Operational semantics notation.}
+\end{table}
+\begin{table}
+{\bf Instructions}
+\begin{small}
+\[
+\begin{array}{cc}
+  \infer[\textsc{Assign}]
+    { % conclusion
+      \Delta, p, \text{x := $e$} 
+      \leadsto 
+      \Delta', p+1, i
+    }
+    { % premise
+      \Delta \vdash e \Downarrow v 
+      & \Delta' = \Delta[x \leftarrow v]
+      & \Pi \vdash p+1:i
+    } &
+  \infer[\textsc{Jmp}]
+  { % conclusion
+    \Delta, p, \texttt{jmp($\ell$)} 
+    \leadsto 
+    \Delta, p', \texttt{label $v$}
+  }
+  { % premise
+    \Delta \vdash \ell \Downarrow v
+    & \Lambda \vdash v : p'
+    & \Pi \vdash p' : \texttt{label $v$}
+  }\\[10pt]
+  \infer[\textsc{label}]
+  { % conclusion
+    \Delta, p, \texttt{label $\ell$} 
+    \leadsto
+    \Delta, p+1, i
+  }
+  { % premise
+      \Pi[p+1] = i
+  } &
+  \infer[\textsc{halt}]
+  { % conclusion
+    \Delta, p, \texttt{halt $e$} 
+    \leadsto
+    \text{terminate with  $v$}
+%    \Pi, \Delta, p+1, \texttt{halt $v$}
+  }
+  {
+     \Delta \vdash e \Downarrow v
+  }\\[10pt]
+  \infer[\textsc{assert-t}]
+  { % conclusion
+    \Delta, p, \texttt{assert}(e)
+    \leadsto
+    \Delta, p+1, i
+  } 
+  { % premise
+    \Delta \vdash e \Downarrow 1 &
+    \Pi[p+1] = i
+  } &
+  \infer[\textsc{assert-f}]
+  { % conclusion
+    \Delta, p, \texttt{assert}(e)
+    \leadsto
+    \text{terminate with  $\perp$}
+  }
+  { % premise
+    \Delta \vdash e \Downarrow 0
+  }
+\\
+\end{array}
+\]
+\[
+\begin{array}{c}
+  \infer[\textsc{CJmp-t}]
+  { %conclusion
+    \Delta, p, \texttt{cjmp($e$, $\ell_T$, $\ell_F$)} 
+    \leadsto
+    \Delta, p',  \texttt{label $v$}
+  }
+  { %premise
+    \Delta \vdash e \Downarrow 1
+    & \Delta \vdash \ell_T \Downarrow v
+    & \Lambda \vdash v: p'
+    & \Pi \vdash p' :  \texttt{label $v$}
+  }\\[10pt]
+  \infer[\textsc{CJmp-f}]
+  { %conclusion
+    \Delta, p, \texttt{cjmp($e$, $\ell_T$, $\ell_F$)} 
+    \leadsto
+    \Delta, p', \texttt{label $v$}
+  }
+  { %premise
+    \Delta \vdash e \Downarrow 0
+    & \Delta \vdash \ell_F \Downarrow v
+    & \Lambda \vdash v: p'
+    & \Pi \vdash p' : \texttt{label $v$}
+  } \\[10pt]
+  \text{No rule for {\tt special}, when
+    $v \notin \Lambda$, and when  $p \notin \Pi$.}  
+\end{array}
+\]
+\end{small}
+
+{\bf Expressions}\\
+\begin{small}
+\[
+\begin{array}{cc}
+  \infer[\textsc{binop}]
+  { % conclusion
+    \Delta \vdash e_1 \Diamond_b e_2 \Downarrow v
+  }
+  { % premise
+    \Delta \vdash e_1 \Downarrow v_1 
+    & \Delta \vdash e_2 \Downarrow v_2
+    & v = v_1 \Diamond_b v_2
+  } &
+  \infer[\textsc{unop}]
+  { % conclusion
+    \Delta \vdash \Diamond_u e_1 \Downarrow v
+  } 
+  { % premise
+    \Delta \vdash e_1 \Downarrow v_1 
+    & v = \Diamond_u v_1
+  }\\[10pt]
+\end{array}
+\]
+\[
+\begin{array}{ccc}
+  \infer[\textsc{Value}]
+  { % conclusion
+    \Delta \vdash v \Downarrow v
+  } 
+  { % premise (empty)
+  } &
+  \infer[\textsc{Var}]
+  { % conclusion
+    \Delta \vdash x \Downarrow v
+  }
+  { % premise
+    \Delta \vdash x:v
+  } &
+  \infer[\textsc{let}]
+  { % conclusion
+    \Delta \vdash \texttt{let $x$ = $e_1$ in $e_2$} \Downarrow v
+  }
+  { % premise
+    \Delta \vdash e_1 \Downarrow v_1 
+    & \Delta' = \Delta[x \leftarrow v_1]
+    & \Delta' \vdash e_2 \Downarrow v
+  }\\
+\end{array}
+\]
+\[
+\begin{array}{c}
+  \infer[\textsc{Load$_{\text{little}}$}]
+  { % conclusion
+    \Delta \vdash \texttt{load($e_1$, $e_2$, $e_3$, $\tau_{\text{reg}}$)} \Downarrow v
+  }
+  { % premise
+    \Delta \vdash e_1 \Downarrow v_1 
+    & \Delta \vdash e_2 \Downarrow v_2
+    & \Delta \vdash e_3 \Downarrow 0
+    & n = \text{\# bytes of $\tau_{\text{reg}}$}
+    & v = v_1[v_2..v_2+n] \text{ in little endian byte order}
+  } \\[10pt]
+  \infer[\textsc{Load$_{\text{big}}$}]
+  { % conclusion
+    \Delta \vdash \texttt{load($e_1$, $e_2$, $e_3$, $\tau_{\text{reg}}$)} \Downarrow v
+  }
+  { % premise
+    \Delta \vdash e_1 \Downarrow v_1 
+    & \Delta \vdash e_2 \Downarrow v_2
+    & \Delta \vdash e_3 \Downarrow 1
+    & n = \text{\# bytes of $\tau_{\text{reg}}$}
+    & v = v_1[v_2..v_2+n] \text{ in big endian byte order}
+  } \\[10pt]
+  \infer[\textsc{Load$_\text{array}$}]
+  { % conclusion
+    \Delta \vdash \texttt{load($e_1$, $e_2$, $e_3$, \texttt{array\_t})} \Downarrow v
+  }
+  { % premise
+    \Delta \vdash e_1 \Downarrow v_1 
+    & \Delta \vdash e_2 \Downarrow v_2
+    & \Delta \vdash e_3 \Downarrow 0
+    & v = v_1[v_2]
+  } \\[10pt]
+  \infer[\textsc{Store$_{\text{little}}$}]
+  { % conclusion
+    \Delta \vdash \texttt{store($e_1$, $e_2$, $e_3$, $e_4$, $\tau_{\text{reg}}$)}  \Downarrow v
+  }
+  { % premise
+    \Delta \vdash e_1 \Downarrow v_1 
+    & \Delta \vdash e_2 \Downarrow v_2
+    & \Delta \vdash e_3 \Downarrow v_3
+    & \Delta \vdash e_4 \Downarrow 0
+    & n = \text{\# bytes $\tau_{\text{reg}}$}
+    & v = v_1[v_2..v_2+n \leftarrow v_3] \text{ (little endian)}
+  }\\[10pt]
+  \infer[\textsc{Store$_{\text{big}}$}]
+  { % conclusion
+    \Delta \vdash \texttt{store($e_1$, $e_2$, $e_3$, $e_4$, $\tau_{\text{reg}}$)}  \Downarrow v
+  }
+  { % premise
+    \Delta \vdash e_1 \Downarrow v_1 
+    & \Delta \vdash e_2 \Downarrow v_2
+    & \Delta \vdash e_3 \Downarrow v_3
+    & \Delta \vdash e_4 \Downarrow 1
+    & n = \text{\# bytes $\tau_{\text{reg}}$}
+    & v = v_1[v_2..v_2+n \leftarrow v_3] \text{ (big endian)}
+  }\\[10pt]
+  \infer[\textsc{Store$_{\text{array}}$}]
+  { % conclusion
+    \Delta \vdash \texttt{store($e_1$, $e_2$, $e_3$, $e_4$, \texttt{array\_t})}  \Downarrow v
+  }
+  { % premise
+    \Delta \vdash e_1 \Downarrow v_1 
+    & (e_1 : \texttt{array\_t})
+    & \Delta \vdash e_2 \Downarrow v_2
+    & \Delta \vdash e_3 \Downarrow v_3
+    & (e_4 \text{ ignored})
+    & v = v_1[v_2 \leftarrow v_3]
+  }
+\end{array}\\
+\]
+\[
+\begin{array}{cc}
+  \infer[\textsc{cast$_u$}]{ %conclusion
+    \Delta \vdash \texttt{cast(unsigned, $\tau_{\text{reg}}$, $e$)}
+    \Downarrow v
+  }
+  { %premise
+   \Delta \vdash e \Downarrow v & \text{zero extend $v$ to
+    $\tau_{\text{reg}}$ bits}
+  } &
+  \infer[\textsc{cast$_s$}]{ %conclusion
+    \Delta \vdash \texttt{cast(signed, $\tau_{\text{reg}}$, $e$)}
+    \Downarrow v
+  }
+  { %premise
+   \Delta \vdash e \Downarrow v & \text{sign extend $v$ to
+    $\tau_{\text{reg}}$ bits}
+  }\\[10pt]
+    \infer[\textsc{cast$_h$}]{ %conclusion
+    \Delta \vdash \texttt{cast(high, $\tau_{\text{reg}}$, $e$)}
+    \Downarrow v
+  }
+  { %premise
+   \Delta \vdash e \Downarrow v & \text{extract 
+    $\tau_{\text{reg}}$  high bits of $v$}
+  } &
+    \infer[\textsc{cast$_l$}]{ %conclusion
+    \Delta \vdash \texttt{cast(low, $\tau_{\text{reg}}$, $e$)}
+    \Downarrow v
+  }
+  { %premise
+   \Delta \vdash e \Downarrow v & \text{extract 
+    $\tau_{\text{reg}}$  low bits of $v$}
+  }\\[10pt]
+  \infer[\textsc{name}]
+  { % conclusion
+    \cdot \vdash \texttt{name}\text{(string)} : \text{string}
+  }
+  { % premise
+  } &
+  \infer[\textsc{unknown}]
+  { % conclusion
+    \cdot \vdash \texttt{unknown}(s) \Downarrow \perp
+  }
+  { % premise
+  }
+\end{array}
+\]
+\end{small}
+\caption{Operational Semantics.}
+\label{vine:taboperational}
+\end{table}
+
+%\renewcommand{\baselinestretch}{1.66}\normalsize

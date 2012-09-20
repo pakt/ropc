@@ -1,0 +1,12 @@
+BAP: The Binary Analysis Platform. For more information see our
+project webpage via http://bap.ece.cmu.edu/
+
+For installation instruction see the INSTALL file.
+
+For copyright information see the COPYING file.
+
+
+This is a pre-alpha release. It is completely unsupported. If you need help,
+this is not for you; please wait for a later version or learn some problem
+solving skills. If you find a bug, please submit patches to
+https://kestrel.ece.cmu.edu/bugzilla/

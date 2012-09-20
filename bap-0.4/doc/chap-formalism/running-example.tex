@@ -1,0 +1,46 @@
+\subsection{\bap and the Running Example}
+
+\input{running-asm}
+%\input{vine/running-il}
+
+Figure~\ref{fig:running-asm} shows the assembly for the running
+example from \chref~1 (which is reproduced as part of the figure). The
+assembly (given in Intel syntax) shown is for the running example
+compiled as a single function which is passed in {\tt ptr}, with {\tt
+read} and {\tt realloc} as external calls.  Each assembly line
+contains the instruction address followed by the instruction with
+operands.
+
+The first 4 instructions in Figure~\ref{fig:running-asm} implement the
+function prologue, which sets up the stack frame.  The variable {\tt i}
+is assigned by the compiler to register {\tt eax}. Instruction
+0x804822-0x804825 push the argument {\tt eax} onto the stack, and then
+call the function corresponding to {\tt read} at address 0x80483f4.
+Instruction 0x804842d-0x8048430 correspond to the test {\tt if i \%2
+== 0}.  The compiler implemented the reduction modulo 2 as bit-wise ``and''.
+Instructions 0x8048437-0x804843d implement the true branch where {\tt
+s := i+2}.  The compiler assigned the variable {\tt s} the register
+{\tt eax} in assembly, which is put on the local stack frame slot {\tt
+ebp-0x4}.  Instructions 0x8048442-0x8048445 implement the false branch
+where {\tt s := i+3}, again storing the result in {\tt ebp-0x4}.  Line
+0x804844b-0x48455 correspond to the call to {\tt realloc}, followed by
+the function epilogue.
+
+\input{running-il}
+
+Figure~\ref{fig:running-il} shows the \bap IL for the assembly in
+Figure~\ref{fig:running-asm}. For simplicity, we note where {\tt
+eflags} code is calculated, but do not include the logic in the
+Figure. Each assembly instruction is lifted in a syntax-directed
+manner.
+
+The IL reduces complex x86 instructions to a simplified language. For
+example, the x86 {\tt push ebp} instruction at 0x8048419 in the IL is
+de-sugared as decrementing the register {\tt esp} by one word, then
+storing {\tt ebp} at the resulting address in memory.  Another example
+is in assembly, there is no syntactic relationship between the {\tt
+test} instruction at 0x8048430 and the conditional jump {\tt jne} at
+0x804843f. The IL, however, explicitly shows {\tt test} sets the {\tt
+ ZF} flag, which the raised conditional jump checks.
+
+

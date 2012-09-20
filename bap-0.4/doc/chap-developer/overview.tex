@@ -1,0 +1,35 @@
+\section{Overview}
+
+The \bap infrastructure is implemented in C++ and OCaml.  The
+front-end lifting is implemented primarily in C++.  The back-end is
+implemented in OCaml. We interface the C++ front-end with the OCaml
+back-end using OCaml via IDL generated stubs.
+
+The front-end interfaces with Valgrind's
+VEX~\cite{nethercote:2004:phd} to help lift instructions%% (see
+%% Chapter~\ref{vine:frontend})
+, GNU BFD for parsing executable objects,
+and GNU libopcodes for pretty-printing the disassembly. Each
+disassembled instruction is lifted to the IL, then passed to the
+back-end .  
+
+The \bap top-level directory structure is:
+\begin{itemize}\squish
+\item {\bf libasmir:} This directory contains all the code that
+  interfaces which parses a binary file (when appropriate), interfaces
+  with Valgrind's VEX~\cite{nethercote:2004:phd}, and produces an
+  initial IL.  We are planning to migrate away from most of the
+  C++ code in this directory to OCaml.
+
+\item {\bf ocaml:} This directory contains the core \bap library and
+  routines. All the code is written in ocaml. Only core \bap code
+  should go on this directory. If you must modify it in a
+  project-specific way, please make a project-specific branch for
+  those changes.
+
+\item {\bf utils:} This contains user utilities, again written in OCaml.
+
+\item {\bf doc:} The directory containing this documentation, as well
+  as ocamldoc generated documentation. (Note: ocamldoc needs to be run
+  after compiling.)
+\end{itemize}

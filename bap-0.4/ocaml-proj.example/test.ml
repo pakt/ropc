@@ -1,0 +1,2 @@
+let testf () =
+  "Hooray!\n";;

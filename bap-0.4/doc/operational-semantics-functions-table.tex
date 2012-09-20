@@ -1,0 +1,44 @@
+
+\begin{table}
+{\bf Contexts}\\
+\begin{tabular}{lllp{2.7in}}
+
+  {\it Functions}&$\Sigma$ & \emphkind{proc} $\mapsto$
+  (\emphkind{var} list, \emphkind{var} list, $\Pi_{\text{proc}}$) &
+  $\Sigma$ is used for setting up function calls. There are three
+  things it keeps track of for each procedure given by \emphkind{proc
+    id}. The first item in the tuple is the list of argument
+  variables   $[arg_1:\tau_1, \ldots ,arg_i:\tau_i]$. The second is the list of
+  variables scoped by the procedure $[x_1:\tau_0, \ldots,
+  x_n:\tau_n]$. The third is an instruction map $\Pi_{\text{proc}}$ for the
+  procedure. $\Pi_{\text{proc}}$ is only defined on instructions which
+  are part of the procedure. Note that we define it this way to
+  prevent jumps outside of the procedure.\\
+  {\it Instructions} & $\Pi$ & $n$ $\mapsto$ \emphkind{instr}&
+  Maps an instruction address to the instruction.\\
+  {\it Variables} & $\Delta$ &  
+  $id \mapsto (\emphkind{var},bool)$  & As before, $\Delta$ is the
+  variable context. We augment the mapping such that we also
+  keep track of whether a variable is global or local to the
+  function.\\
+  {\it Stack} & $\Gamma$ & $[(x_1,id_1), (x_2,id_2), ...,(x_n,id_n)]$& 
+  The procedure call stack.  Each procedure call saves the tuple
+  $(x_i, id_i)$ where $x_i$ is the variable to assign any returned
+  value, and $id_i$ is the next instruction to execute after a return.\\
+\end{tabular}\\
+\newline
+{\bf Notation}\\
+\begin{tabular}{lp{3.5in}}
+  $\Delta \vdash e \Downarrow v$ & As before, expression $e$ evaluates to value
+  $v$ given variable context $\Delta$ as given by the expression
+  evaluation rules.\\
+  $(\Pi, \Sigma, \Gamma, \Delta, p, i)$ & An abstraction machine
+  configuration.  We augment the abstract machine to include a context
+  of function declarations $\Sigma$, as well as a stack of return
+  addresses $\Gamma$. \\
+  $(\Pi, \Sigma, \Gamma, \Delta, p, i) \leadsto (\Pi, \Sigma, \Gamma', \Delta', p', \iota)$ &
+  An abstract machine execution step. $\Delta'$ is a (possibly
+  updated) variable context, and $\Gamma'$ is a (possibly updated)
+  stack context.\\
+\end{tabular}
+\end{table}

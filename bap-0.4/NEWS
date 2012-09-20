@@ -1,0 +1,14 @@
+New in BAP 0.2:
+
+* Temporaries introduced in SSA can be removed when converting back to the AST.
+* Added constant folding and algebraic simplifications to SCCVN.
+* Added a simple interface in Ssa_simp to apply all safe optimizations easily.
+* Changed REG_{1,8,16,32,64} to Reg of int so there is less special casing.
+* Added Control Dependence Graphs again.
+* Syntax errors now include line numbers.
+* Added memory2array.
+* Makefile now recompiles utils when library changes.
+* Removed unneeded jump instructions when lifting code.
+* Fixed a problem in Cfg_ast.to_prog.
+* Fixed a bug in unsigned division.
+* Temporarily stopped using -pack to work around problems with ocamldebug.

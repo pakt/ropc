@@ -1,0 +1,108 @@
+Style guidelines for our ocaml code
+
+
+We will use http://caml.inria.fr/resources/doc/guides/guidelines.en.html
+with the following clarifications/changes:
+
+* Keep the "in" keyword aligned either vertically or horizontally with its
+  corresponding "let" or "and". This makes it easier to visually match them up.
+* Keep the "and" keyword aligned with it's corresponding "let".
+* Don't indent after "in".
+
+Eg:
+  let foo = bar in
+
+Eg2:
+  let foo =
+    bar
+    baz
+  in
+  quux
+
+Eg3:
+  let foo = bar
+  and baz = quux in
+
+
+BadEg1:
+-  let foo =
+-    bar in
+
+
+* Don't put a space between a constructor and it's parethesized arguments.
+    This is not mentioned in the regular guidelines, and goes against the
+    examples, but it makes some sense, since unlike a function, a constructor
+    is not valid without it's arguments.
+
+Eg:
+  let x = Foo(bar, baz, quux) in
+  let y = Bar x in
+  let z = Baz(f x) in
+
+***Pattern matching***:
+
+* Give each pattern a line of it's own, unless they all fit on one line.
+* Prefix the first pattern with the optional "|", and start it on the line after
+  "with", unless all the patterns and their expressions can fit on the same line
+   as the "with".
+* If the expression for all the cases fit on the same line as their pattern,
+  that is ok, otherwise they should all start on the next line.
+
+Eg:
+  match foo with
+  | Bar -> ...
+  | Baz -> ...
+
+Eg2:
+  match foo bar baz with
+  | Bar ->
+       ...
+  | Baz ->
+       ...
+
+Eg3:
+  match foo bar baz
+  with
+  | Bar -> ...
+  | Baz -> ...
+
+Eg4:
+  try
+    foo;
+    bar;
+    baz
+  with Foo -> foo
+ 
+BadEg:
+-  match foo 
+-   bar baz with
+-    | Bar ->
+-       ...
+-    | Baz -> ...
+
+
+
+*** Other notes***:
+
+* Prefer parentheses over begin/end.    
+* Prefer "ignore" over "let _".
+* Since we no longer indent after "in", use ";" rather than "let () = ... in"
+* Don't explicitly ascribe types that could be infered. It makes the code
+  harder to change later.
+* Don't overparenthesize unless there is some possible way it may be ambiguous.
+
+*** Editors ***:
+
+Emacs:
+Install tuareg-mode, and use
+(custom-set-variables
+	'(tuareg-in-indent 0)
+	'(tuareg-with-indent 0))
+
+Note: Comments in ocaml start with a (* and end with a *) and can
+contain nested comments. Apparently this is too complicated for emacs'
+comment-region, which does retarded things instead, as it tries to
+individually comment each line and escape internal comments.
+
+Vim:
+Someone who uses vim please update this.

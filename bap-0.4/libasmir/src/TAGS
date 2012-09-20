@@ -1,0 +1,938 @@
+
+ocaml_helpers.c,286
+asection* bfd_sections(5,66
+asection* bfd_next_section(9,131
+bfd* asmir_get_bfd(16,267
+address_t bfd_section_get_vma(20,327
+bfd_size_type bfd_section_get_size(24,392
+const char* bfd_section_get_name(28,463
+int64_t bfd_section_get_flags(32,532
+void asmir_free_vex_buffers(36,599
+
+irtoir.cpp,3059
+#define Ist_MFence 11,179
+bool print_warnings 15,265
+bool use_eflags_thunks 19,400
+bool use_simple_segments 22,475
+bool translate_calls_and_returns 24,506
+VexArch guest_arch 30,732
+static string uTag 37,848
+static string sTag 38,882
+Exp * count_opnd 44,970
+void asmir_set_print_warning(63,1763
+bool asmir_get_print_warning(67,1835
+void set_use_eflags_thunks(77,2156
+void asmir_set_use_simple_segments(82,2285
+bool get_use_eflags_thunks(88,2484
+void set_call_return_translation(93,2546
+void panic(102,2959
+vector<VarDecl *> get_reg_decls(118,3318
+vector<VarDecl *> get_reg_decls(130,3563
+Exp *translate_get(translate_get135,3643
+Stmt *translate_put(translate_put151,4024
+Exp *translate_ccall(translate_ccall163,4320
+void modify_flags(179,4679
+reg_t IRType_to_reg_type(201,5243
+reg_t regt_of_irexpr(229,5873
+Temp *mk_temp(mk_temp234,5981
+Temp *mk_temp(mk_temp241,6128
+Temp *mk_temp(mk_temp250,6344
+Label *mk_dest_label(mk_dest_label261,6782
+Name *mk_dest_name(mk_dest_name271,7184
+Exp *translate_32HLto64(translate_32HLto64288,7786
+Exp *translate_64HLto64(translate_64HLto64300,8091
+Exp *translate_DivModU64to32(translate_DivModU64to32313,8428
+Exp *translate_DivModS64to32(translate_DivModS64to32324,8721
+Exp *translate_MullS8(translate_MullS8335,9014
+Exp *translate_MullU32(translate_MullU32346,9260
+Exp *translate_MullS32(translate_MullS32357,9515
+Exp *translate_Clz32(translate_Clz32368,9762
+Exp *translate_Ctz32(translate_Ctz32398,10846
+Exp *translate_CmpF64(translate_CmpF64428,11930
+Exp *translate_const(translate_const472,13648
+Exp *translate_simple_unop(translate_simple_unop509,14993
+Exp *translate_unop(translate_unop579,18324
+Exp *translate_simple_binop(translate_simple_binop606,18930
+Exp *translate_binop(translate_binop716,23129
+Exp *translate_triop(translate_triop840,28015
+Exp *emit_mux0x(emit_mux0x880,29215
+Exp *translate_mux0x(translate_mux0x964,31259
+Exp *translate_load(translate_load995,32223
+Exp *translate_tmp_ex(translate_tmp_ex1013,32564
+Exp *translate_expr(translate_expr1039,33413
+Stmt *translate_tmp_st(translate_tmp_st1088,34769
+Stmt *translate_store(translate_store1108,35287
+Stmt *translate_imark(translate_imark1129,35791
+Stmt *translate_exit(translate_exit1136,35919
+Stmt *translate_stmt(translate_stmt1166,36896
+Stmt *translate_jumpkind(translate_jumpkind1214,38102
+bool is_special(1281,40038
+vector<Stmt *> *translate_special(translate_special1286,40091
+vector<Stmt *> *translate_irbb(translate_irbb1294,40435
+VexArch vexarch_of_bfdarch(1372,42401
+VexArch vexarch_of_prog(1383,42629
+bap_block_t* generate_vex_ir(1397,43177
+vector<bap_block_t *> generate_vex_ir(1418,43907
+vector<bap_block_t *> generate_vex_ir(1437,44546
+void insert_specials(1461,45132
+void generate_bap_ir_block(1492,45968
+generate_bap_ir(1531,46947
+string inst_to_str(1551,47392
+string get_op_str(1556,47507
+int match_mux0x(1569,47821
+reg_t get_exp_type_from_cast(1666,50239
+reg_t get_exp_type(1674,50329
+do_cleanups_before_processing(1698,50685
+
+memory_data.cpp,375
+typedef struct memory_cell_data 14,230
+address_t address;memory_cell_data::address15,264
+int value;memory_cell_data::value16,283
+} memory_cell_data_t;17,338
+extern void destroy_memory_data(20,362
+address_t memory_cell_data_address(30,593
+int memory_cell_data_value(34,681
+int memory_data_size(38,759
+memory_cell_data_t * memory_data_get(42,827
+get_rodata(52,1086
+
+asm_program.c,1050
+static section_t* get_section_of(15,280
+bfd_byte *asmir_get_ptr_to_instr(asmir_get_ptr_to_instr29,572
+asmir_open_file(41,888
+void asmir_close(58,1175
+static int ignore(66,1299
+int asmir_get_instr_length(70,1336
+my_read_memory 83,1724
+static void init_disasm_info2(106,2252
+static void init_disasm_info(125,2964
+static uint8_t trace_instruction_bytes[trace_instruction_bytes134,3242
+static size_t trace_instruction_size;135,3298
+static bfd_vma trace_instruction_addr;136,3336
+void set_trace_bytes(138,3376
+trace_read_memory 145,3564
+initialize_sections(163,4186
+initialize_bfd(200,5170
+struct bprintf_buffer 239,6095
+  char *str;str240,6119
+  char *end;end241,6159
+  size_t size;242,6229
+int bprintf(245,6267
+char* asmir_string_of_insn(272,7121
+enum bfd_architecture asmir_get_asmp_arch(293,7686
+asm_program_t* asmir_new_asmp_for_arch(300,7915
+asm_program_t* asmir_trace_asmp_for_arch(326,8686
+bfd_vma asmir_get_sec_startaddr(354,9440
+bfd_vma asmir_get_sec_endaddr(385,10145
+asection** asmir_get_all_sections(418,10844
+
+symbols.c,154
+static void make_assertions(11,178
+remove_useless_symbols_local 25,467
+asymbol ** asmir_get_all_symbols(48,1031
+asymbol ** asmir_get_symbols(112,2897
+
+vexir.c,591
+static VexArchInfo         vai;25,587
+static VexGuestExtents     vge;26,619
+static VexTranslateArgs    vta;27,651
+static VexTranslateResult  vtr;28,683
+#define TMPBUF_SIZE 33,814
+static UChar tmpbuf[tmpbuf34,839
+static Int tmpbuf_used;35,873
+static IRSB *irbb_current irbb_current40,1008
+static void failure_exit(49,1267
+static void log_bytes(54,1316
+static Bool chase_into_ok(63,1554
+static void *dispatch(dispatch68,1636
+static UInt needs_self_check 73,1688
+IRSB *instrument1(instrument180,1964
+void translate_init(101,2518
+IRSB *translate_insn(translate_insn174,5355
+
+irtoir_c.cpp,1109
+int asmir_bap_blocks_size(58,1433
+bap_block_t * asmir_bap_blocks_get(66,1547
+void destroy_bap_block(70,1632
+void destroy_bap_blocks(90,2186
+long asmir_bap_blocks_error(99,2490
+long asmir_bap_block_error(110,2646
+address_t asmir_bap_block_address(114,2746
+int asmir_bap_block_size(119,2819
+Stmt * asmir_bap_block_get(127,2942
+const char* asm_string_from_block(131,3024
+byte_insn_to_asmp(141,3266
+bap_block_t* asmir_addr_to_bap(170,4099
+bap_blocks_t * asmir_bap_from_trace_file(190,4629
+trace_frames_t * asmir_frames_from_trace_file(205,5068
+void asmir_frames_destroy(213,5391
+int asmir_frames_length(218,5485
+trace_frame_t * asmir_frames_get(224,5588
+pintrace::FrameType asmir_frame_type(230,5698
+int asmir_frame_tid(236,5793
+uint8_t * asmir_frame_get_insn_bytes(248,6022
+const char* asmir_frame_get_loadmod_info(271,6643
+void asmir_frame_get_syscall_info(282,6961
+void asmir_frame_get_except_info(294,7295
+conc_map_vec * asmir_frame_get_operands(309,7727
+void asmir_frame_destroy_operands(340,8441
+int asmir_frame_operands_length(351,8625
+ConcPair* asmir_frame_get_operand(359,8744
+
+old_ir/stmt_c.cpp,1182
+stmt_type_t stmt_type(10,199
+Exp* move_lhs(13,257
+Exp* move_rhs(16,310
+const char* label_string(19,363
+TraceAttrs_t* stmt_attributes(22,438
+threadid_t trace_tid(26,509
+int conc_map_size(31,599
+conc_map* get_cval(35,710
+const char* cval_name(39,831
+big_val_t* cval_value(42,896
+long cval_value_size(45,957
+const_val_t cval_value_part(48,1016
+const_val_t cval_ind(51,1088
+long cval_mem(54,1145
+cval_type_t cval_type(57,1193
+int cval_usage(60,1250
+int cval_taint(63,1301
+const char* asm_string_from_stmt(66,1352
+const char* special_string(69,1427
+const char* comment_string(72,1508
+Exp* jmp_target(75,1589
+Exp* cjmp_cond(78,1646
+Exp* cjmp_ttarget(81,1701
+Exp* cjmp_ftarget(84,1763
+Exp* expstmt_exp(87,1825
+const char* vardecl_name(90,1884
+reg_t vardecl_type(93,1960
+long call_has_lval(96,2021
+Exp* call_lval_opt(99,2094
+Exp * call_fnname(102,2157
+static T* vec_to_list(109,2313
+Exp** call_params(123,2582
+long ret_has_exp(127,2656
+Exp* ret_exp(131,2729
+const char* func_name(136,2816
+long func_has_rv(140,2891
+reg_t func_rt(144,2953
+Stmt** func_params(148,3008
+long func_is_external(157,3269
+Stmt** func_body(161,3338
+Exp* assert_cond(165,3409
+
+old_ir/exp_c.cpp,645
+exp_type_t exp_type(19,471
+binop_type_t binop_type(22,525
+Exp* binop_lhs(25,595
+Exp* binop_rhs(28,649
+unop_type_t unop_type(31,703
+Exp* unop_subexp(34,769
+Exp* mem_addr(37,824
+reg_t mem_regtype(40,876
+const_val_t constant_val(43,931
+reg_t constant_regtype(46,998
+const char* phi_phiname(49,1063
+int phi_numnodes(52,1137
+Exp* phi_nodeat(55,1199
+reg_t temp_regtype(58,1263
+const char* temp_name(61,1320
+const char* unknown_str(64,1389
+reg_t unknown_regtype(67,1462
+reg_t cast_width(70,1525
+cast_t cast_casttype(73,1580
+Exp* cast_subexp(76,1645
+const char* name_string(79,1700
+let_var(84,1778
+let_exp(90,1831
+let_in(96,1884
+
+traces/pin_trace.h,1101
+#define TRACE_MAGIC 12,127
+#define TRACE_VERSION 14,159
+#define TRACE_ICACHE_SIZE 16,184
+#define TRACE_ICACHE_MASK 17,215
+  typedef std::map<uint64_t, uint64_t> toc_map;46,1358
+   class TraceExn 48,1409
+      const std::string msg;TraceExn::msg50,1440
+      TraceExn(TraceExn::TraceExn51,1469
+   struct TraceHeader 57,1585
+      uint32_t magic;TraceHeader::magic58,1609
+      uint32_t version;TraceHeader::version59,1631
+      uint64_t frame_count;TraceHeader::frame_count60,1655
+      uint64_t toc_offset;TraceHeader::toc_offset61,1683
+   class TraceReader 67,1783
+     uint64_t frm_pos;TraceReader::frm_pos71,1820
+     std::auto_ptr<toc_map> toc;TraceReader::toc73,1892
+      std::ifstream infile;TraceReader::infile76,1945
+      TraceHeader header;TraceReader::header77,1973
+      char icache[TraceReader::icache79,2059
+   class TraceWriter 113,2997
+      uint64_t frm_count;TraceWriter::frm_count117,3040
+      std::ofstream outfile;TraceWriter::outfile121,3088
+      char icache[TraceWriter::icache123,3118
+      uint32_t offset(TraceWriter::offset153,4350
+
+vexmem.c,1557
+#define Ist_MFence 19,477
+void vx_panic 71,2637
+#define HUGE_BLOCK_SIZE 86,2964
+unsigned char huge_block[huge_block104,3676
+unsigned char *next_free next_free105,3721
+void *vx_Alloc(vx_Alloc107,3761
+void vx_FreeAll(120,3961
+IRCallee* vx_mkIRCallee 135,4217
+IRRegArray* vx_mkIRRegArray 151,4582
+IRExpr* vx_IRExpr_Get 166,5032
+IRExpr* vx_IRExpr_GetI 173,5240
+IRExpr* vx_IRExpr_Tmp 181,5502
+IRExpr* vx_IRExpr_Qop 187,5670
+IRExpr* vx_IRExpr_Triop 198,6028
+IRExpr* vx_IRExpr_Binop 208,6365
+IRExpr* vx_IRExpr_Unop 216,6624
+IRExpr* vx_IRExpr_Load 223,6828
+IRExpr* vx_IRExpr_Const 232,7127
+IRExpr* vx_IRExpr_CCall 238,7303
+IRExpr* vx_IRExpr_Mux0X 246,7576
+IRDirty* vx_emptyIRDirty 258,7884
+IRStmt* vx_IRStmt_NoOp 275,8237
+IRStmt* vx_IRStmt_IMark 282,8410
+IRStmt* vx_IRStmt_AbiHint 289,8626
+IRStmt* vx_IRStmt_Put 296,8855
+IRStmt* vx_IRStmt_PutI 303,9068
+IRStmt* vx_IRStmt_Tmp 313,9395
+IRStmt* vx_IRStmt_Store 320,9609
+IRStmt* vx_IRStmt_Dirty 329,9920
+IRStmt* vx_IRStmt_MFence 336,10104
+IRStmt* vx_IRStmt_Exit 343,10281
+IRStmt* vx_IRStmt_CAS 351,10545
+IRStmt* vx_IRStmt_LLSC 357,10710
+IRSB* vx_emptyIRSB 370,11094
+IRExpr** vx_sopyIRExprVec 393,11779
+IRExpr** vx_dopyIRExprVec 408,12084
+IRConst* vx_dopyIRConst 419,12356
+IRCallee* vx_dopyIRCallee 427,12504
+IRRegArray* vx_dopyIRRegArray 434,12668
+IRExpr* vx_dopyIRExpr 439,12779
+IRDirty* vx_dopyIRDirty 492,14967
+IRCAS* vx_mkIRCAS 510,15471
+IRCAS* vx_dopyIRCAS 527,15930
+IRStmt* vx_dopyIRStmt 537,16315
+IRTypeEnv* vx_dopyIRTypeEnv 587,18252
+IRSB* vx_dopyIRSB 599,18622
+
+irtoir-arm.cpp,967
+#define OFFB_R0 15,363
+#define OFFB_R1 16,421
+#define OFFB_R2 17,479
+#define OFFB_R3 18,537
+#define OFFB_R4 19,595
+#define OFFB_R5 20,653
+#define OFFB_R6 21,711
+#define OFFB_R7 22,769
+#define OFFB_R8 23,827
+#define OFFB_R9 24,885
+#define OFFB_R10 25,943
+#define OFFB_R11 26,1002
+#define OFFB_R12 27,1061
+#define OFFB_R13 28,1120
+#define OFFB_R14 29,1179
+#define OFFB_R15T 30,1238
+#define OFFB_CC_OP 36,1502
+#define OFFB_CC_DEP1 37,1563
+#define OFFB_CC_DEP2 38,1626
+#define OFFB_CC_NDEP 39,1689
+vector<VarDecl *> arm_get_reg_decls(41,1753
+static string reg_offset_to_name(74,2977
+static inline Temp *mk_reg(mk_reg109,4030
+static Exp *translate_get_reg_32(translate_get_reg_32115,4126
+Exp  *arm_translate_get(arm_translate_get125,4290
+static Stmt *translate_put_reg_32(translate_put_reg_32135,4503
+Stmt *arm_translate_put(arm_translate_put145,4702
+Exp  *arm_translate_ccall(arm_translate_ccall157,5005
+void  arm_modify_flags(165,5208
+
+traces/pin_frame.h,5003
+namespace pintrace 25,589
+union PIN_REGISTER39,1139
+  uint8_t  byte[byte41,1160
+  uint16_t word[word42,1200
+  uint32_t dword[dword43,1240
+  uint64_t qword[qword44,1282
+  int8_t   s_byte[s_byte46,1327
+  int16_t  s_word[s_word47,1369
+  int32_t  s_dword[s_dword48,1411
+  int64_t  s_qword[s_qword49,1455
+  float  flt[flt51,1500
+  double  dbl[dbl52,1538
+#define __NR_read	61,1700
+#define __NR_open	62,1723
+#define __NR_close	63,1746
+#define __NR_execve	64,1770
+#define __NR_mmap	65,1795
+#define __NR_socketcall	66,1818
+#define __NR_mmap2	67,1846
+#define REG_BASE 69,1871
+#define MEM_BASE 70,1892
+#define REGTYPE_LAST 71,1914
+#define MEMTYPE_LAST 72,1948
+#define VT_NONE 74,2010
+#define VT_REG8 75,2034
+#define VT_REG16 76,2069
+#define VT_REG32 77,2104
+#define VT_REG64 78,2139
+#define VT_REG128 79,2174
+#define VT_MEM8 80,2209
+#define VT_MEM16 81,2244
+#define VT_MEM32 82,2279
+#define VT_MEM64 83,2314
+#define VT_MEM128 84,2349
+#define VT_MEM256 85,2384
+enum FrameType 87,2420
+   FRM_NONE 90,2464
+   FRM_KEY 93,2550
+   FRM_STD 96,2641
+   FRM_LOADMOD 99,2702
+   FRM_SYSCALL 102,2779
+   FRM_TAINT 105,2830
+   FRM_STD2 107,2849
+   FRM_EXCEPT 110,2889
+   struct Frame 121,3034
+      FrameType type;123,3053
+      Frame(125,3076
+   struct StdFrame 227,7866
+      uint32_t addr;StdFrame::addr229,7903
+      uint32_t tid;StdFrame::tid230,7924
+      uint8_t insn_length;StdFrame::insn_length231,7944
+      uint8_t values_count;StdFrame::values_count232,8008
+      char rawbytes[StdFrame::rawbytes233,8076
+      char cachemask[StdFrame::cachemask234,8113
+      uint32_t values[StdFrame::values235,8156
+      uint32_t types[StdFrame::types236,8197
+      uint32_t usages[StdFrame::usages237,8237
+      uint32_t locs[StdFrame::locs238,8278
+      uint32_t taint[StdFrame::taint239,8317
+      StdFrame(StdFrame::StdFrame241,8358
+      bool isCached(StdFrame::isCached255,8804
+      void setCached(StdFrame::setCached263,8991
+      void unsetCached(StdFrame::unsetCached269,9133
+   struct StdFrame2 362,13573
+      uint32_t addr;StdFrame2::addr364,13611
+      uint32_t tid;StdFrame2::tid365,13632
+      uint8_t insn_length;StdFrame2::insn_length366,13652
+      uint8_t values_count;StdFrame2::values_count367,13716
+      char rawbytes[StdFrame2::rawbytes368,13784
+      char cachemask[StdFrame2::cachemask369,13821
+      PIN_REGISTER values[StdFrame2::values370,13864
+      uint32_t types[StdFrame2::types371,13909
+      uint32_t usages[StdFrame2::usages372,13949
+      uint32_t locs[StdFrame2::locs373,13990
+      uint32_t taint[StdFrame2::taint374,14029
+      StdFrame2(StdFrame2::StdFrame2376,14070
+      bool isCached(StdFrame2::isCached390,14518
+      void setCached(StdFrame2::setCached398,14705
+      void unsetCached(StdFrame2::unsetCached404,14847
+   struct KeyFrame 439,16275
+      uint64_t pos;KeyFrame::pos441,16312
+      uint32_t eax;KeyFrame::eax443,16333
+      uint32_t ebx;KeyFrame::ebx444,16353
+      uint32_t ecx;KeyFrame::ecx445,16373
+      uint32_t edx;KeyFrame::edx446,16393
+      uint32_t esi;KeyFrame::esi447,16413
+      uint32_t edi;KeyFrame::edi448,16433
+      uint32_t esp;KeyFrame::esp449,16453
+      uint32_t ebp;KeyFrame::ebp450,16473
+      uint32_t eflags;KeyFrame::eflags451,16493
+      uint16_t cs;KeyFrame::cs453,16517
+      uint16_t ds;KeyFrame::ds454,16536
+      uint16_t ss;KeyFrame::ss455,16555
+      uint16_t es;KeyFrame::es456,16574
+      uint16_t fs;KeyFrame::fs457,16593
+      uint16_t gs;KeyFrame::gs458,16612
+      KeyFrame(KeyFrame::KeyFrame462,16669
+   struct LoadModuleFrame 483,17305
+      uint32_t low_addr;LoadModuleFrame::low_addr485,17349
+      uint32_t high_addr;LoadModuleFrame::high_addr486,17374
+      uint32_t start_addr;LoadModuleFrame::start_addr487,17400
+      uint32_t load_offset;LoadModuleFrame::load_offset488,17427
+      char name[LoadModuleFrame::name489,17455
+      LoadModuleFrame(LoadModuleFrame::LoadModuleFrame491,17483
+   struct SyscallFrame 506,17807
+      uint32_t addr;SyscallFrame::addr508,17848
+      uint32_t tid;SyscallFrame::tid509,17869
+      uint32_t callno;SyscallFrame::callno510,17889
+      uint32_t args[SyscallFrame::args511,17912
+      SyscallFrame(SyscallFrame::SyscallFrame513,17958
+   struct TaintFrame 523,18282
+      uint32_t id;TaintFrame::id525,18321
+      uint32_t length;TaintFrame::length526,18340
+      uint32_t addr;TaintFrame::addr527,18363
+      TaintFrame(TaintFrame::TaintFrame529,18391
+   struct ExceptionFrame 547,18853
+       uint32_t exception;ExceptionFrame::exception549,18896
+       uint32_t tid;ExceptionFrame::tid550,18923
+       uint32_t from_addr;ExceptionFrame::from_addr552,18979
+       uint32_t to_addr;ExceptionFrame::to_addr553,19006
+      ExceptionFrame(ExceptionFrame::ExceptionFrame555,19032
+typedef pintrace::Frame trace_frame_t;563,19248
+typedef std::vector<trace_frame_t*> trace_frames_t;564,19287
+
+traces/pin_trace.cpp,624
+namespace pintrace 12,171
+  const bool use_toc pintrace::use_toc14,193
+TraceReader::TraceReader(pintrace::TraceReader::TraceReader16,226
+TraceReader::~TraceReader(21,263
+TraceReader::TraceReader(26,297
+void TraceReader::open(31,367
+uint32_t TraceReader::count(86,1980
+uint32_t TraceReader::pos(91,2051
+bool TraceReader::seek(98,2188
+Frame *TraceReader::next(TraceReader::next139,3194
+bool TraceReader::eof(174,4162
+TraceWriter::TraceWriter(180,4345
+uint32_t TraceWriter::count(205,4877
+void TraceWriter::add(211,4973
+  void TraceWriter::add(239,5630
+void TraceWriter::finalize(250,6111
+int main(282,6739
+
+traces/pin_frame.cpp,1557
+int pintrace::source 11,149
+#define READ(13,176
+#define WRITE(14,251
+uint32_t bitsOfType(17,377
+uint32_t bytesOfType(54,980
+Frame *Frame::unserialize(Frame::unserialize60,1090
+ostream &Frame::serialize(Frame::serialize123,2484
+void StdFrame::clearCache(137,2771
+void StdFrame2::clearCache(142,2860
+ostream &StdFrame::serialize(StdFrame::serialize147,2950
+istream &StdFrame::unserializePart(StdFrame::unserializePart187,4137
+conc_map_vec * StdFrame::getOperands(218,4951
+ostream &StdFrame2::serialize(StdFrame2::serialize224,5019
+istream &StdFrame2::unserializePart(StdFrame2::unserializePart271,6445
+conc_map_vec * StdFrame2::getOperands(304,7326
+ostream &KeyFrame::serialize(KeyFrame::serialize372,9288
+istream &KeyFrame::unserializePart(KeyFrame::unserializePart400,9777
+void KeyFrame::setAll(426,10134
+ostream &LoadModuleFrame::serialize(LoadModuleFrame::serialize453,10754
+istream &LoadModuleFrame::unserializePart(LoadModuleFrame::unserializePart468,11025
+ostream &SyscallFrame::serialize(SyscallFrame::serialize482,11220
+istream &SyscallFrame::unserializePart(SyscallFrame::unserializePart498,11525
+conc_map_vec * SyscallFrame::getOperands(514,11756
+ostream &TaintFrame::serialize(TaintFrame::serialize541,12378
+istream &TaintFrame::unserializePart(TaintFrame::unserializePart554,12581
+conc_map_vec * TaintFrame::getOperands(566,12730
+ostream &ExceptionFrame::serialize(ExceptionFrame::serialize592,13297
+istream &ExceptionFrame::unserializePart(ExceptionFrame::unserializePart605,13537
+int main(617,13709
+
+traces/reg_mapping.cpp,348
+string regid_to_name(8,138
+uint32_t regid_to_full(108,1798
+static uint32_t regid_to_write_mask(167,2649
+reg_t regid_to_type(222,3498
+uint32_t regid_to_read_mask(277,4264
+string register_name(298,4591
+Move* write_reg(308,4938
+Exp* read_reg(393,6966
+Exp* read_reg(423,7634
+string pin_register_name(444,7972
+cval_type_t get_type(1130,26790
+
+traces/readtrace.cpp,127
+trace_frames_t * read_frames_from_file(11,228
+void destroy_trace_frames(67,1615
+bap_blocks_t * read_trace_from_file(79,1816
+
+traces/trace.cpp,464
+Trace::Trace(4,80
+void Trace::read_taint_byte_record(9,141
+void Trace::read_taint_record(14,271
+void Trace::read_records(27,635
+void Trace::read_operand(38,923
+void Trace::read_operands(45,1099
+void Trace::read_entry_header(57,1370
+void Trace::read_module(67,1682
+void Trace::read_process(73,1787
+void Trace::read_procs(82,1994
+void Trace::consume_header(89,2135
+cval_type_t Trace::opsize_to_type(94,2212
+conc_map_vec * Trace::operand_status(110,2831
+
+irtoir-i386.cpp,6462
+#define OFFB_EAX 15,251
+#define OFFB_EBX 16,311
+#define OFFB_ECX 17,371
+#define OFFB_EDX 18,431
+#define OFFB_ESP 19,491
+#define OFFB_EBP 20,551
+#define OFFB_ESI 21,611
+#define OFFB_EDI 22,671
+#define OFFB_EIP 24,732
+#define OFFB_CC_OP 26,793
+#define OFFB_CC_DEP1 27,855
+#define OFFB_CC_DEP2 28,919
+#define OFFB_CC_NDEP 29,983
+#define OFFB_FPREGS 31,1048
+#define OFFB_FPTAGS 32,1113
+#define OFFB_DFLAG 33,1178
+#define OFFB_IDFLAG 34,1240
+#define OFFB_ACFLAG 35,1303
+#define OFFB_FTOP 36,1366
+#define OFFB_FC3210 37,1427
+#define OFFB_FPROUND 38,1490
+#define OFFB_CS 40,1555
+#define OFFB_DS 41,1614
+#define OFFB_ES 42,1673
+#define OFFB_FS 43,1732
+#define OFFB_GS 44,1791
+#define OFFB_SS 45,1850
+#define OFFB_LDT 46,1909
+#define OFFB_GDT 47,1969
+#define OFFB_SSEROUND 49,2030
+#define OFFB_XMM0 50,2095
+#define OFFB_XMM1 51,2156
+#define OFFB_XMM2 52,2217
+#define OFFB_XMM3 53,2278
+#define OFFB_XMM4 54,2339
+#define OFFB_XMM5 55,2400
+#define OFFB_XMM6 56,2461
+#define OFFB_XMM7 57,2522
+#define OFFB_EMWARN 59,2584
+#define OFFB_TISTART 61,2648
+#define OFFB_TILEN 62,2712
+#define OFFB_NRADDR 63,2774
+#define OFFB_AX 69,2890
+#define OFFB_AL 70,2925
+#define OFFB_AH 71,2960
+#define OFFB_BX 72,2997
+#define OFFB_BL 73,3032
+#define OFFB_BH 74,3067
+#define OFFB_CX 75,3104
+#define OFFB_CL 76,3139
+#define OFFB_CH 77,3174
+#define OFFB_DX 78,3211
+#define OFFB_DL 79,3246
+#define OFFB_DH 80,3281
+#define OFFB_DI 81,3318
+#define OFFB_SI 82,3353
+#define OFFB_BP 83,3388
+#define OFFB_SP 84,3423
+#define OFFB_CC_DEP1_0 89,3498
+#define CF_MASK 94,3561
+#define PF_MASK 95,3581
+#define AF_MASK 96,3606
+#define ZF_MASK 97,3631
+#define SF_MASK 98,3656
+#define OF_MASK 99,3681
+#define CF_POS 104,3734
+#define PF_POS 105,3752
+#define AF_POS 106,3770
+#define ZF_POS 107,3788
+#define SF_POS 108,3806
+#define OF_POS 109,3824
+      X86CondO ::X86CondO119,4054
+      X86CondNO ::X86CondNO120,4105
+      X86CondB ::X86CondB122,4157
+      X86CondNB ::X86CondNB123,4208
+      X86CondZ ::X86CondZ125,4260
+      X86CondNZ ::X86CondNZ126,4311
+      X86CondBE ::X86CondBE128,4363
+      X86CondNBE ::X86CondNBE129,4414
+      X86CondS ::X86CondS131,4466
+      X86CondNS ::X86CondNS132,4517
+      X86CondP ::X86CondP134,4569
+      X86CondNP ::X86CondNP135,4620
+      X86CondL ::X86CondL137,4672
+      X86CondNL ::X86CondNL138,4723
+      X86CondLE ::X86CondLE140,4775
+      X86CondNLE ::X86CondNLE141,4826
+      X86CondAlways ::X86CondAlways143,4878
+   X86Condcode;145,4920
+    X86G_CC_OP_COPY=::X86G_CC_OP_COPY152,4994
+    X86G_CC_OP_ADDB,::X86G_CC_OP_ADDB155,5126
+    X86G_CC_OP_ADDW,::X86G_CC_OP_ADDW156,5158
+    X86G_CC_OP_ADDL,::X86G_CC_OP_ADDL157,5230
+    X86G_CC_OP_SUBB,::X86G_CC_OP_SUBB159,5263
+    X86G_CC_OP_SUBW,::X86G_CC_OP_SUBW160,5295
+    X86G_CC_OP_SUBL,::X86G_CC_OP_SUBL161,5367
+    X86G_CC_OP_ADCB,::X86G_CC_OP_ADCB163,5400
+    X86G_CC_OP_ADCW,::X86G_CC_OP_ADCW164,5432
+    X86G_CC_OP_ADCL,::X86G_CC_OP_ADCL165,5517
+    X86G_CC_OP_SBBB,::X86G_CC_OP_SBBB167,5550
+    X86G_CC_OP_SBBW,::X86G_CC_OP_SBBW168,5583
+    X86G_CC_OP_SBBL,::X86G_CC_OP_SBBL169,5669
+    X86G_CC_OP_LOGICB,::X86G_CC_OP_LOGICB171,5703
+    X86G_CC_OP_LOGICW,::X86G_CC_OP_LOGICW172,5736
+    X86G_CC_OP_LOGICL,::X86G_CC_OP_LOGICL173,5808
+    X86G_CC_OP_INCB,::X86G_CC_OP_INCB175,5842
+    X86G_CC_OP_INCW,::X86G_CC_OP_INCW176,5875
+    X86G_CC_OP_INCL,::X86G_CC_OP_INCL177,5958
+    X86G_CC_OP_DECB,::X86G_CC_OP_DECB179,5992
+    X86G_CC_OP_DECW,::X86G_CC_OP_DECW180,6025
+    X86G_CC_OP_DECL,::X86G_CC_OP_DECL181,6108
+    X86G_CC_OP_SHLB,::X86G_CC_OP_SHLB183,6142
+    X86G_CC_OP_SHLW,::X86G_CC_OP_SHLW184,6214
+    X86G_CC_OP_SHLL,::X86G_CC_OP_SHLL185,6295
+    X86G_CC_OP_SHRB,::X86G_CC_OP_SHRB187,6329
+    X86G_CC_OP_SHRW,::X86G_CC_OP_SHRW188,6401
+    X86G_CC_OP_SHRL,::X86G_CC_OP_SHRL189,6482
+    X86G_CC_OP_ROLB,::X86G_CC_OP_ROLB191,6516
+    X86G_CC_OP_ROLW,::X86G_CC_OP_ROLW192,6549
+    X86G_CC_OP_ROLL,::X86G_CC_OP_ROLL193,6621
+    X86G_CC_OP_RORB,::X86G_CC_OP_RORB195,6655
+    X86G_CC_OP_RORW,::X86G_CC_OP_RORW196,6688
+    X86G_CC_OP_RORL,::X86G_CC_OP_RORL197,6760
+    X86G_CC_OP_UMULB,::X86G_CC_OP_UMULB199,6794
+    X86G_CC_OP_UMULW,::X86G_CC_OP_UMULW200,6827
+    X86G_CC_OP_UMULL,::X86G_CC_OP_UMULL201,6900
+    X86G_CC_OP_SMULB,::X86G_CC_OP_SMULB203,6934
+    X86G_CC_OP_SMULW,::X86G_CC_OP_SMULW204,6967
+    X86G_CC_OP_SMULL,::X86G_CC_OP_SMULL205,7040
+    X86G_CC_OP_NUMBER::X86G_CC_OP_NUMBER207,7074
+static string uTag 234,8256
+static string sTag 235,8290
+vector<VarDecl *> i386_get_reg_decls(250,8526
+static string reg_offset_to_name(339,11750
+static inline Temp *mk_reg(mk_reg399,13977
+static Exp *translate_get_reg_8(translate_get_reg_8413,14267
+static Exp *translate_get_segreg_base(translate_get_segreg_base449,15327
+static Exp *translate_get_reg_16(translate_get_reg_16510,16640
+static Exp *translate_get_reg_32(translate_get_reg_32561,18040
+Exp *i386_translate_get(i386_translate_get570,18203
+Exp *i386_translate_ccall(i386_translate_ccall620,19104
+static Stmt *translate_put_reg_8(translate_put_reg_81034,33254
+static Stmt *translate_put_reg_16(translate_put_reg_161089,34950
+static Stmt *translate_put_reg_32(translate_put_reg_321152,36720
+Stmt *i386_translate_put(i386_translate_put1161,36918
+void del_get_thunk(1349,40869
+void get_thunk_index(1394,42074
+void set_eflags_bits(1432,42960
+void get_eflags_bits(1469,44999
+void set_flag(1515,46292
+#define CALC_COND_PF(1552,47525
+Exp* mask_overflow(1565,48009
+vector<Stmt *> mod_eflags_copy(1587,48376
+vector<Stmt *> mod_eflags_add(1614,49386
+vector<Stmt *> mod_eflags_sub(1685,52049
+vector<Stmt *> mod_eflags_adc(1742,53969
+vector<Stmt *> mod_eflags_sbb(1833,56860
+vector<Stmt *> mod_eflags_logic(1918,59641
+vector<Stmt *> mod_eflags_inc(1968,61141
+vector<Stmt *> mod_eflags_dec(2044,63318
+vector<Stmt *> mod_eflags_shl(2106,65373
+vector<Stmt *> mod_eflags_shr(2175,67571
+vector<Stmt *> mod_eflags_rol(2253,70120
+vector<Stmt *> mod_eflags_ror(2311,72210
+vector<Stmt *> mod_eflags_umul(2364,74261
+vector<Stmt *> mod_eflags_smul(2442,76634
+int del_put_thunk(2522,79147
+typedef vector<Stmt *> Mod_Func_0 2619,81979
+typedef vector<Stmt *> Mod_Func_2 2620,82021
+typedef vector<Stmt *> Mod_Func_3 2621,82078
+static void modify_eflags_helper(2623,82143
+bool i386_op_is_very_broken(2698,84764
+void i386_modify_flags(2708,84943
+
+old_ir/exp.cpp,3760
+static string binopnames[binopnames16,329
+static string strs[strs41,609
+Exp::cast_value(68,821
+Exp::reg_to_bits(86,1322
+Exp::clone(101,1602
+void Exp::destroy(107,1654
+Exp::string_type(129,2593
+BinOp::BinOp(145,2921
+BinOp::BinOp(151,3020
+BinOp::clone(159,3163
+BinOp::tostring(165,3223
+BinOp::optype_to_string(174,3375
+BinOp::optype_to_name(180,3469
+BinOp::string_to_optype(186,3573
+void BinOp::destroy(196,3765
+UnOp::UnOp(206,3900
+UnOp::UnOp(212,4002
+UnOp::clone(218,4091
+UnOp::tostring(225,4150
+UnOp::optype_to_string(241,4385
+UnOp::string_to_optype(255,4626
+void UnOp::destroy(263,4760
+Mem::Mem(280,4937
+Mem::Mem(286,4999
+Mem::clone(294,5096
+Mem::tostring(300,5152
+void Mem::destroy(307,5294
+Constant::Constant(316,5401
+Constant::Constant(323,5485
+Constant::clone(330,5593
+Constant::tostring(336,5659
+void Constant::destroy(355,6142
+Constant Constant::t 362,6224
+Constant Constant::f 364,6284
+Phi::Phi(372,6512
+Phi::Phi(383,6742
+Phi::clone(389,6841
+Phi::tostring(395,6897
+void Phi::destroy(409,7158
+Temp::Temp(423,7350
+Temp::Temp(428,7418
+Temp::clone(435,7509
+Temp::tostring(441,7568
+void Temp::destroy(451,7763
+Unknown::Unknown(458,7837
+Unknown::Unknown(461,7909
+Unknown::clone(466,8012
+void Unknown::destroy(471,8069
+Name::Name(478,8149
+Name::Name(483,8224
+Name::clone(489,8324
+string Name::tostring(494,8375
+void Name::destroy(500,8478
+Cast::Cast(507,8552
+Cast::Cast(511,8642
+Cast::clone(518,8773
+void Cast::destroy(523,8824
+string Cast::tostring(532,8928
+string Cast::cast_type_to_string(556,9562
+Let::Let(581,10406
+Let *Let::clone(Let::clone586,10492
+Let::Let(593,10548
+Let::destroy(601,10678
+Let::tostring(612,10861
+Exp *ecl(ecl628,11333
+Constant *ex_const(ex_const634,11401
+Constant *ex_const(ex_const640,11481
+Name *ex_name(ex_name646,11570
+UnOp *_ex_not(_ex_not651,11631
+UnOp *ex_not(ex_not656,11693
+BinOp *_ex_add(_ex_add662,11770
+BinOp *ex_add(ex_add667,11854
+BinOp *_ex_sub(_ex_sub674,11977
+BinOp *ex_sub(ex_sub679,12062
+BinOp *_ex_mul(_ex_mul686,12185
+BinOp *ex_mul(ex_mul691,12270
+BinOp *_ex_div(_ex_div698,12393
+BinOp *ex_div(ex_div703,12479
+BinOp *_ex_and(_ex_and710,12600
+BinOp *_ex_and(_ex_and715,12686
+BinOp *_ex_and(_ex_and720,12788
+BinOp *ex_and(ex_and725,12969
+BinOp *ex_and(ex_and732,13092
+BinOp *ex_and(ex_and740,13256
+BinOp *_ex_or(_ex_or752,13584
+BinOp *_ex_or(_ex_or757,13668
+BinOp *_ex_or(_ex_or762,13767
+BinOp *_ex_or(_ex_or767,13927
+BinOp *ex_or(ex_or772,14104
+BinOp *ex_or(ex_or779,14225
+BinOp *ex_or(ex_or787,14393
+BinOp *ex_or(ex_or798,14690
+BinOp *_ex_xor(_ex_xor810,15030
+BinOp *_ex_xor(_ex_xor815,15113
+BinOp *_ex_xor(_ex_xor820,15215
+BinOp *_ex_xor(_ex_xor825,15345
+BinOp *ex_xor(ex_xor831,15566
+BinOp *ex_xor(ex_xor838,15693
+BinOp *_ex_shl(_ex_shl846,15863
+BinOp *ex_shl(ex_shl851,15949
+BinOp *ex_shl(ex_shl858,16086
+BinOp *_ex_shr(_ex_shr864,16206
+BinOp *ex_shr(ex_shr869,16292
+BinOp *ex_shr(ex_shr876,16429
+BinOp *_ex_sar(_ex_sar882,16549
+BinOp *ex_sar(ex_sar887,16636
+BinOp *ex_sar(ex_sar894,16774
+BinOp *_ex_eq(_ex_eq900,16895
+BinOp *ex_eq(ex_eq905,16976
+BinOp *_ex_neq(_ex_neq912,17108
+BinOp *ex_neq(ex_neq917,17191
+BinOp *ex_gt(ex_gt924,17325
+BinOp *ex_lt(ex_lt931,17457
+BinOp *ex_ge(ex_ge938,17592
+BinOp *ex_le(ex_le945,17724
+Cast *ex_u_cast(ex_u_cast952,17859
+Cast *_ex_u_cast(_ex_u_cast958,17973
+Cast *ex_s_cast(ex_s_cast963,18068
+Cast *_ex_s_cast(_ex_s_cast969,18184
+Cast *ex_h_cast(ex_h_cast974,18277
+Cast *ex_l_cast(ex_l_cast980,18391
+Cast *_ex_l_cast(_ex_l_cast986,18504
+Cast *ex_i_cast(ex_i_cast991,18594
+Cast *ex_f_cast(ex_f_cast997,18711
+Cast *ex_ri_cast(ex_ri_cast1003,18826
+Cast *ex_rf_cast(ex_rf_cast1009,18945
+
+old_ir/stmt.cpp,1393
+Stmt::clone(14,247
+void Stmt::destroy(19,294
+VarDecl::VarDecl(82,1820
+VarDecl::VarDecl(88,1949
+VarDecl::VarDecl(94,2086
+VarDecl::tostring(102,2194
+VarDecl::clone(109,2315
+Move::tostring(116,2381
+Move::Move(121,2464
+Move::Move(128,2620
+Move::clone(135,2753
+Label::Label(140,2804
+Label::Label(146,2933
+Label::clone(152,3056
+Label::tostring(158,3116
+Jmp::Jmp(165,3212
+Jmp::Jmp(169,3319
+Jmp::clone(176,3443
+string Jmp::tostring(183,3494
+CJmp::CJmp(189,3588
+CJmp::CJmp(194,3739
+CJmp::clone(203,3940
+CJmp::tostring(209,3999
+Special::Special(218,4151
+Special::Special(222,4273
+Special::clone(229,4410
+string Special::tostring(234,4467
+Comment::Comment(240,4562
+Comment::Comment(244,4684
+Comment::clone(252,4822
+string Comment::tostring(257,4879
+ExpStmt::ExpStmt(262,4960
+ExpStmt::ExpStmt(268,5078
+ExpStmt::clone(275,5216
+ExpStmt::tostring(281,5280
+Call::Call(286,5352
+Call::Call(295,5580
+Call::Call(304,5793
+string Call::tostring(318,6196
+Call* Call::clone(343,6758
+Return::Return(349,6816
+Return::Return(356,6959
+string Return::tostring(362,7129
+Return* Return::clone(376,7316
+Func::Func(381,7379
+Func::Func(395,7763
+string Func::tostring(412,8295
+Func* Func::clone(449,9013
+Assert::Assert(457,9073
+Assert::Assert(461,9183
+string Assert::tostring(467,9309
+string int_to_str(478,9582
+string int_to_hex(488,9881
+Label *mk_label(mk_label499,10238
+
+traces/trace_v50.cpp,262
+Trace_v50::Trace_v50(4,25
+void Trace_v50::read_taint_record(6,90
+void Trace_v50::read_records(22,544
+void Trace_v50::read_entry_header(36,885
+void Trace_v50::read_process(44,1141
+void Trace_v50::consume_header(55,1316
+void Trace_v50::read_operand(62,1498
+
+traces/trace_v40.cpp,104
+Trace_v40::Trace_v40(4,25
+void Trace_v40::read_taint_record(6,92
+void Trace_v40::read_operand(15,340
+
+traces/trace_v41.cpp,27
+Trace_v41::Trace_v41(3,24

@@ -1,0 +1,278 @@
+{!indexlist}
+
+{2 What is unit Testing?}
+
+A test-oriented methodology for software development is most
+effective whent tests are easy to create, change, and execute. The
+JUnit tool pioneerded for test-first development in Java. OUnit is
+an adaptation of JUnit to OCaml.
+
+With OUnit, as with JUnit, you can easily create tests, name them,
+group them into suites, and execute them, with the framework
+checking the results automatically.
+
+{2 Getting Started}
+
+The basic principle of a test suite is to have a file {i test.ml} which will
+contain the tests, and an OCaml module under test, named {i foo.ml}.
+
+File {i foo.ml}:
+{[
+(* The functions we wish to test *)
+let unity x = x;;
+let funix ()= 0;;
+let fgeneric () = failwith "Not implemented";;
+]}
+
+The main point of a test is to check that the function under test has the
+expected behavior. You check the behavior using assert functions. The most
+simple one is {!OUnit.assert_equal}. This function compares the result of the
+function with an expected result. 
+
+The most useful functions are:
+- {!OUnit.assert_equal} the basic assert function
+- {!OUnit.(>:::)} to define a list of tests 
+- {!OUnit.(>::)} to name a test
+- {!OUnit.run_test_tt_main} to run the test suite you define
+- {!OUnit.bracket} that can help to set and clean environment, it is especially
+  useful if you deal with temporary filename.
+
+File {i test.ml}:
+{[
+open OUnit;;
+
+let test1 () = assert_equal "x" (Foo.unity "x");; 
+
+let test2 () = assert_equal 100 (Foo.unity 100);;
+
+(* Name the test cases and group them together *)
+let suite = 
+"suite">:::
+ ["test1">:: test1;
+  "test2">:: test2]
+;;
+
+let _ = 
+  run_test_tt_main suite
+;;
+]}
+
+And compile the module
+
+{[
+$ ocamlfind ocamlc -o test -package oUnit -linkpkg -g foo.ml test.ml
+]}
+
+A executable named "test" will be created. When run it produces the
+following output.
+
+{[
+$ ./tests
+..
+Ran: 2 tests in: 0.00 Seconds
+OK
+]}
+
+When using {!OUnit.run_test_tt_main}, a non zero exit code signals that the
+test suite was not successful.
+
+{2 Advanced usage}
+
+The topics, cover here, are only for advanced users who wish to unravel the 
+power of OUnit.
+
+{!modules: OUnit OUnitDiff}
+
+{3 Error reporting}
+
+The error reporting part of OUnit is quite important. If you want to identify
+the failure, you should tune the display of the value and the test.
+
+Here is a list of thing you can display:
+- name of the test: OUnit use numbers to define path's test. But an error
+  reporting about a failed test "0:1:2" is less explicit than
+  "OUnit:0:comparator:1:float_comparator:2"
+- [~msg] parameter: it allows you to define say which assert has failed in your
+  test. When you have more than one assert in a test, you should provide a
+  [~msg] to be able to make the difference
+- [~printer] parameter: {!OUnit.assert_equal} allows you to define a printer for
+  compared values. A message ["abcd" is not equal to "defg"] is better than [not
+  equal]
+
+{[
+open OUnit;;
+
+let _ = 
+  "mytest">::
+  (fun () ->
+    assert_equal
+      ~msg:"int value"
+      ~printer:string_of_int
+      1
+      (Foo.unity 1))
+;;
+]}
+
+{3 Command line arguments}
+
+{!OUnit.run_test_tt_main} already provides a set of command line argument to 
+help user to run only the test he wants:
+- [-only-test]: skip all the tests except this one, you can use this flag
+  several time to select more than one test to run 
+- [-list-test]: list all the available tests and exit
+- [-verbose]: rather than displaying dots while running the test, be more 
+  verbose
+- [-help]: display help message and exit
+
+It is also possible to add your own command-line arguments. You should do it 
+if you want to define some extra arguments. For example:
+
+{[
+open OUnit;;
+
+let my_program_to_test = 
+  ref None
+;;
+
+let test1 () =
+  match !my_program_to_test with
+    | Some prg -> 
+        assert_command prg []
+    | None ->
+        skip_if true "My program is not defined"
+;;
+
+let _ = 
+  run_test_tt_main
+    ~arg_specs:["-my-program",
+                Arg.String (fun fn -> my_program_to_test := Some fn),
+                "fn Program to test"]
+    ("test1" >:: test1)
+;;
+]}
+
+{3 Skip and todo tests}
+
+Tests are not always meaningful and can even fail because something is missing 
+in the environment. In order to manage this, you can define a skip condition 
+that will skip the test. 
+
+If you start by defining your tests rather than implementing the functions 
+under test, you know that some tests will just fail. You can mark these tests
+as to do tests, this way they will be reported differently in your test suite.
+
+{[
+open OUnit;;
+
+let _ =
+  "allfuns" >:::
+  [
+    "funix">::
+    (fun () ->
+      skip_if (Sys.os_type = "Win32") "Don't work on Windows";
+      assert_equal
+        0
+        (Foo.funix ()));
+
+    "fgeneric">::
+    (fun () ->
+      todo "fgeneric not implemented";
+      assert_equal
+        0
+        (Foo.fgeneric ()));
+  ]
+;;
+]}
+
+{3 Effective OUnit}
+
+This section is about general tips about unit testing and OUnit. It is the
+result of some years using OUnit in real world applications.
+
+- test everything: the more you create tests, the better chance you have to
+  catch early an error in your program. Every submitted bugs to your application
+  should have a matching tests. This is a good practice, but it is not always
+  easy to implement.
+- test only what is really exported: on the long term, you have to maintain your
+  test suite. If you test low-level functions, you'll have a lot of tests to
+  rewrite. You should focus on creating tests for functions for which the
+  behavior shouldn't change.
+- test fast: the best test suite is the one that runs after every single build.
+  You should set your default Makefile target to run the test suite. It means
+  that your test suite should be fast to run, typically, a 10s test suite is
+  fine.
+- test long: contrary to the former tip, you should also have a complete test
+  suite which can be very long to run. The best way to achieve both tips, is to
+  define a command line arguments [-long] and skip the tests that are too long in 
+  your test suite according to it. When you do a release, you should use run
+  your long test suite. 
+- family tests: when testing behavior, most of the time you call exactly the
+  same code with different arguments. In this case [List.map] and
+  {!OUnit.(>:::)} are your friends. For example:
+
+{[
+open OUnit;;
+
+let _ =
+  "Family">:::
+  (List.map 
+    (fun (arg,res) -> 
+      let title = 
+        Printf.sprintf "%s->%s" arg res
+      in
+        title >::
+        (fun () ->
+          assert_equal res (Foo.unity arg)))
+      ["abcd", "abcd";
+       "defg", "defg";
+       "wxyz", "wxyz"])
+;;
+]}
+
+- test failures and successes: the most obvious thing you want to test are
+  successes, i.e. that you get the expected behavior in the normal case. But
+  most of the errors arise in corner cases and in the code of the test itself.
+  For example, you can have a partial application of your {!OUnit.assert_equal}
+  and never encounter any errors, just because the [assert_equal] is not called.
+  In this case, if you test errors as well, you will have a missing errors as
+  well.
+- set up and clean your environment in the test: you should not set up and clean
+  your test environment outside the test. Ideally, if you run no tests, the
+  program should do nothing. This is also a sane way to be sure that you are
+  always testing in a clean environment, not polluted by the result of failed
+  tests run before.
+
+{[
+open OUnit;;
+
+let _ =
+  (* We need to call a function in a particular directory *)
+  "change-dir-and-run">::
+  bracket
+    (fun () -> 
+      let pwd = Sys.getcwd () in
+        Sys.chdir "test";
+        pwd)
+    (fun _ ->
+      assert_command "ls" [])
+    (fun pwd ->
+      Sys.chdir pwd)
+;;
+]}
+- separate your test: OUnit test code should live outside the code under tests.
+  This allow to drop the dependency on OUnit when distributing your
+  library/application. This also enables people to easily make a difference from
+  what really matters (the main code) and what are only tests. It is possible to
+  have it directly in the code, like in Quickcheck style tests.  
+
+The unit testing scope is always hard to define. Unit testing should be about
+testing a single features. But OUnit can help you to test higher level behavior,
+by running a full program for example. While it isn't real unit testing, you
+can use OUnit to do it and should not hesitate to do it.
+
+In term of line of codes, a test suite can represent from 10% to 150% of the
+code under test. With time, your test suite will grow faster than your
+program/library. A good ratio is 33%.
+
+@author Maas-Maarten Zeeman
+@author Sylvain Le Gall

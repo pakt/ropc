@@ -1,0 +1,5 @@
+This directory contains include files from the Windows Driver
+Development Kit, version 7600.16385.1.  They are included here because
+1) WDK is annoying to obtain, 2) there are header file conflicts
+between WDK and VC++ that are difficult to resolve.  These header
+files work on VS 10.0.30319.1.

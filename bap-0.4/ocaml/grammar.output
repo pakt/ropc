@@ -1,0 +1,5651 @@
+   0  $accept : %entry% $end
+
+   1  program : stmtlist EOF
+
+   2  stmtlist : revstmtlist
+
+   3  revstmtlist : revstmtlist stmt
+   4              |
+
+   5  stmt : JMP expr attrs semi
+   6       | CJMP expr COMMA expr COMMA expr attrs semi
+   7       | SPECIAL STRING attrs semi
+   8       | lval ASSIGN expr attrs semi
+   9       | lval EQUAL expr attrs semi
+  10       | HALT expr attrs semi
+  11       | ASSERT expr attrs semi
+  12       | LABEL ID attrs
+  13       | ADDR INT attrs
+  14       | COMMENT attrs
+
+  15  plusminusint : INT
+  16               | MINUS INT
+
+  17  context : ID LSQUARE INT RSQUARE EQUAL INT COMMA plusminusint COMMA styp
+  18          | ID EQUAL INT COMMA plusminusint COMMA typ
+
+  19  attrs :
+  20        | attr attrs
+
+  21  attr : AT ID STRING
+  22       | AT ID context
+
+  23  lval : ID opttyp
+
+  24  opttyp :
+  25         | COLON typ
+
+  26  typ : styp
+  27      | QUESTION styp
+  28      | styp QUESTION styp
+
+  29  styp : ID
+
+  30  letstart : LET ID COLON typ ASSIGN expr
+
+  31  expr : LPAREN expr RPAREN
+  32       | expr PLUS expr
+  33       | expr MINUS expr
+  34       | expr TIMES expr
+  35       | expr DIVIDE expr
+  36       | expr SDIVIDE expr
+  37       | expr MOD expr
+  38       | expr SMOD expr
+  39       | expr LSHIFT expr
+  40       | expr RSHIFT expr
+  41       | expr ARSHIFT expr
+  42       | expr AND expr
+  43       | expr OR expr
+  44       | expr XOR expr
+  45       | expr EQUALEQUAL expr
+  46       | expr NEQ expr
+  47       | expr LT expr
+  48       | expr LE expr
+  49       | expr SLT expr
+  50       | expr SLE expr
+  51       | expr GT expr
+  52       | expr GE expr
+  53       | expr SGT expr
+  54       | expr SGE expr
+  55       | NOT expr
+  56       | MINUS expr
+  57       | UNKNOWN STRING COLON typ
+  58       | STRING
+  59       | lval
+  60       | IF expr THEN expr ELSE expr
+  61       | letstart IN expr
+  62       | EXTRACT COLON INT COLON INT COLON LSQUARE expr RSQUARE
+  63       | CONCAT COLON LSQUARE expr RSQUARE LSQUARE expr RSQUARE
+  64       | ID COLON typ LPAREN expr RPAREN
+  65       | TRUE
+  66       | FALSE
+  67       | INT COLON typ
+  68       | expr WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr
+  69       | expr LSQUARE expr COMMA endian RSQUARE COLON typ
+
+  70  endian : EBIG
+  71         | ELITTLE
+  72         | expr
+
+  73  semi : SEMI
+  74       |
+
+  75  assign : ASSIGN
+  76         | EQUAL
+
+  77  %entry% : '\001' program
+  78          | '\002' expr
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	'\002'  shift 2
+	.  error
+
+	%entry%  goto 3
+
+
+state 1
+	%entry% : '\001' . program  (77)
+	revstmtlist : .  (4)
+
+	.  reduce 4
+
+	program  goto 4
+	stmtlist  goto 5
+	revstmtlist  goto 6
+
+
+state 2
+	%entry% : '\002' . expr  (78)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 20
+	lval  goto 21
+	letstart  goto 22
+
+
+state 3
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 4
+	%entry% : '\001' program .  (77)
+
+	.  reduce 77
+
+
+state 5
+	program : stmtlist . EOF  (1)
+
+	EOF  shift 23
+	.  error
+
+
+state 6
+	stmtlist : revstmtlist .  (2)
+	revstmtlist : revstmtlist . stmt  (3)
+
+	ID  shift 24
+	COMMENT  shift 25
+	CJMP  shift 26
+	JMP  shift 27
+	LABEL  shift 28
+	ADDR  shift 29
+	ASSERT  shift 30
+	HALT  shift 31
+	SPECIAL  shift 32
+	EOF  reduce 2
+
+	stmt  goto 33
+	lval  goto 34
+
+
+state 7
+	lval : ID . opttyp  (23)
+	expr : ID . COLON typ LPAREN expr RPAREN  (64)
+	opttyp : .  (24)
+
+	COLON  shift 35
+	$end  reduce 24
+	ID  reduce 24
+	COMMENT  reduce 24
+	RPAREN  reduce 24
+	LSQUARE  reduce 24
+	RSQUARE  reduce 24
+	COMMA  reduce 24
+	SEMI  reduce 24
+	EOF  reduce 24
+	CJMP  reduce 24
+	JMP  reduce 24
+	LABEL  reduce 24
+	ADDR  reduce 24
+	ASSERT  reduce 24
+	HALT  reduce 24
+	SPECIAL  reduce 24
+	IN  reduce 24
+	WITH  reduce 24
+	THEN  reduce 24
+	ELSE  reduce 24
+	PLUS  reduce 24
+	MINUS  reduce 24
+	DIVIDE  reduce 24
+	MOD  reduce 24
+	SMOD  reduce 24
+	TIMES  reduce 24
+	SDIVIDE  reduce 24
+	LSHIFT  reduce 24
+	RSHIFT  reduce 24
+	ARSHIFT  reduce 24
+	XOR  reduce 24
+	NEQ  reduce 24
+	SLT  reduce 24
+	SLE  reduce 24
+	AND  reduce 24
+	OR  reduce 24
+	EQUALEQUAL  reduce 24
+	LT  reduce 24
+	LE  reduce 24
+	GT  reduce 24
+	GE  reduce 24
+	SGT  reduce 24
+	SGE  reduce 24
+	AT  reduce 24
+
+	opttyp  goto 36
+
+
+state 8
+	expr : INT . COLON typ  (67)
+
+	COLON  shift 37
+	.  error
+
+
+state 9
+	expr : STRING .  (58)
+
+	.  reduce 58
+
+
+state 10
+	expr : LPAREN . expr RPAREN  (31)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 38
+	lval  goto 21
+	letstart  goto 22
+
+
+state 11
+	letstart : LET . ID COLON typ ASSIGN expr  (30)
+
+	ID  shift 39
+	.  error
+
+
+state 12
+	expr : UNKNOWN . STRING COLON typ  (57)
+
+	STRING  shift 40
+	.  error
+
+
+state 13
+	expr : TRUE .  (65)
+
+	.  reduce 65
+
+
+state 14
+	expr : FALSE .  (66)
+
+	.  reduce 66
+
+
+state 15
+	expr : IF . expr THEN expr ELSE expr  (60)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 41
+	lval  goto 21
+	letstart  goto 22
+
+
+state 16
+	expr : MINUS . expr  (56)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 42
+	lval  goto 21
+	letstart  goto 22
+
+
+state 17
+	expr : CONCAT . COLON LSQUARE expr RSQUARE LSQUARE expr RSQUARE  (63)
+
+	COLON  shift 43
+	.  error
+
+
+state 18
+	expr : EXTRACT . COLON INT COLON INT COLON LSQUARE expr RSQUARE  (62)
+
+	COLON  shift 44
+	.  error
+
+
+state 19
+	expr : NOT . expr  (55)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 45
+	lval  goto 21
+	letstart  goto 22
+
+
+state 20
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+	%entry% : '\002' expr .  (78)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	$end  reduce 78
+
+
+state 21
+	expr : lval .  (59)
+
+	.  reduce 59
+
+
+state 22
+	expr : letstart . IN expr  (61)
+
+	IN  shift 71
+	.  error
+
+
+state 23
+	program : stmtlist EOF .  (1)
+
+	.  reduce 1
+
+
+state 24
+	lval : ID . opttyp  (23)
+	opttyp : .  (24)
+
+	COLON  shift 72
+	EQUAL  reduce 24
+	ASSIGN  reduce 24
+
+	opttyp  goto 36
+
+
+state 25
+	stmt : COMMENT . attrs  (14)
+	attrs : .  (19)
+
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 74
+	attr  goto 75
+
+
+state 26
+	stmt : CJMP . expr COMMA expr COMMA expr attrs semi  (6)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 76
+	lval  goto 21
+	letstart  goto 22
+
+
+state 27
+	stmt : JMP . expr attrs semi  (5)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 77
+	lval  goto 21
+	letstart  goto 22
+
+
+state 28
+	stmt : LABEL . ID attrs  (12)
+
+	ID  shift 78
+	.  error
+
+
+state 29
+	stmt : ADDR . INT attrs  (13)
+
+	INT  shift 79
+	.  error
+
+
+state 30
+	stmt : ASSERT . expr attrs semi  (11)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 80
+	lval  goto 21
+	letstart  goto 22
+
+
+state 31
+	stmt : HALT . expr attrs semi  (10)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 81
+	lval  goto 21
+	letstart  goto 22
+
+
+state 32
+	stmt : SPECIAL . STRING attrs semi  (7)
+
+	STRING  shift 82
+	.  error
+
+
+state 33
+	revstmtlist : revstmtlist stmt .  (3)
+
+	.  reduce 3
+
+
+state 34
+	stmt : lval . ASSIGN expr attrs semi  (8)
+	stmt : lval . EQUAL expr attrs semi  (9)
+
+	EQUAL  shift 83
+	ASSIGN  shift 84
+	.  error
+
+
+state 35
+	opttyp : COLON . typ  (25)
+	expr : ID COLON . typ LPAREN expr RPAREN  (64)
+
+	ID  shift 85
+	QUESTION  shift 86
+	.  error
+
+	styp  goto 87
+	typ  goto 88
+
+
+state 36
+	lval : ID opttyp .  (23)
+
+	.  reduce 23
+
+
+state 37
+	expr : INT COLON . typ  (67)
+
+	ID  shift 85
+	QUESTION  shift 86
+	.  error
+
+	styp  goto 87
+	typ  goto 89
+
+
+state 38
+	expr : LPAREN expr . RPAREN  (31)
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	RPAREN  shift 90
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 39
+	letstart : LET ID . COLON typ ASSIGN expr  (30)
+
+	COLON  shift 91
+	.  error
+
+
+state 40
+	expr : UNKNOWN STRING . COLON typ  (57)
+
+	COLON  shift 92
+	.  error
+
+
+state 41
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : IF expr . THEN expr ELSE expr  (60)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	THEN  shift 93
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 42
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : MINUS expr .  (56)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	$end  reduce 56
+	ID  reduce 56
+	COMMENT  reduce 56
+	RPAREN  reduce 56
+	RSQUARE  reduce 56
+	COMMA  reduce 56
+	SEMI  reduce 56
+	EOF  reduce 56
+	CJMP  reduce 56
+	JMP  reduce 56
+	LABEL  reduce 56
+	ADDR  reduce 56
+	ASSERT  reduce 56
+	HALT  reduce 56
+	SPECIAL  reduce 56
+	IN  reduce 56
+	WITH  reduce 56
+	THEN  reduce 56
+	ELSE  reduce 56
+	PLUS  reduce 56
+	MINUS  reduce 56
+	DIVIDE  reduce 56
+	MOD  reduce 56
+	SMOD  reduce 56
+	TIMES  reduce 56
+	SDIVIDE  reduce 56
+	LSHIFT  reduce 56
+	RSHIFT  reduce 56
+	ARSHIFT  reduce 56
+	XOR  reduce 56
+	NEQ  reduce 56
+	SLT  reduce 56
+	SLE  reduce 56
+	AND  reduce 56
+	OR  reduce 56
+	EQUALEQUAL  reduce 56
+	LT  reduce 56
+	LE  reduce 56
+	GT  reduce 56
+	GE  reduce 56
+	SGT  reduce 56
+	SGE  reduce 56
+	AT  reduce 56
+
+
+state 43
+	expr : CONCAT COLON . LSQUARE expr RSQUARE LSQUARE expr RSQUARE  (63)
+
+	LSQUARE  shift 94
+	.  error
+
+
+state 44
+	expr : EXTRACT COLON . INT COLON INT COLON LSQUARE expr RSQUARE  (62)
+
+	INT  shift 95
+	.  error
+
+
+state 45
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : NOT expr .  (55)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	$end  reduce 55
+	ID  reduce 55
+	COMMENT  reduce 55
+	RPAREN  reduce 55
+	RSQUARE  reduce 55
+	COMMA  reduce 55
+	SEMI  reduce 55
+	EOF  reduce 55
+	CJMP  reduce 55
+	JMP  reduce 55
+	LABEL  reduce 55
+	ADDR  reduce 55
+	ASSERT  reduce 55
+	HALT  reduce 55
+	SPECIAL  reduce 55
+	IN  reduce 55
+	WITH  reduce 55
+	THEN  reduce 55
+	ELSE  reduce 55
+	PLUS  reduce 55
+	MINUS  reduce 55
+	DIVIDE  reduce 55
+	MOD  reduce 55
+	SMOD  reduce 55
+	TIMES  reduce 55
+	SDIVIDE  reduce 55
+	LSHIFT  reduce 55
+	RSHIFT  reduce 55
+	ARSHIFT  reduce 55
+	XOR  reduce 55
+	NEQ  reduce 55
+	SLT  reduce 55
+	SLE  reduce 55
+	AND  reduce 55
+	OR  reduce 55
+	EQUALEQUAL  reduce 55
+	LT  reduce 55
+	LE  reduce 55
+	GT  reduce 55
+	GE  reduce 55
+	SGT  reduce 55
+	SGE  reduce 55
+	AT  reduce 55
+
+
+state 46
+	expr : expr LSQUARE . expr COMMA endian RSQUARE COLON typ  (69)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 96
+	lval  goto 21
+	letstart  goto 22
+
+
+state 47
+	expr : expr WITH . LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+
+	LSQUARE  shift 97
+	.  error
+
+
+state 48
+	expr : expr PLUS . expr  (32)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 98
+	lval  goto 21
+	letstart  goto 22
+
+
+state 49
+	expr : expr MINUS . expr  (33)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 99
+	lval  goto 21
+	letstart  goto 22
+
+
+state 50
+	expr : expr DIVIDE . expr  (35)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 100
+	lval  goto 21
+	letstart  goto 22
+
+
+state 51
+	expr : expr MOD . expr  (37)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 101
+	lval  goto 21
+	letstart  goto 22
+
+
+state 52
+	expr : expr SMOD . expr  (38)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 102
+	lval  goto 21
+	letstart  goto 22
+
+
+state 53
+	expr : expr TIMES . expr  (34)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 103
+	lval  goto 21
+	letstart  goto 22
+
+
+state 54
+	expr : expr SDIVIDE . expr  (36)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 104
+	lval  goto 21
+	letstart  goto 22
+
+
+state 55
+	expr : expr LSHIFT . expr  (39)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 105
+	lval  goto 21
+	letstart  goto 22
+
+
+state 56
+	expr : expr RSHIFT . expr  (40)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 106
+	lval  goto 21
+	letstart  goto 22
+
+
+state 57
+	expr : expr ARSHIFT . expr  (41)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 107
+	lval  goto 21
+	letstart  goto 22
+
+
+state 58
+	expr : expr XOR . expr  (44)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 108
+	lval  goto 21
+	letstart  goto 22
+
+
+state 59
+	expr : expr NEQ . expr  (46)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 109
+	lval  goto 21
+	letstart  goto 22
+
+
+state 60
+	expr : expr SLT . expr  (49)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 110
+	lval  goto 21
+	letstart  goto 22
+
+
+state 61
+	expr : expr SLE . expr  (50)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 111
+	lval  goto 21
+	letstart  goto 22
+
+
+state 62
+	expr : expr AND . expr  (42)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 112
+	lval  goto 21
+	letstart  goto 22
+
+
+state 63
+	expr : expr OR . expr  (43)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 113
+	lval  goto 21
+	letstart  goto 22
+
+
+state 64
+	expr : expr EQUALEQUAL . expr  (45)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 114
+	lval  goto 21
+	letstart  goto 22
+
+
+state 65
+	expr : expr LT . expr  (47)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 115
+	lval  goto 21
+	letstart  goto 22
+
+
+state 66
+	expr : expr LE . expr  (48)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 116
+	lval  goto 21
+	letstart  goto 22
+
+
+state 67
+	expr : expr GT . expr  (51)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 117
+	lval  goto 21
+	letstart  goto 22
+
+
+state 68
+	expr : expr GE . expr  (52)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 118
+	lval  goto 21
+	letstart  goto 22
+
+
+state 69
+	expr : expr SGT . expr  (53)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 119
+	lval  goto 21
+	letstart  goto 22
+
+
+state 70
+	expr : expr SGE . expr  (54)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 120
+	lval  goto 21
+	letstart  goto 22
+
+
+state 71
+	expr : letstart IN . expr  (61)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 121
+	lval  goto 21
+	letstart  goto 22
+
+
+state 72
+	opttyp : COLON . typ  (25)
+
+	ID  shift 85
+	QUESTION  shift 86
+	.  error
+
+	styp  goto 87
+	typ  goto 122
+
+
+state 73
+	attr : AT . ID STRING  (21)
+	attr : AT . ID context  (22)
+
+	ID  shift 123
+	.  error
+
+
+state 74
+	stmt : COMMENT attrs .  (14)
+
+	.  reduce 14
+
+
+state 75
+	attrs : attr . attrs  (20)
+	attrs : .  (19)
+
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	SEMI  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 124
+	attr  goto 75
+
+
+state 76
+	stmt : CJMP expr . COMMA expr COMMA expr attrs semi  (6)
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	COMMA  shift 125
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 77
+	stmt : JMP expr . attrs semi  (5)
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+	attrs : .  (19)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	SEMI  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 126
+	attr  goto 75
+
+
+state 78
+	stmt : LABEL ID . attrs  (12)
+	attrs : .  (19)
+
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 127
+	attr  goto 75
+
+
+state 79
+	stmt : ADDR INT . attrs  (13)
+	attrs : .  (19)
+
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 128
+	attr  goto 75
+
+
+state 80
+	stmt : ASSERT expr . attrs semi  (11)
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+	attrs : .  (19)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	SEMI  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 129
+	attr  goto 75
+
+
+state 81
+	stmt : HALT expr . attrs semi  (10)
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+	attrs : .  (19)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	SEMI  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 130
+	attr  goto 75
+
+
+state 82
+	stmt : SPECIAL STRING . attrs semi  (7)
+	attrs : .  (19)
+
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	SEMI  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 131
+	attr  goto 75
+
+
+state 83
+	stmt : lval EQUAL . expr attrs semi  (9)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 132
+	lval  goto 21
+	letstart  goto 22
+
+
+state 84
+	stmt : lval ASSIGN . expr attrs semi  (8)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 133
+	lval  goto 21
+	letstart  goto 22
+
+
+state 85
+	styp : ID .  (29)
+
+	.  reduce 29
+
+
+state 86
+	typ : QUESTION . styp  (27)
+
+	ID  shift 85
+	.  error
+
+	styp  goto 134
+
+
+state 87
+	typ : styp .  (26)
+	typ : styp . QUESTION styp  (28)
+
+	QUESTION  shift 135
+	$end  reduce 26
+	ID  reduce 26
+	COMMENT  reduce 26
+	LPAREN  reduce 26
+	RPAREN  reduce 26
+	LSQUARE  reduce 26
+	RSQUARE  reduce 26
+	COMMA  reduce 26
+	SEMI  reduce 26
+	EOF  reduce 26
+	CJMP  reduce 26
+	JMP  reduce 26
+	LABEL  reduce 26
+	ADDR  reduce 26
+	ASSERT  reduce 26
+	HALT  reduce 26
+	SPECIAL  reduce 26
+	IN  reduce 26
+	WITH  reduce 26
+	THEN  reduce 26
+	ELSE  reduce 26
+	PLUS  reduce 26
+	MINUS  reduce 26
+	DIVIDE  reduce 26
+	MOD  reduce 26
+	SMOD  reduce 26
+	TIMES  reduce 26
+	SDIVIDE  reduce 26
+	LSHIFT  reduce 26
+	RSHIFT  reduce 26
+	ARSHIFT  reduce 26
+	XOR  reduce 26
+	NEQ  reduce 26
+	SLT  reduce 26
+	SLE  reduce 26
+	AND  reduce 26
+	OR  reduce 26
+	EQUAL  reduce 26
+	EQUALEQUAL  reduce 26
+	LT  reduce 26
+	LE  reduce 26
+	ASSIGN  reduce 26
+	GT  reduce 26
+	GE  reduce 26
+	SGT  reduce 26
+	SGE  reduce 26
+	AT  reduce 26
+
+
+state 88
+	opttyp : COLON typ .  (25)
+	expr : ID COLON typ . LPAREN expr RPAREN  (64)
+
+	LPAREN  shift 136
+	$end  reduce 25
+	ID  reduce 25
+	COMMENT  reduce 25
+	RPAREN  reduce 25
+	LSQUARE  reduce 25
+	RSQUARE  reduce 25
+	COMMA  reduce 25
+	SEMI  reduce 25
+	EOF  reduce 25
+	CJMP  reduce 25
+	JMP  reduce 25
+	LABEL  reduce 25
+	ADDR  reduce 25
+	ASSERT  reduce 25
+	HALT  reduce 25
+	SPECIAL  reduce 25
+	IN  reduce 25
+	WITH  reduce 25
+	THEN  reduce 25
+	ELSE  reduce 25
+	PLUS  reduce 25
+	MINUS  reduce 25
+	DIVIDE  reduce 25
+	MOD  reduce 25
+	SMOD  reduce 25
+	TIMES  reduce 25
+	SDIVIDE  reduce 25
+	LSHIFT  reduce 25
+	RSHIFT  reduce 25
+	ARSHIFT  reduce 25
+	XOR  reduce 25
+	NEQ  reduce 25
+	SLT  reduce 25
+	SLE  reduce 25
+	AND  reduce 25
+	OR  reduce 25
+	EQUALEQUAL  reduce 25
+	LT  reduce 25
+	LE  reduce 25
+	GT  reduce 25
+	GE  reduce 25
+	SGT  reduce 25
+	SGE  reduce 25
+	AT  reduce 25
+
+
+state 89
+	expr : INT COLON typ .  (67)
+
+	.  reduce 67
+
+
+state 90
+	expr : LPAREN expr RPAREN .  (31)
+
+	.  reduce 31
+
+
+state 91
+	letstart : LET ID COLON . typ ASSIGN expr  (30)
+
+	ID  shift 85
+	QUESTION  shift 86
+	.  error
+
+	styp  goto 87
+	typ  goto 137
+
+
+state 92
+	expr : UNKNOWN STRING COLON . typ  (57)
+
+	ID  shift 85
+	QUESTION  shift 86
+	.  error
+
+	styp  goto 87
+	typ  goto 138
+
+
+state 93
+	expr : IF expr THEN . expr ELSE expr  (60)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 139
+	lval  goto 21
+	letstart  goto 22
+
+
+state 94
+	expr : CONCAT COLON LSQUARE . expr RSQUARE LSQUARE expr RSQUARE  (63)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 140
+	lval  goto 21
+	letstart  goto 22
+
+
+state 95
+	expr : EXTRACT COLON INT . COLON INT COLON LSQUARE expr RSQUARE  (62)
+
+	COLON  shift 141
+	.  error
+
+
+state 96
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+	expr : expr LSQUARE expr . COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	COMMA  shift 142
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 97
+	expr : expr WITH LSQUARE . expr COMMA endian RSQUARE COLON typ assign expr  (68)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 143
+	lval  goto 21
+	letstart  goto 22
+
+
+state 98
+	expr : expr . PLUS expr  (32)
+	expr : expr PLUS expr .  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	$end  reduce 32
+	ID  reduce 32
+	COMMENT  reduce 32
+	RPAREN  reduce 32
+	RSQUARE  reduce 32
+	COMMA  reduce 32
+	SEMI  reduce 32
+	EOF  reduce 32
+	CJMP  reduce 32
+	JMP  reduce 32
+	LABEL  reduce 32
+	ADDR  reduce 32
+	ASSERT  reduce 32
+	HALT  reduce 32
+	SPECIAL  reduce 32
+	IN  reduce 32
+	WITH  reduce 32
+	THEN  reduce 32
+	ELSE  reduce 32
+	PLUS  reduce 32
+	MINUS  reduce 32
+	LSHIFT  reduce 32
+	RSHIFT  reduce 32
+	ARSHIFT  reduce 32
+	XOR  reduce 32
+	NEQ  reduce 32
+	SLT  reduce 32
+	SLE  reduce 32
+	AND  reduce 32
+	OR  reduce 32
+	EQUALEQUAL  reduce 32
+	LT  reduce 32
+	LE  reduce 32
+	GT  reduce 32
+	GE  reduce 32
+	SGT  reduce 32
+	SGE  reduce 32
+	AT  reduce 32
+
+
+state 99
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr MINUS expr .  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	$end  reduce 33
+	ID  reduce 33
+	COMMENT  reduce 33
+	RPAREN  reduce 33
+	RSQUARE  reduce 33
+	COMMA  reduce 33
+	SEMI  reduce 33
+	EOF  reduce 33
+	CJMP  reduce 33
+	JMP  reduce 33
+	LABEL  reduce 33
+	ADDR  reduce 33
+	ASSERT  reduce 33
+	HALT  reduce 33
+	SPECIAL  reduce 33
+	IN  reduce 33
+	WITH  reduce 33
+	THEN  reduce 33
+	ELSE  reduce 33
+	PLUS  reduce 33
+	MINUS  reduce 33
+	LSHIFT  reduce 33
+	RSHIFT  reduce 33
+	ARSHIFT  reduce 33
+	XOR  reduce 33
+	NEQ  reduce 33
+	SLT  reduce 33
+	SLE  reduce 33
+	AND  reduce 33
+	OR  reduce 33
+	EQUALEQUAL  reduce 33
+	LT  reduce 33
+	LE  reduce 33
+	GT  reduce 33
+	GE  reduce 33
+	SGT  reduce 33
+	SGE  reduce 33
+	AT  reduce 33
+
+
+state 100
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr DIVIDE expr .  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	$end  reduce 35
+	ID  reduce 35
+	COMMENT  reduce 35
+	RPAREN  reduce 35
+	RSQUARE  reduce 35
+	COMMA  reduce 35
+	SEMI  reduce 35
+	EOF  reduce 35
+	CJMP  reduce 35
+	JMP  reduce 35
+	LABEL  reduce 35
+	ADDR  reduce 35
+	ASSERT  reduce 35
+	HALT  reduce 35
+	SPECIAL  reduce 35
+	IN  reduce 35
+	WITH  reduce 35
+	THEN  reduce 35
+	ELSE  reduce 35
+	PLUS  reduce 35
+	MINUS  reduce 35
+	DIVIDE  reduce 35
+	MOD  reduce 35
+	SMOD  reduce 35
+	TIMES  reduce 35
+	SDIVIDE  reduce 35
+	LSHIFT  reduce 35
+	RSHIFT  reduce 35
+	ARSHIFT  reduce 35
+	XOR  reduce 35
+	NEQ  reduce 35
+	SLT  reduce 35
+	SLE  reduce 35
+	AND  reduce 35
+	OR  reduce 35
+	EQUALEQUAL  reduce 35
+	LT  reduce 35
+	LE  reduce 35
+	GT  reduce 35
+	GE  reduce 35
+	SGT  reduce 35
+	SGE  reduce 35
+	AT  reduce 35
+
+
+state 101
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr MOD expr .  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	$end  reduce 37
+	ID  reduce 37
+	COMMENT  reduce 37
+	RPAREN  reduce 37
+	RSQUARE  reduce 37
+	COMMA  reduce 37
+	SEMI  reduce 37
+	EOF  reduce 37
+	CJMP  reduce 37
+	JMP  reduce 37
+	LABEL  reduce 37
+	ADDR  reduce 37
+	ASSERT  reduce 37
+	HALT  reduce 37
+	SPECIAL  reduce 37
+	IN  reduce 37
+	WITH  reduce 37
+	THEN  reduce 37
+	ELSE  reduce 37
+	PLUS  reduce 37
+	MINUS  reduce 37
+	DIVIDE  reduce 37
+	MOD  reduce 37
+	SMOD  reduce 37
+	TIMES  reduce 37
+	SDIVIDE  reduce 37
+	LSHIFT  reduce 37
+	RSHIFT  reduce 37
+	ARSHIFT  reduce 37
+	XOR  reduce 37
+	NEQ  reduce 37
+	SLT  reduce 37
+	SLE  reduce 37
+	AND  reduce 37
+	OR  reduce 37
+	EQUALEQUAL  reduce 37
+	LT  reduce 37
+	LE  reduce 37
+	GT  reduce 37
+	GE  reduce 37
+	SGT  reduce 37
+	SGE  reduce 37
+	AT  reduce 37
+
+
+state 102
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr SMOD expr .  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	$end  reduce 38
+	ID  reduce 38
+	COMMENT  reduce 38
+	RPAREN  reduce 38
+	RSQUARE  reduce 38
+	COMMA  reduce 38
+	SEMI  reduce 38
+	EOF  reduce 38
+	CJMP  reduce 38
+	JMP  reduce 38
+	LABEL  reduce 38
+	ADDR  reduce 38
+	ASSERT  reduce 38
+	HALT  reduce 38
+	SPECIAL  reduce 38
+	IN  reduce 38
+	WITH  reduce 38
+	THEN  reduce 38
+	ELSE  reduce 38
+	PLUS  reduce 38
+	MINUS  reduce 38
+	DIVIDE  reduce 38
+	MOD  reduce 38
+	SMOD  reduce 38
+	TIMES  reduce 38
+	SDIVIDE  reduce 38
+	LSHIFT  reduce 38
+	RSHIFT  reduce 38
+	ARSHIFT  reduce 38
+	XOR  reduce 38
+	NEQ  reduce 38
+	SLT  reduce 38
+	SLE  reduce 38
+	AND  reduce 38
+	OR  reduce 38
+	EQUALEQUAL  reduce 38
+	LT  reduce 38
+	LE  reduce 38
+	GT  reduce 38
+	GE  reduce 38
+	SGT  reduce 38
+	SGE  reduce 38
+	AT  reduce 38
+
+
+state 103
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr TIMES expr .  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	$end  reduce 34
+	ID  reduce 34
+	COMMENT  reduce 34
+	RPAREN  reduce 34
+	RSQUARE  reduce 34
+	COMMA  reduce 34
+	SEMI  reduce 34
+	EOF  reduce 34
+	CJMP  reduce 34
+	JMP  reduce 34
+	LABEL  reduce 34
+	ADDR  reduce 34
+	ASSERT  reduce 34
+	HALT  reduce 34
+	SPECIAL  reduce 34
+	IN  reduce 34
+	WITH  reduce 34
+	THEN  reduce 34
+	ELSE  reduce 34
+	PLUS  reduce 34
+	MINUS  reduce 34
+	DIVIDE  reduce 34
+	MOD  reduce 34
+	SMOD  reduce 34
+	TIMES  reduce 34
+	SDIVIDE  reduce 34
+	LSHIFT  reduce 34
+	RSHIFT  reduce 34
+	ARSHIFT  reduce 34
+	XOR  reduce 34
+	NEQ  reduce 34
+	SLT  reduce 34
+	SLE  reduce 34
+	AND  reduce 34
+	OR  reduce 34
+	EQUALEQUAL  reduce 34
+	LT  reduce 34
+	LE  reduce 34
+	GT  reduce 34
+	GE  reduce 34
+	SGT  reduce 34
+	SGE  reduce 34
+	AT  reduce 34
+
+
+state 104
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr SDIVIDE expr .  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	$end  reduce 36
+	ID  reduce 36
+	COMMENT  reduce 36
+	RPAREN  reduce 36
+	RSQUARE  reduce 36
+	COMMA  reduce 36
+	SEMI  reduce 36
+	EOF  reduce 36
+	CJMP  reduce 36
+	JMP  reduce 36
+	LABEL  reduce 36
+	ADDR  reduce 36
+	ASSERT  reduce 36
+	HALT  reduce 36
+	SPECIAL  reduce 36
+	IN  reduce 36
+	WITH  reduce 36
+	THEN  reduce 36
+	ELSE  reduce 36
+	PLUS  reduce 36
+	MINUS  reduce 36
+	DIVIDE  reduce 36
+	MOD  reduce 36
+	SMOD  reduce 36
+	TIMES  reduce 36
+	SDIVIDE  reduce 36
+	LSHIFT  reduce 36
+	RSHIFT  reduce 36
+	ARSHIFT  reduce 36
+	XOR  reduce 36
+	NEQ  reduce 36
+	SLT  reduce 36
+	SLE  reduce 36
+	AND  reduce 36
+	OR  reduce 36
+	EQUALEQUAL  reduce 36
+	LT  reduce 36
+	LE  reduce 36
+	GT  reduce 36
+	GE  reduce 36
+	SGT  reduce 36
+	SGE  reduce 36
+	AT  reduce 36
+
+
+state 105
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr LSHIFT expr .  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	$end  reduce 39
+	ID  reduce 39
+	COMMENT  reduce 39
+	RPAREN  reduce 39
+	RSQUARE  reduce 39
+	COMMA  reduce 39
+	SEMI  reduce 39
+	EOF  reduce 39
+	CJMP  reduce 39
+	JMP  reduce 39
+	LABEL  reduce 39
+	ADDR  reduce 39
+	ASSERT  reduce 39
+	HALT  reduce 39
+	SPECIAL  reduce 39
+	IN  reduce 39
+	WITH  reduce 39
+	THEN  reduce 39
+	ELSE  reduce 39
+	LSHIFT  reduce 39
+	RSHIFT  reduce 39
+	ARSHIFT  reduce 39
+	XOR  reduce 39
+	NEQ  reduce 39
+	SLT  reduce 39
+	SLE  reduce 39
+	AND  reduce 39
+	OR  reduce 39
+	EQUALEQUAL  reduce 39
+	LT  reduce 39
+	LE  reduce 39
+	GT  reduce 39
+	GE  reduce 39
+	SGT  reduce 39
+	SGE  reduce 39
+	AT  reduce 39
+
+
+state 106
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr RSHIFT expr .  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	$end  reduce 40
+	ID  reduce 40
+	COMMENT  reduce 40
+	RPAREN  reduce 40
+	RSQUARE  reduce 40
+	COMMA  reduce 40
+	SEMI  reduce 40
+	EOF  reduce 40
+	CJMP  reduce 40
+	JMP  reduce 40
+	LABEL  reduce 40
+	ADDR  reduce 40
+	ASSERT  reduce 40
+	HALT  reduce 40
+	SPECIAL  reduce 40
+	IN  reduce 40
+	WITH  reduce 40
+	THEN  reduce 40
+	ELSE  reduce 40
+	LSHIFT  reduce 40
+	RSHIFT  reduce 40
+	ARSHIFT  reduce 40
+	XOR  reduce 40
+	NEQ  reduce 40
+	SLT  reduce 40
+	SLE  reduce 40
+	AND  reduce 40
+	OR  reduce 40
+	EQUALEQUAL  reduce 40
+	LT  reduce 40
+	LE  reduce 40
+	GT  reduce 40
+	GE  reduce 40
+	SGT  reduce 40
+	SGE  reduce 40
+	AT  reduce 40
+
+
+state 107
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr ARSHIFT expr .  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	$end  reduce 41
+	ID  reduce 41
+	COMMENT  reduce 41
+	RPAREN  reduce 41
+	RSQUARE  reduce 41
+	COMMA  reduce 41
+	SEMI  reduce 41
+	EOF  reduce 41
+	CJMP  reduce 41
+	JMP  reduce 41
+	LABEL  reduce 41
+	ADDR  reduce 41
+	ASSERT  reduce 41
+	HALT  reduce 41
+	SPECIAL  reduce 41
+	IN  reduce 41
+	WITH  reduce 41
+	THEN  reduce 41
+	ELSE  reduce 41
+	LSHIFT  reduce 41
+	RSHIFT  reduce 41
+	ARSHIFT  reduce 41
+	XOR  reduce 41
+	NEQ  reduce 41
+	SLT  reduce 41
+	SLE  reduce 41
+	AND  reduce 41
+	OR  reduce 41
+	EQUALEQUAL  reduce 41
+	LT  reduce 41
+	LE  reduce 41
+	GT  reduce 41
+	GE  reduce 41
+	SGT  reduce 41
+	SGE  reduce 41
+	AT  reduce 41
+
+
+state 108
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr XOR expr .  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	$end  reduce 44
+	ID  reduce 44
+	COMMENT  reduce 44
+	RPAREN  reduce 44
+	RSQUARE  reduce 44
+	COMMA  reduce 44
+	SEMI  reduce 44
+	EOF  reduce 44
+	CJMP  reduce 44
+	JMP  reduce 44
+	LABEL  reduce 44
+	ADDR  reduce 44
+	ASSERT  reduce 44
+	HALT  reduce 44
+	SPECIAL  reduce 44
+	IN  reduce 44
+	WITH  reduce 44
+	THEN  reduce 44
+	ELSE  reduce 44
+	XOR  reduce 44
+	OR  reduce 44
+	AT  reduce 44
+
+
+state 109
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr NEQ expr .  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	SLT  shift 60
+	SLE  shift 61
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	$end  reduce 46
+	ID  reduce 46
+	COMMENT  reduce 46
+	RPAREN  reduce 46
+	RSQUARE  reduce 46
+	COMMA  reduce 46
+	SEMI  reduce 46
+	EOF  reduce 46
+	CJMP  reduce 46
+	JMP  reduce 46
+	LABEL  reduce 46
+	ADDR  reduce 46
+	ASSERT  reduce 46
+	HALT  reduce 46
+	SPECIAL  reduce 46
+	IN  reduce 46
+	WITH  reduce 46
+	THEN  reduce 46
+	ELSE  reduce 46
+	XOR  reduce 46
+	NEQ  reduce 46
+	AND  reduce 46
+	OR  reduce 46
+	EQUALEQUAL  reduce 46
+	AT  reduce 46
+
+
+state 110
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr SLT expr .  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	$end  reduce 49
+	ID  reduce 49
+	COMMENT  reduce 49
+	RPAREN  reduce 49
+	RSQUARE  reduce 49
+	COMMA  reduce 49
+	SEMI  reduce 49
+	EOF  reduce 49
+	CJMP  reduce 49
+	JMP  reduce 49
+	LABEL  reduce 49
+	ADDR  reduce 49
+	ASSERT  reduce 49
+	HALT  reduce 49
+	SPECIAL  reduce 49
+	IN  reduce 49
+	WITH  reduce 49
+	THEN  reduce 49
+	ELSE  reduce 49
+	XOR  reduce 49
+	NEQ  reduce 49
+	SLT  reduce 49
+	SLE  reduce 49
+	AND  reduce 49
+	OR  reduce 49
+	EQUALEQUAL  reduce 49
+	LT  reduce 49
+	LE  reduce 49
+	GT  reduce 49
+	GE  reduce 49
+	SGT  reduce 49
+	SGE  reduce 49
+	AT  reduce 49
+
+
+state 111
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr SLE expr .  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	$end  reduce 50
+	ID  reduce 50
+	COMMENT  reduce 50
+	RPAREN  reduce 50
+	RSQUARE  reduce 50
+	COMMA  reduce 50
+	SEMI  reduce 50
+	EOF  reduce 50
+	CJMP  reduce 50
+	JMP  reduce 50
+	LABEL  reduce 50
+	ADDR  reduce 50
+	ASSERT  reduce 50
+	HALT  reduce 50
+	SPECIAL  reduce 50
+	IN  reduce 50
+	WITH  reduce 50
+	THEN  reduce 50
+	ELSE  reduce 50
+	XOR  reduce 50
+	NEQ  reduce 50
+	SLT  reduce 50
+	SLE  reduce 50
+	AND  reduce 50
+	OR  reduce 50
+	EQUALEQUAL  reduce 50
+	LT  reduce 50
+	LE  reduce 50
+	GT  reduce 50
+	GE  reduce 50
+	SGT  reduce 50
+	SGE  reduce 50
+	AT  reduce 50
+
+
+state 112
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr AND expr .  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	$end  reduce 42
+	ID  reduce 42
+	COMMENT  reduce 42
+	RPAREN  reduce 42
+	RSQUARE  reduce 42
+	COMMA  reduce 42
+	SEMI  reduce 42
+	EOF  reduce 42
+	CJMP  reduce 42
+	JMP  reduce 42
+	LABEL  reduce 42
+	ADDR  reduce 42
+	ASSERT  reduce 42
+	HALT  reduce 42
+	SPECIAL  reduce 42
+	IN  reduce 42
+	WITH  reduce 42
+	THEN  reduce 42
+	ELSE  reduce 42
+	XOR  reduce 42
+	AND  reduce 42
+	OR  reduce 42
+	AT  reduce 42
+
+
+state 113
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr OR expr .  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	$end  reduce 43
+	ID  reduce 43
+	COMMENT  reduce 43
+	RPAREN  reduce 43
+	RSQUARE  reduce 43
+	COMMA  reduce 43
+	SEMI  reduce 43
+	EOF  reduce 43
+	CJMP  reduce 43
+	JMP  reduce 43
+	LABEL  reduce 43
+	ADDR  reduce 43
+	ASSERT  reduce 43
+	HALT  reduce 43
+	SPECIAL  reduce 43
+	IN  reduce 43
+	WITH  reduce 43
+	THEN  reduce 43
+	ELSE  reduce 43
+	OR  reduce 43
+	AT  reduce 43
+
+
+state 114
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr EQUALEQUAL expr .  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	SLT  shift 60
+	SLE  shift 61
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	$end  reduce 45
+	ID  reduce 45
+	COMMENT  reduce 45
+	RPAREN  reduce 45
+	RSQUARE  reduce 45
+	COMMA  reduce 45
+	SEMI  reduce 45
+	EOF  reduce 45
+	CJMP  reduce 45
+	JMP  reduce 45
+	LABEL  reduce 45
+	ADDR  reduce 45
+	ASSERT  reduce 45
+	HALT  reduce 45
+	SPECIAL  reduce 45
+	IN  reduce 45
+	WITH  reduce 45
+	THEN  reduce 45
+	ELSE  reduce 45
+	XOR  reduce 45
+	NEQ  reduce 45
+	AND  reduce 45
+	OR  reduce 45
+	EQUALEQUAL  reduce 45
+	AT  reduce 45
+
+
+state 115
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr LT expr .  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	$end  reduce 47
+	ID  reduce 47
+	COMMENT  reduce 47
+	RPAREN  reduce 47
+	RSQUARE  reduce 47
+	COMMA  reduce 47
+	SEMI  reduce 47
+	EOF  reduce 47
+	CJMP  reduce 47
+	JMP  reduce 47
+	LABEL  reduce 47
+	ADDR  reduce 47
+	ASSERT  reduce 47
+	HALT  reduce 47
+	SPECIAL  reduce 47
+	IN  reduce 47
+	WITH  reduce 47
+	THEN  reduce 47
+	ELSE  reduce 47
+	XOR  reduce 47
+	NEQ  reduce 47
+	SLT  reduce 47
+	SLE  reduce 47
+	AND  reduce 47
+	OR  reduce 47
+	EQUALEQUAL  reduce 47
+	LT  reduce 47
+	LE  reduce 47
+	GT  reduce 47
+	GE  reduce 47
+	SGT  reduce 47
+	SGE  reduce 47
+	AT  reduce 47
+
+
+state 116
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr LE expr .  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	$end  reduce 48
+	ID  reduce 48
+	COMMENT  reduce 48
+	RPAREN  reduce 48
+	RSQUARE  reduce 48
+	COMMA  reduce 48
+	SEMI  reduce 48
+	EOF  reduce 48
+	CJMP  reduce 48
+	JMP  reduce 48
+	LABEL  reduce 48
+	ADDR  reduce 48
+	ASSERT  reduce 48
+	HALT  reduce 48
+	SPECIAL  reduce 48
+	IN  reduce 48
+	WITH  reduce 48
+	THEN  reduce 48
+	ELSE  reduce 48
+	XOR  reduce 48
+	NEQ  reduce 48
+	SLT  reduce 48
+	SLE  reduce 48
+	AND  reduce 48
+	OR  reduce 48
+	EQUALEQUAL  reduce 48
+	LT  reduce 48
+	LE  reduce 48
+	GT  reduce 48
+	GE  reduce 48
+	SGT  reduce 48
+	SGE  reduce 48
+	AT  reduce 48
+
+
+state 117
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr GT expr .  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	$end  reduce 51
+	ID  reduce 51
+	COMMENT  reduce 51
+	RPAREN  reduce 51
+	RSQUARE  reduce 51
+	COMMA  reduce 51
+	SEMI  reduce 51
+	EOF  reduce 51
+	CJMP  reduce 51
+	JMP  reduce 51
+	LABEL  reduce 51
+	ADDR  reduce 51
+	ASSERT  reduce 51
+	HALT  reduce 51
+	SPECIAL  reduce 51
+	IN  reduce 51
+	WITH  reduce 51
+	THEN  reduce 51
+	ELSE  reduce 51
+	XOR  reduce 51
+	NEQ  reduce 51
+	SLT  reduce 51
+	SLE  reduce 51
+	AND  reduce 51
+	OR  reduce 51
+	EQUALEQUAL  reduce 51
+	LT  reduce 51
+	LE  reduce 51
+	GT  reduce 51
+	GE  reduce 51
+	SGT  reduce 51
+	SGE  reduce 51
+	AT  reduce 51
+
+
+state 118
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr GE expr .  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	$end  reduce 52
+	ID  reduce 52
+	COMMENT  reduce 52
+	RPAREN  reduce 52
+	RSQUARE  reduce 52
+	COMMA  reduce 52
+	SEMI  reduce 52
+	EOF  reduce 52
+	CJMP  reduce 52
+	JMP  reduce 52
+	LABEL  reduce 52
+	ADDR  reduce 52
+	ASSERT  reduce 52
+	HALT  reduce 52
+	SPECIAL  reduce 52
+	IN  reduce 52
+	WITH  reduce 52
+	THEN  reduce 52
+	ELSE  reduce 52
+	XOR  reduce 52
+	NEQ  reduce 52
+	SLT  reduce 52
+	SLE  reduce 52
+	AND  reduce 52
+	OR  reduce 52
+	EQUALEQUAL  reduce 52
+	LT  reduce 52
+	LE  reduce 52
+	GT  reduce 52
+	GE  reduce 52
+	SGT  reduce 52
+	SGE  reduce 52
+	AT  reduce 52
+
+
+state 119
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr SGT expr .  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	$end  reduce 53
+	ID  reduce 53
+	COMMENT  reduce 53
+	RPAREN  reduce 53
+	RSQUARE  reduce 53
+	COMMA  reduce 53
+	SEMI  reduce 53
+	EOF  reduce 53
+	CJMP  reduce 53
+	JMP  reduce 53
+	LABEL  reduce 53
+	ADDR  reduce 53
+	ASSERT  reduce 53
+	HALT  reduce 53
+	SPECIAL  reduce 53
+	IN  reduce 53
+	WITH  reduce 53
+	THEN  reduce 53
+	ELSE  reduce 53
+	XOR  reduce 53
+	NEQ  reduce 53
+	SLT  reduce 53
+	SLE  reduce 53
+	AND  reduce 53
+	OR  reduce 53
+	EQUALEQUAL  reduce 53
+	LT  reduce 53
+	LE  reduce 53
+	GT  reduce 53
+	GE  reduce 53
+	SGT  reduce 53
+	SGE  reduce 53
+	AT  reduce 53
+
+
+state 120
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr SGE expr .  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	$end  reduce 54
+	ID  reduce 54
+	COMMENT  reduce 54
+	RPAREN  reduce 54
+	RSQUARE  reduce 54
+	COMMA  reduce 54
+	SEMI  reduce 54
+	EOF  reduce 54
+	CJMP  reduce 54
+	JMP  reduce 54
+	LABEL  reduce 54
+	ADDR  reduce 54
+	ASSERT  reduce 54
+	HALT  reduce 54
+	SPECIAL  reduce 54
+	IN  reduce 54
+	WITH  reduce 54
+	THEN  reduce 54
+	ELSE  reduce 54
+	XOR  reduce 54
+	NEQ  reduce 54
+	SLT  reduce 54
+	SLE  reduce 54
+	AND  reduce 54
+	OR  reduce 54
+	EQUALEQUAL  reduce 54
+	LT  reduce 54
+	LE  reduce 54
+	GT  reduce 54
+	GE  reduce 54
+	SGT  reduce 54
+	SGE  reduce 54
+	AT  reduce 54
+
+
+state 121
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : letstart IN expr .  (61)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	$end  reduce 61
+	ID  reduce 61
+	COMMENT  reduce 61
+	RPAREN  reduce 61
+	RSQUARE  reduce 61
+	COMMA  reduce 61
+	SEMI  reduce 61
+	EOF  reduce 61
+	CJMP  reduce 61
+	JMP  reduce 61
+	LABEL  reduce 61
+	ADDR  reduce 61
+	ASSERT  reduce 61
+	HALT  reduce 61
+	SPECIAL  reduce 61
+	IN  reduce 61
+	THEN  reduce 61
+	ELSE  reduce 61
+	AT  reduce 61
+
+
+state 122
+	opttyp : COLON typ .  (25)
+
+	.  reduce 25
+
+
+state 123
+	attr : AT ID . STRING  (21)
+	attr : AT ID . context  (22)
+
+	ID  shift 144
+	STRING  shift 145
+	.  error
+
+	context  goto 146
+
+
+state 124
+	attrs : attr attrs .  (20)
+
+	.  reduce 20
+
+
+state 125
+	stmt : CJMP expr COMMA . expr COMMA expr attrs semi  (6)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 147
+	lval  goto 21
+	letstart  goto 22
+
+
+state 126
+	stmt : JMP expr attrs . semi  (5)
+	semi : .  (74)
+
+	SEMI  shift 148
+	ID  reduce 74
+	COMMENT  reduce 74
+	EOF  reduce 74
+	CJMP  reduce 74
+	JMP  reduce 74
+	LABEL  reduce 74
+	ADDR  reduce 74
+	ASSERT  reduce 74
+	HALT  reduce 74
+	SPECIAL  reduce 74
+
+	semi  goto 149
+
+
+state 127
+	stmt : LABEL ID attrs .  (12)
+
+	.  reduce 12
+
+
+state 128
+	stmt : ADDR INT attrs .  (13)
+
+	.  reduce 13
+
+
+state 129
+	stmt : ASSERT expr attrs . semi  (11)
+	semi : .  (74)
+
+	SEMI  shift 148
+	ID  reduce 74
+	COMMENT  reduce 74
+	EOF  reduce 74
+	CJMP  reduce 74
+	JMP  reduce 74
+	LABEL  reduce 74
+	ADDR  reduce 74
+	ASSERT  reduce 74
+	HALT  reduce 74
+	SPECIAL  reduce 74
+
+	semi  goto 150
+
+
+state 130
+	stmt : HALT expr attrs . semi  (10)
+	semi : .  (74)
+
+	SEMI  shift 148
+	ID  reduce 74
+	COMMENT  reduce 74
+	EOF  reduce 74
+	CJMP  reduce 74
+	JMP  reduce 74
+	LABEL  reduce 74
+	ADDR  reduce 74
+	ASSERT  reduce 74
+	HALT  reduce 74
+	SPECIAL  reduce 74
+
+	semi  goto 151
+
+
+state 131
+	stmt : SPECIAL STRING attrs . semi  (7)
+	semi : .  (74)
+
+	SEMI  shift 148
+	ID  reduce 74
+	COMMENT  reduce 74
+	EOF  reduce 74
+	CJMP  reduce 74
+	JMP  reduce 74
+	LABEL  reduce 74
+	ADDR  reduce 74
+	ASSERT  reduce 74
+	HALT  reduce 74
+	SPECIAL  reduce 74
+
+	semi  goto 152
+
+
+state 132
+	stmt : lval EQUAL expr . attrs semi  (9)
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+	attrs : .  (19)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	SEMI  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 153
+	attr  goto 75
+
+
+state 133
+	stmt : lval ASSIGN expr . attrs semi  (8)
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+	attrs : .  (19)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	SEMI  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 154
+	attr  goto 75
+
+
+state 134
+	typ : QUESTION styp .  (27)
+
+	.  reduce 27
+
+
+state 135
+	typ : styp QUESTION . styp  (28)
+
+	ID  shift 85
+	.  error
+
+	styp  goto 155
+
+
+state 136
+	expr : ID COLON typ LPAREN . expr RPAREN  (64)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 156
+	lval  goto 21
+	letstart  goto 22
+
+
+state 137
+	letstart : LET ID COLON typ . ASSIGN expr  (30)
+
+	ASSIGN  shift 157
+	.  error
+
+
+state 138
+	expr : UNKNOWN STRING COLON typ .  (57)
+
+	.  reduce 57
+
+
+state 139
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : IF expr THEN expr . ELSE expr  (60)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	ELSE  shift 158
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 140
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : CONCAT COLON LSQUARE expr . RSQUARE LSQUARE expr RSQUARE  (63)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	RSQUARE  shift 159
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 141
+	expr : EXTRACT COLON INT COLON . INT COLON LSQUARE expr RSQUARE  (62)
+
+	INT  shift 160
+	.  error
+
+
+state 142
+	expr : expr LSQUARE expr COMMA . endian RSQUARE COLON typ  (69)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	EBIG  shift 161
+	ELITTLE  shift 162
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 163
+	lval  goto 21
+	letstart  goto 22
+	endian  goto 164
+
+
+state 143
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr WITH LSQUARE expr . COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	COMMA  shift 165
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 144
+	context : ID . LSQUARE INT RSQUARE EQUAL INT COMMA plusminusint COMMA styp  (17)
+	context : ID . EQUAL INT COMMA plusminusint COMMA typ  (18)
+
+	LSQUARE  shift 166
+	EQUAL  shift 167
+	.  error
+
+
+state 145
+	attr : AT ID STRING .  (21)
+
+	.  reduce 21
+
+
+state 146
+	attr : AT ID context .  (22)
+
+	.  reduce 22
+
+
+state 147
+	stmt : CJMP expr COMMA expr . COMMA expr attrs semi  (6)
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	COMMA  shift 168
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 148
+	semi : SEMI .  (73)
+
+	.  reduce 73
+
+
+state 149
+	stmt : JMP expr attrs semi .  (5)
+
+	.  reduce 5
+
+
+state 150
+	stmt : ASSERT expr attrs semi .  (11)
+
+	.  reduce 11
+
+
+state 151
+	stmt : HALT expr attrs semi .  (10)
+
+	.  reduce 10
+
+
+state 152
+	stmt : SPECIAL STRING attrs semi .  (7)
+
+	.  reduce 7
+
+
+state 153
+	stmt : lval EQUAL expr attrs . semi  (9)
+	semi : .  (74)
+
+	SEMI  shift 148
+	ID  reduce 74
+	COMMENT  reduce 74
+	EOF  reduce 74
+	CJMP  reduce 74
+	JMP  reduce 74
+	LABEL  reduce 74
+	ADDR  reduce 74
+	ASSERT  reduce 74
+	HALT  reduce 74
+	SPECIAL  reduce 74
+
+	semi  goto 169
+
+
+state 154
+	stmt : lval ASSIGN expr attrs . semi  (8)
+	semi : .  (74)
+
+	SEMI  shift 148
+	ID  reduce 74
+	COMMENT  reduce 74
+	EOF  reduce 74
+	CJMP  reduce 74
+	JMP  reduce 74
+	LABEL  reduce 74
+	ADDR  reduce 74
+	ASSERT  reduce 74
+	HALT  reduce 74
+	SPECIAL  reduce 74
+
+	semi  goto 170
+
+
+state 155
+	typ : styp QUESTION styp .  (28)
+
+	.  reduce 28
+
+
+state 156
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : ID COLON typ LPAREN expr . RPAREN  (64)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	RPAREN  shift 171
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 157
+	letstart : LET ID COLON typ ASSIGN . expr  (30)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 172
+	lval  goto 21
+	letstart  goto 22
+
+
+state 158
+	expr : IF expr THEN expr ELSE . expr  (60)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 173
+	lval  goto 21
+	letstart  goto 22
+
+
+state 159
+	expr : CONCAT COLON LSQUARE expr RSQUARE . LSQUARE expr RSQUARE  (63)
+
+	LSQUARE  shift 174
+	.  error
+
+
+state 160
+	expr : EXTRACT COLON INT COLON INT . COLON LSQUARE expr RSQUARE  (62)
+
+	COLON  shift 175
+	.  error
+
+
+state 161
+	endian : EBIG .  (70)
+
+	.  reduce 70
+
+
+state 162
+	endian : ELITTLE .  (71)
+
+	.  reduce 71
+
+
+state 163
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+	endian : expr .  (72)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	RSQUARE  reduce 72
+
+
+state 164
+	expr : expr LSQUARE expr COMMA endian . RSQUARE COLON typ  (69)
+
+	RSQUARE  shift 176
+	.  error
+
+
+state 165
+	expr : expr WITH LSQUARE expr COMMA . endian RSQUARE COLON typ assign expr  (68)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	EBIG  shift 161
+	ELITTLE  shift 162
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 163
+	lval  goto 21
+	letstart  goto 22
+	endian  goto 177
+
+
+state 166
+	context : ID LSQUARE . INT RSQUARE EQUAL INT COMMA plusminusint COMMA styp  (17)
+
+	INT  shift 178
+	.  error
+
+
+state 167
+	context : ID EQUAL . INT COMMA plusminusint COMMA typ  (18)
+
+	INT  shift 179
+	.  error
+
+
+state 168
+	stmt : CJMP expr COMMA expr COMMA . expr attrs semi  (6)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 180
+	lval  goto 21
+	letstart  goto 22
+
+
+state 169
+	stmt : lval EQUAL expr attrs semi .  (9)
+
+	.  reduce 9
+
+
+state 170
+	stmt : lval ASSIGN expr attrs semi .  (8)
+
+	.  reduce 8
+
+
+state 171
+	expr : ID COLON typ LPAREN expr RPAREN .  (64)
+
+	.  reduce 64
+
+
+state 172
+	letstart : LET ID COLON typ ASSIGN expr .  (30)
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	IN  reduce 30
+
+
+state 173
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : IF expr THEN expr ELSE expr .  (60)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	$end  reduce 60
+	ID  reduce 60
+	COMMENT  reduce 60
+	RPAREN  reduce 60
+	RSQUARE  reduce 60
+	COMMA  reduce 60
+	SEMI  reduce 60
+	EOF  reduce 60
+	CJMP  reduce 60
+	JMP  reduce 60
+	LABEL  reduce 60
+	ADDR  reduce 60
+	ASSERT  reduce 60
+	HALT  reduce 60
+	SPECIAL  reduce 60
+	IN  reduce 60
+	THEN  reduce 60
+	ELSE  reduce 60
+	AT  reduce 60
+
+
+state 174
+	expr : CONCAT COLON LSQUARE expr RSQUARE LSQUARE . expr RSQUARE  (63)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 181
+	lval  goto 21
+	letstart  goto 22
+
+
+state 175
+	expr : EXTRACT COLON INT COLON INT COLON . LSQUARE expr RSQUARE  (62)
+
+	LSQUARE  shift 182
+	.  error
+
+
+state 176
+	expr : expr LSQUARE expr COMMA endian RSQUARE . COLON typ  (69)
+
+	COLON  shift 183
+	.  error
+
+
+state 177
+	expr : expr WITH LSQUARE expr COMMA endian . RSQUARE COLON typ assign expr  (68)
+
+	RSQUARE  shift 184
+	.  error
+
+
+state 178
+	context : ID LSQUARE INT . RSQUARE EQUAL INT COMMA plusminusint COMMA styp  (17)
+
+	RSQUARE  shift 185
+	.  error
+
+
+state 179
+	context : ID EQUAL INT . COMMA plusminusint COMMA typ  (18)
+
+	COMMA  shift 186
+	.  error
+
+
+state 180
+	stmt : CJMP expr COMMA expr COMMA expr . attrs semi  (6)
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+	attrs : .  (19)
+
+	LSQUARE  shift 46
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	AT  shift 73
+	ID  reduce 19
+	COMMENT  reduce 19
+	SEMI  reduce 19
+	EOF  reduce 19
+	CJMP  reduce 19
+	JMP  reduce 19
+	LABEL  reduce 19
+	ADDR  reduce 19
+	ASSERT  reduce 19
+	HALT  reduce 19
+	SPECIAL  reduce 19
+
+	attrs  goto 187
+	attr  goto 75
+
+
+state 181
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : CONCAT COLON LSQUARE expr RSQUARE LSQUARE expr . RSQUARE  (63)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	RSQUARE  shift 188
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 182
+	expr : EXTRACT COLON INT COLON INT COLON LSQUARE . expr RSQUARE  (62)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 189
+	lval  goto 21
+	letstart  goto 22
+
+
+state 183
+	expr : expr LSQUARE expr COMMA endian RSQUARE COLON . typ  (69)
+
+	ID  shift 85
+	QUESTION  shift 86
+	.  error
+
+	styp  goto 87
+	typ  goto 190
+
+
+state 184
+	expr : expr WITH LSQUARE expr COMMA endian RSQUARE . COLON typ assign expr  (68)
+
+	COLON  shift 191
+	.  error
+
+
+state 185
+	context : ID LSQUARE INT RSQUARE . EQUAL INT COMMA plusminusint COMMA styp  (17)
+
+	EQUAL  shift 192
+	.  error
+
+
+state 186
+	context : ID EQUAL INT COMMA . plusminusint COMMA typ  (18)
+
+	INT  shift 193
+	MINUS  shift 194
+	.  error
+
+	plusminusint  goto 195
+
+
+state 187
+	stmt : CJMP expr COMMA expr COMMA expr attrs . semi  (6)
+	semi : .  (74)
+
+	SEMI  shift 148
+	ID  reduce 74
+	COMMENT  reduce 74
+	EOF  reduce 74
+	CJMP  reduce 74
+	JMP  reduce 74
+	LABEL  reduce 74
+	ADDR  reduce 74
+	ASSERT  reduce 74
+	HALT  reduce 74
+	SPECIAL  reduce 74
+
+	semi  goto 196
+
+
+state 188
+	expr : CONCAT COLON LSQUARE expr RSQUARE LSQUARE expr RSQUARE .  (63)
+
+	.  reduce 63
+
+
+state 189
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : EXTRACT COLON INT COLON INT COLON LSQUARE expr . RSQUARE  (62)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	RSQUARE  shift 197
+	WITH  shift 47
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	.  error
+
+
+state 190
+	expr : expr LSQUARE expr COMMA endian RSQUARE COLON typ .  (69)
+
+	.  reduce 69
+
+
+state 191
+	expr : expr WITH LSQUARE expr COMMA endian RSQUARE COLON . typ assign expr  (68)
+
+	ID  shift 85
+	QUESTION  shift 86
+	.  error
+
+	styp  goto 87
+	typ  goto 198
+
+
+state 192
+	context : ID LSQUARE INT RSQUARE EQUAL . INT COMMA plusminusint COMMA styp  (17)
+
+	INT  shift 199
+	.  error
+
+
+state 193
+	plusminusint : INT .  (15)
+
+	.  reduce 15
+
+
+state 194
+	plusminusint : MINUS . INT  (16)
+
+	INT  shift 200
+	.  error
+
+
+state 195
+	context : ID EQUAL INT COMMA plusminusint . COMMA typ  (18)
+
+	COMMA  shift 201
+	.  error
+
+
+state 196
+	stmt : CJMP expr COMMA expr COMMA expr attrs semi .  (6)
+
+	.  reduce 6
+
+
+state 197
+	expr : EXTRACT COLON INT COLON INT COLON LSQUARE expr RSQUARE .  (62)
+
+	.  reduce 62
+
+
+state 198
+	expr : expr WITH LSQUARE expr COMMA endian RSQUARE COLON typ . assign expr  (68)
+
+	EQUAL  shift 202
+	ASSIGN  shift 203
+	.  error
+
+	assign  goto 204
+
+
+state 199
+	context : ID LSQUARE INT RSQUARE EQUAL INT . COMMA plusminusint COMMA styp  (17)
+
+	COMMA  shift 205
+	.  error
+
+
+state 200
+	plusminusint : MINUS INT .  (16)
+
+	.  reduce 16
+
+
+state 201
+	context : ID EQUAL INT COMMA plusminusint COMMA . typ  (18)
+
+	ID  shift 85
+	QUESTION  shift 86
+	.  error
+
+	styp  goto 87
+	typ  goto 206
+
+
+state 202
+	assign : EQUAL .  (76)
+
+	.  reduce 76
+
+
+state 203
+	assign : ASSIGN .  (75)
+
+	.  reduce 75
+
+
+state 204
+	expr : expr WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign . expr  (68)
+
+	ID  shift 7
+	INT  shift 8
+	STRING  shift 9
+	LPAREN  shift 10
+	LET  shift 11
+	UNKNOWN  shift 12
+	TRUE  shift 13
+	FALSE  shift 14
+	IF  shift 15
+	MINUS  shift 16
+	CONCAT  shift 17
+	EXTRACT  shift 18
+	NOT  shift 19
+	.  error
+
+	expr  goto 207
+	lval  goto 21
+	letstart  goto 22
+
+
+state 205
+	context : ID LSQUARE INT RSQUARE EQUAL INT COMMA . plusminusint COMMA styp  (17)
+
+	INT  shift 193
+	MINUS  shift 194
+	.  error
+
+	plusminusint  goto 208
+
+
+state 206
+	context : ID EQUAL INT COMMA plusminusint COMMA typ .  (18)
+
+	.  reduce 18
+
+
+state 207
+	expr : expr . PLUS expr  (32)
+	expr : expr . MINUS expr  (33)
+	expr : expr . TIMES expr  (34)
+	expr : expr . DIVIDE expr  (35)
+	expr : expr . SDIVIDE expr  (36)
+	expr : expr . MOD expr  (37)
+	expr : expr . SMOD expr  (38)
+	expr : expr . LSHIFT expr  (39)
+	expr : expr . RSHIFT expr  (40)
+	expr : expr . ARSHIFT expr  (41)
+	expr : expr . AND expr  (42)
+	expr : expr . OR expr  (43)
+	expr : expr . XOR expr  (44)
+	expr : expr . EQUALEQUAL expr  (45)
+	expr : expr . NEQ expr  (46)
+	expr : expr . LT expr  (47)
+	expr : expr . LE expr  (48)
+	expr : expr . SLT expr  (49)
+	expr : expr . SLE expr  (50)
+	expr : expr . GT expr  (51)
+	expr : expr . GE expr  (52)
+	expr : expr . SGT expr  (53)
+	expr : expr . SGE expr  (54)
+	expr : expr . WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr  (68)
+	expr : expr WITH LSQUARE expr COMMA endian RSQUARE COLON typ assign expr .  (68)
+	expr : expr . LSQUARE expr COMMA endian RSQUARE COLON typ  (69)
+
+	LSQUARE  shift 46
+	PLUS  shift 48
+	MINUS  shift 49
+	DIVIDE  shift 50
+	MOD  shift 51
+	SMOD  shift 52
+	TIMES  shift 53
+	SDIVIDE  shift 54
+	LSHIFT  shift 55
+	RSHIFT  shift 56
+	ARSHIFT  shift 57
+	XOR  shift 58
+	NEQ  shift 59
+	SLT  shift 60
+	SLE  shift 61
+	AND  shift 62
+	OR  shift 63
+	EQUALEQUAL  shift 64
+	LT  shift 65
+	LE  shift 66
+	GT  shift 67
+	GE  shift 68
+	SGT  shift 69
+	SGE  shift 70
+	$end  reduce 68
+	ID  reduce 68
+	COMMENT  reduce 68
+	RPAREN  reduce 68
+	RSQUARE  reduce 68
+	COMMA  reduce 68
+	SEMI  reduce 68
+	EOF  reduce 68
+	CJMP  reduce 68
+	JMP  reduce 68
+	LABEL  reduce 68
+	ADDR  reduce 68
+	ASSERT  reduce 68
+	HALT  reduce 68
+	SPECIAL  reduce 68
+	IN  reduce 68
+	WITH  reduce 68
+	THEN  reduce 68
+	ELSE  reduce 68
+	AT  reduce 68
+
+
+state 208
+	context : ID LSQUARE INT RSQUARE EQUAL INT COMMA plusminusint . COMMA styp  (17)
+
+	COMMA  shift 209
+	.  error
+
+
+state 209
+	context : ID LSQUARE INT RSQUARE EQUAL INT COMMA plusminusint COMMA . styp  (17)
+
+	ID  shift 85
+	.  error
+
+	styp  goto 210
+
+
+state 210
+	context : ID LSQUARE INT RSQUARE EQUAL INT COMMA plusminusint COMMA styp .  (17)
+
+	.  reduce 17
+
+
+67 terminals, 19 nonterminals
+79 grammar rules, 211 states

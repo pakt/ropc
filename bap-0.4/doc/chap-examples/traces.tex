@@ -1,0 +1,94 @@
+\section{Traces}
+
+In this section, we will explain how to use our PIN-based trace
+recording tool to record a trace.  We then show how to perform common
+trace analysis tasks.
+
+\subsection{Setup}
+
+The PIN trace tool is located in the \cmdline{pintraces/}
+directory.  Because of licensing reasons, we cannot distribute PIN
+with the trace tool.  PIN must be extracted inside of the traces
+directory; for instance, if the traces branch is located in
+\cmdline{\$PATH/traces}, then PIN should be in
+\cmdline{\$PATH/traces/pin}.  Running ./getpin.sh from the
+\cmdline{\$PATH/traces/pintraces} directory will automatically
+download and install PIN for Linux; the user is responsible for
+accepting the PIN license agreements.  On Windows, PIN must be
+downloaded and extracted by hand.  The PIN tool can be built by
+executing \cmdline{make} in the \cmdline{\$PATH/traces/experiemental}
+directory.  On Windows, we reccomend using GNU Make for Windows
+(\url{http://gnuwin32.sourceforge.net/packages/make.htm}) and Visual
+C++ 2010 express
+(\url{http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-cpp-express}).
+After compilation, the PIN tool should exist in \\
+\cmdline{\$PATH/traces/pintraces/obj-ia32/gentrace.so} (or
+gentrace.dll on Windows).  In the rest of the chapter, we will assume
+Linux is being used; most interaction with the trace tool is the same.
+
+\subsection{Recording a trace}
+
+To see the command line options to the trace tool, execute 
+
+\begin{verbatim} 
+$PATH/traces/pin/pin -t \
+ $PATH/traces/pintraces/obj-ia32/gentrace.so -h -- /bin/ls
+\end{verbatim}
+
+By default, the trace tool will only log instructions that are
+\emph{tainted}, i.e., those that depend on user input.  The options
+that begin with taint are used to mark various data
+as being user input.  For instance, -taint-files readme marks the file
+readme as being user input.
+
+We will record a trace of a simple buffer overflow.  Run 
+
+\begin{verbatim}
+echo ``helloooooooooooooooooo'' > readme
+\end{verbatim}
+
+ to create the input file.  Then run 
+
+\begin{verbatim}
+make $PATH/traces/pintraces/examples/bof1/
+\end{verbatim}
+
+and
+
+\begin{verbatim}
+$PATH/traces/pin/pin -t  \
+ $PATH/traces/pintraces/obj-ia32/gentrace.so -taint-files readme \
+ -- $PATH/traces/pintraces/examples/bof1/bof1
+\end{verbatim}
+
+The PIN tool will output
+many debugging messages; this is normal.  If the trace tool detected
+the buffer overflow, it will print ``stack smashing detected'' near
+the end of the logs.  At this point, there should be a trace file
+ending with suffix bpt in the current working directory.  In the
+following commands, we assume this file is named trace.bpt.
+
+To lift the trace data and print it, run 
+
+\begin{verbatim}
+iltrans -pin -trace trace.bpt -pp-ast /dev/stdout
+\end{verbatim}
+
+It is also possible to concretize the trace, which removes jumps and performs
+memory concretization, by executing 
+
+\begin{verbatim}
+iltrans -pin -trace trace.bpt -trace-concrete -pp-ast /dev/stdout
+\end{verbatim}
+
+Adding the -trace-check option before -trace-concrete causes BAP to compare its
+internal evaluator's notion of state with the actual values recorded in the
+trace.  It can be used to check for bugs in the IL.  Finally, running 
+
+\begin{verbatim}
+iltrans -pin -trace trace.bpt -trace-formula f
+\end{verbatim}
+
+will symbolically execute the trace and output the generated verification
+condtion to the file f. This can then be solved with stp to find satisfying
+answers to the trace.

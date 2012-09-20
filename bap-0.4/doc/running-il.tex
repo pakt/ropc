@@ -1,0 +1,78 @@
+\begin{figure}
+\begin{scriptsize}
+\begin{minipage}[c]{.50\linewidth}
+\begin{lstlisting}
+label 0x8048419; //push   ebp
+  ESP = ESP - 4;
+  mem = store(mem, ESP, EBP, reg32_t);
+label 0x804841a; //mov    ebp,esp
+  EBP = ESP;
+label 0x804841c; //sub esp, 0x18
+  ESP = ESP-24; 
+  /* 'sub' eflags omitted */
+label 0x804841f; //lea    eax, [ebp-0x8]
+  EAX = (EBP+0xFFFFFFF8);
+label 0x8048422; //mov    [esp], eax
+  mem = store(mem, ESP, EAX, reg32_t);
+label 0x8048425; //call   0x80483f4
+  ESP = ESP-4;
+  mem = store(mem, ESP, 0x804842A, reg32_t);
+  jmp(0x80483f4); 
+label 0x804842a; //mov    eax, [ebp-0x8]
+  EAX = load(mem, EBP+0xFFFFFFF8,reg32_t);
+label 0x804842d; //and    eax, 0x1
+  EAX = EAX & 1; 
+  /* 'and' eflags omitted */
+label 0x8048430; //test   eax,eax
+  temp = EAX & EAX;
+  ZF:reg1_t = temp == 0; 
+  /* SF and PF code omitted */
+label 0x8048432; //jne    0x804843f
+  cjmp(ZF,0x8048434,0x804843F);
+label 0x8048434; //mov    eax,[ebp-0x8]
+  EAX = load(mem, EBP+0xFFFFFFF8, reg32_t);
+label 0x8048437; //add    eax, 0x2 
+  EAX = EAX + 2; 
+  /* 'add' eflags omitted */
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}[c]{.45\linewidth}
+\begin{lstlisting}
+label 0x804843a; //mov    [ebp-0x4], eax
+  mem = store(mem, EBP+0xFFFFFFFC, EAX, reg32_t);
+label 0x804843d; //jmp    0x8048448
+  jmp(0x8048448);
+label 0x804843f; //mov    eax,[ebp-0x8]
+  EAX = load(mem, EBP+0xFFFFFFF8, reg32_t);
+label 0x8048442; //add    eax,0x3
+  EAX = EAX+3; 
+  /* 'add' eflags omitted */
+label 0x8048445; //mov    [ebp-0x4], eax
+  mem = store(mem, EBP+0xFFFFFFFC, EAX, reg32_t);
+label 0x8048448; //mov    eax, [ebp-0x4]
+  EAX = load(mem, EBP+0xFFFFFFFC, reg32_t);
+label 0x804844b; //mov    [esp+0x4], eax
+  mem = store(mem, ESP+4, EAX, reg32_t);
+label 0x804844f; //mov    eax, [ebp+0x8]
+  EAX = load(mem, EBP+8, reg32_t);
+label 0x8048452; //mov    [esp],eax
+  mem = store(mem, ESP, EAX, reg32_t);
+label 0x8048455; //call   0x8048338
+  ESP = ESP-4;
+  mem = store(mem, ESP, 0x804845A, reg32_t);
+  jmp(0x8048338); 
+label 0x804845a; //mov    [ebp+0x8],eax
+  mem = store(mem, ESP+8, EAX, reg32_t);
+label 0x804845d; //leave
+  ESP = EBP+4;
+  EBP = load(mem, EBP, reg32_t);
+label 0x804845e; //ret
+  target = load(mem, ESP, reg32_t);
+  ESP = ESP+4;
+  jmp(target);
+\end{lstlisting}
+\end{minipage}
+\end{scriptsize}
+\caption{The assembly from Figure~\ref{fig:running-asm} in the \bap IL.}
+\label{fig:running-il}
+\end{figure}

@@ -1,0 +1,109 @@
+\section{Discussion}
+\label{vine:discussion}
+
+\subsection{Why Design a New Infrastructure?}  
+
+At a high level, we designed \bap as a new platform because existing
+platforms are a) defined for higher-level languages and thus not
+appropriate for binary code analysis, b) designed for orthogonal goals
+such as binary instrumentation or decompilation, and/or c) unavailable
+to use for research purposes.  As a result, other tools we tried
+(e.g., DynInst~\cite{dyninst} version 5.2, Phoenix~\cite{phoenix}
+April 2008 SDK, IDA Pro~\cite{idapro} version 5, and others) were
+inadequate, e.g., could not create a correct control flow graph for
+the 3 line assembly shown in Figure~\ref{vine:shl-add}. Another reason
+we created \bap is so that we could be sure of the semantics of 
+analysis. Existing platforms tend not to have publicly available
+formally defined semantics, thus we would not know exactly what we are
+using.
+
+Formal semantics are important for several practical reasons. We found
+that defining the semantics of \bap was helpful in catching design
+bugs, unsupported assumptions, and other errors that could affect many
+different kinds of analysis. In addition, the semantics are helpful
+for communicating how \bap works with other researchers.  Further,
+without a specified semantics, it is difficult to show an analysis is
+correct. For example, in ~\cite{brumley:2006:alias} we show our
+proposed assembly-level alias analysis~\cite{brumley:2006:alias} is
+correct with respect to the operational semantics of \bap.
+
+
+\subsection{Limitations of \bap} 
+
+\bap is designed to enable program analysis of binary program
+states. Therefore, analyses that depends upon more than the
+operational semantics of the instruction fall outside the scope of
+\bap. For example, creating an analysis of the timing behavior of
+binary programs falls outside the current scope of \bap.
+
+Some architectures, such as later versions of ARM, are bi-endian where
+the endianness is specified by a register status flag and can be
+changed mid-program. \bap currently supports big and little endian,
+but does not support bi-endian architectures. Adding support is
+straight-forward by changing {\tt store} and {\tt load} instructions
+to have an additional field indicating the endianness (which can then
+be removed by normalizing memory appropriately).  If we annotate
+individual loads and stores, we would need to remove the endianness as
+part of the memory type declaration in order to prevent the semantics
+allowing type-incompatible loads and stores on memory.
+
+\bap does not strongly associated an assembly instruction to the
+corresponding sequence of lifted IL instructions.  Currently \bap
+prefixes a sequence of IL instructions with a comment containing the
+pretty-printed assembly.  However, an analysis itself does not know
+which IL instructions arose from which assembly.  Although users of
+\bap often seem to want to tie IL instructions to assembly
+instructions, it is unclear how to accomplish this in flexible way
+that is also non-intrusive to analyses themselves.
+
+One principle in \bap is to  note explicitly in the IL any unhandled
+instructions during lifting.  For each architecture supported, there
+may be many instructions which \bap cannot lift.  Such instructions
+are noted in the IL as either {\tt special} or {\tt unknown}. For
+example, \bap does not currently support floating point numbers. The
+central reason lies in properly defining the semantics of floating
+point with respect to rounding.  This is a problem we plan on tackling
+in future versions of \bap.
+
+\subsection{Is Lifting Correct?}
+
+Assembly instructions are lifted to \bap in a syntax directed manner.
+One may view that the \bap IL is a model of the underlying assembly.
+There is a chance, however, that lifting could produce incorrect
+IL. Although it is impossible to say that all assembly instructions
+are correctly lifted, the advantage of \bap's design is that only the
+lifting process needs to understand the semantics of the original
+assembly.
+
+
+We have developed several measures to make sure our IL is
+correct. First, we have a series of unit tests for IL translations. A
+unit test executes both the real instruction and the lifted IL in a
+know pre-state and verifies both terminate in the same post-state.
+Second, we have performed larger scale tests that verify the
+executions consisting of millions of instructions produce the same
+output value on the corresponding IL.  
+
+
+\subsection{Size of Lifting IL for a Program}
+
+A single assembly instruction will typically be translated into
+several \bap instructions. Thus, the resulting \bap program will
+have more statements than the corresponding assembly.  For example and
+roughly speaking, x86 assembly instructions are raised to be about 7
+\bap instructions: 1 \bap instruction for the direct effect, and 6
+for updating processor-specific status flags.
+
+In our experience, the constant-size factor in code size is worth the
+benefits of simplifying the semantics of assembly.  Assembly
+instructions are designed to be efficient for a computer to execute,
+not for a human to understand. The IL, on the other hand, is designed
+to be easy for a human to understand.  We have found even experienced
+assembly-level programmers will comment that they have a hard time
+keeping track of control and data dependencies since there are few
+syntactic cues in assembly to help. \bap, on the other hand, obviates
+all data and control dependencies within the code. 
+
+
+
+

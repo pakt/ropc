@@ -1,0 +1,6 @@
+Run getpin.sh to download and extract Pin in the proper location.
+
+If you run an x86_64 host, you will need to install the multilib
+version of g++ (and possibly binutils).
+
+XXX: Add instructions on how to run the tool

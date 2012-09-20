@@ -1,0 +1,243 @@
+
+%\renewcommand{\baselinestretch}{1.0}\normalsize
+
+\begin{table}
+
+{\bf Context}\\
+\begin{tabular}{llp{4.5in}}
+$\Gamma$ & \emphkind{var} $\rightarrow$ $\tau$& 
+Typing context of $(x:\tau)$ pairs where $x$ is of type $\tau$.
+\end{tabular}\\[10pt]
+{\bf Program and Instructions}
+\begin{footnotesize}
+\[
+\begin{array}{c}
+\infer[]
+ { 
+   \cdot \vdash (x_i:\tau_i)^* i^*  : ()
+ }
+ {
+   \forall i \in i^* | (x_i:\tau_i)^* \vdash i : ()
+ }
+\end{array}
+\]
+\[
+\begin{array}{ccc}
+\infer[\textsc{assign}]
+   {
+     \Gamma \vdash x := e : ()
+   }
+   {
+     \Gamma \vdash e : \tau
+     &
+     \Gamma \vdash x : \tau
+   } &
+\infer[\textsc{jmp}]
+   {
+     \Gamma \vdash \texttt{jmp($e$)} : ()
+   }
+   {
+     \Gamma \vdash e : \texttt{reg64\_t}
+   } & 
+\infer[\textsc{halt}]
+  {
+     \Gamma \vdash \texttt{halt($e$)} : ()
+  }
+  { 
+     \Gamma \vdash e : \tau
+     & \tau \in \tau_{\text{reg}}
+  }
+\end{array}
+\]
+\[
+\begin{array}{c}
+\infer[\textsc{cjmp}]
+   {
+     \Gamma \vdash \texttt{cjmp($e_1$, $e_2$, $e_3$)} : ()
+   }
+   {
+      \Gamma \vdash e_1 : \texttt{reg1\_t}
+      & 
+      \Gamma \vdash e_2 : \texttt{reg64\_t}
+      &
+      \Gamma \vdash e_3 : \texttt{reg64\_t}
+   }
+\end{array}
+\]
+\[
+\begin{array}{ccc}
+\infer[\textsc{assert}]
+  {
+    \Gamma \vdash \texttt{assert($e$)} : ()
+  }
+  {
+    \Gamma \vdash e : \texttt{reg1\_t}
+  } &
+ \infer[\textsc{label}]
+  {
+    \Gamma \vdash \texttt{label $n$} : ()
+  }
+  {
+  } &
+\infer[\textsc{special}]
+  {
+   \Gamma \vdash \texttt{special {\sf id$_s$}} : ()
+  }
+  {
+  }
+\end{array}
+\]
+\end{footnotesize}
+{\bf Auxiliary Definitions}
+\begin{footnotesize}
+\[
+\begin{array}{c}
+ \infer[\textsc{reg-subtype}]
+   {
+     \texttt{reg1\_t $<:$ reg8\_t $<:$ reg16\_t $<:$ reg32\_t $<:$ reg64\_t}
+   }
+   {
+   }
+\end{array}
+\]
+\[
+\begin{array}{cc}
+\infer[]
+  {
+    \text{mem\_compat($\tau_1$, $\tau_2$)}
+  }
+  {
+   \tau_1 = \texttt{big $|$ little} 
+    & \tau_2 \in \tau_{\text{reg}} 
+  } &
+\infer[]
+  {
+    \text{mem\_compat({\tt norm}, {\tt reg8\_t})}
+  }
+  {
+  }\\[10pt]
+\infer[]
+  {
+    \text{cast\_compat(k, $\tau_1$, $\tau_2$)}
+  }
+  {
+    k = \texttt{unsigned $|$ signed}
+    & 
+    \tau_1 <: \tau_2
+  }&
+\infer[]
+  {
+    \text{cast\_compat(k, $\tau_1$, $\tau_2$)}
+  }
+  {
+    k = \texttt{hi $|$ low}
+    & 
+    \tau_2 <: \tau_1
+  }
+\end{array}
+\]
+\end{footnotesize}
+{\bf Expressions}
+\begin{footnotesize}
+\[
+\begin{array}{cc}
+\infer[\textsc{load}]
+  { % conclusion
+    \Gamma \vdash \texttt{load($e_1$, $e_2$, $\tau$)} : \tau
+  }
+  { % premise
+    \Gamma \vdash e_1 : \texttt{mem\_t($\tau_1$, $\tau_2$)}
+    & 
+    \text{mem\_compat($\tau_1$, $\tau$)}
+    &
+    \Gamma \vdash e_2 : \tau_2
+  } &
+\infer[\textsc{var}]
+  { % conclusion
+      \Gamma \vdash x : \tau
+  }
+  { % premise
+        x:\tau \in \Gamma
+  }
+\end{array}
+\]
+\[
+\begin{array}{c}
+\infer[\textsc{store}]
+  { % conclusion
+    \Gamma \vdash \texttt{store($e_1$, $e_2$,$e_3$)}:\texttt{mem\_t($\tau_1$, $\tau_2$)}
+  }
+  { %premise
+    \Gamma \vdash e_1: \texttt{mem\_t($\tau_1$, $\tau_2$)}
+    &
+    \Gamma \vdash e_2 : \tau_2 
+    & 
+    \Gamma \vdash e_3 : \tau_4
+    & 
+    \text{mem\_compat($\tau_1$, $\tau_4$)}
+  }\\
+\end{array}
+\]
+\[
+\begin{array}{cc}
+\infer[\textsc{binop$_1$}]
+  { % conclusion
+    \Gamma \vdash e_1 \Diamond_b e_2 : \tau
+  }
+  { % premise
+    \Gamma \vdash e_1 : \tau 
+    & \Gamma \vdash e_2 : \tau
+    & \tau \in \tau_{\text{reg}}
+    & \Diamond_b \notin \ll, \gg, \gg_a
+  } &
+\infer[\textsc{unop}]
+  { % conclusion
+    \Gamma \vdash \Diamond_u e : \tau
+  }
+  { % premise
+    \Gamma \vdash e : \tau 
+    & \tau \in \tau_{\text{reg}}
+  } 
+\end{array}
+\]
+\[
+\begin{array}{c}
+\infer[\textsc{binop$_2$}]
+  { % conclusion
+    \Gamma \vdash e_1 \Diamond_b e_2 : \tau
+  }
+  { % premise
+    \Gamma \vdash e_1 : \tau 
+    & \Gamma \vdash e_2 : \tau_2
+    & \tau, \tau_2 \in \tau_{\text{reg}}
+    & \Diamond_b \in \ll, \gg, \gg_a
+  } 
+\end{array}
+\]
+\[
+\begin{array}{cc}
+\infer[\textsc{cast}]
+  { % conclusion 
+   \Gamma \vdash \texttt{cast(\emphkind{cast\_kind}, $\tau$, $e$)} : \tau
+  }
+  { % premise
+    \Gamma \vdash e : \tau_1
+    & \tau, \tau_1 \in \tau_{\text{reg}}
+    & \text{cast\_compat(\emphkind{cast\_kind}, $\tau_1$, $\tau$)}
+  } &
+\infer[\textsc{let}]
+  { % conclusion
+    \Gamma \vdash \texttt{let $x$ := $e_1$ in $e_2$} : \tau
+  }
+  { % premise
+    \Gamma \vdash e_1 : \tau_1
+    & \Gamma,(x:\tau_1) \vdash e_2 : \tau
+  } 
+
+\end{array}
+\]
+\end{footnotesize}
+\caption{Type-checking rules for \bap.}
+\label{vine:typecheck}
+\end{table}
+%\renewcommand{\baselinestretch}{1.66}\normalsize

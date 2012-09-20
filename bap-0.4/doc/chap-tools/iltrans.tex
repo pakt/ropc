@@ -1,0 +1,115 @@
+\section{Transformations on \bil Code}
+The {\tt iltrans} tool translates our IL in various ways.  The options
+to {\tt iltrans} specify a sequence of transformations, optionally
+printing out the result of the transformation.   For example,
+executing:
+\begin{verbatim}
+ iltrans -trans1 -trans2 outfile -trans3 infile
+\end{verbatim}
+would read in {\tt infile}, perfore transformation {\tt trans1}, the
+output of which is fed to {\tt trans2}, the output of which is again
+fed to {\tt trans3} as well as printed to {\tt outfile}. Although this
+may seem a little strange at first, the tool is designed to make it
+easy to specify exactly what algorithms you wish to perform over the
+IL.
+
+
+{\tt iltrans} provides a library of common analyses and utilities,
+which can be used as building blocks for more advanced analyses.
+Please consult {\tt iltrans -help} for exact arguments.  We detail
+below at a high level several of the analysis that can be performed by
+{\tt iltrans}
+
+
+% \paragraph{Type Checker.
+% \item {\bf Type checker.}  The \bap IL serves both as an intermediate
+%   representation for assembly and as a programming language that
+%   assembly-like programs can be written in.  However, the \bap IL
+%   syntax from Figure~\ref{vine:syntax} permits several undefined
+%   operations.  For example, the syntax allows adding two variables of
+%   different types. The \bap type-checker further restricts the
+%   language by removing obviously meaningless statements, as well as
+%   catching several typical bugs. The \bap type-checking is not
+%   designed to ensure safety (preservation + progress) of a
+%   type-checked program. Chapter~\ref{vine:typecheck} details \bap
+%   type-checking.
+
+
+\paragraph{Graphs.} {\tt iltrans} provides options for building and
+manipulating control flow graphs (CFG), including a pretty-printer for
+the graphviz DOT graph language~\cite{graphviz:dot}. {\tt iltrans}
+also provides options for building data, control, and program
+dependence graphs~\cite{muchnick:1997}.  These graphs can be output in
+the {\tt dot} language.  The graphs themselves can be quite large.  We
+currently use {\tt zgrviewer}~\cite{zgrviewer} for viewing the
+resulting dot files.
+
+
+One issue when constructing  graphs of an assembly program is
+determining the successors of jumps to computed values, called {\it
+  indirect} jumps.  Resolving indirect jumps usually involves a program
+analysis that require a CFG, e.g., VSA~\cite{balakrishnan:2007}. Thus,
+there is a potential circular dependency.  Note that an indirect jump
+may potentially go anywhere, including the heap or code that has not
+been previously disassembled.
+
+Our solution is to designate a special node as a successor of
+unresolved indirect jump targets in the CFG.  We provide this so an
+analysis that depends on a correct CFG can recognize that we do not
+know the subsequent state. For example, a data-flow analysis could
+widen all facts to the lattice bottom.  Most normal analyses will
+first run an indirect jump resolution analysis in order to build a
+more precise CFG that resolves indirect jumps to a list of possible
+jump targets.  {\tt iltrans} provides one such analysis, called Value Set
+Analysis~\cite{balakrishnan:2007}.
+
+\paragraph{Single Static Assignment.} {\tt iltrans} supports
+conversion to and from single static assignment (SSA)
+form~\cite{muchnick:1997}. SSA form makes writing an analysis easier
+because every variable is defined statically only once.  Note we
+convert both memory and scalars to SSA form. We convert memories so
+that an analysis can syntactically distinguish between memories before
+and after a write operation instead of requiring the analysis itself
+to maintain similar bookkeeping. For example, in the memory
+normalization example in Figure~\ref{vine:normalized}, an analysis can
+syntactically distinguish between the memory state before the write on
+line 1, the write on line 5, and the read on line 7.
+
+\paragraph{Chopping.}  Given a source and sink node, a program
+chop~\cite{jackson:1994} is a graph showing the statements that cause
+definitions of the source to affect uses of the sink.  For example,
+chopping can be used to restrict subsequent analyses to only a portion
+of code relevant to a given source and sink instead of the whole
+program. %% We describe our implementation of chopping in more detail
+%% in~\ref{algs:chopping}.
+
+\paragraph{Data-flow and Optimizations.} {\tt iltrans} interfaces with
+the generic data-flow engine in \bap.  The data-flow engine works on
+user-defined lattices, such as those for constant propagation, dead
+code elimination, etc.  {\tt iltrans} interfaces with several
+implements several data-flow analyses. \bap currently implements
+Simpson's global value numbering~\cite{simpson:1996}, constant
+propagation and folding~\cite{muchnick:1997}, dead-code
+elimination~\cite{muchnick:1997}, live-variable
+analysis~\cite{muchnick:1997}, integer range analysis, and
+VSA~\cite{balakrishnan:2007}.
+
+We have implemented value set analysis~\cite{balakrishnan:2007}. Value
+set analysis is a data-flow analysis that over-approximates the values
+for each variable at each program point. Value-set analysis can be
+used to help resolve indirect jumps. It can also be used as an alias
+analysis.  Two memory accesses are potentially aliased if the
+intersection of their value sets is non-empty.
+
+
+Optimizations are useful for simplifying or speeding up subsequent
+analyses. For example, we have found that the time for the decision
+procedure STP to return a satisfying answer for a query can be cut in
+half by first using program optimization to simplify the
+query~\cite{brumley:2008}.
+
+
+
+
+
+

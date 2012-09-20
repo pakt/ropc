@@ -1,0 +1,92 @@
+
+\begin{table}
+\centering
+\begin{tabular}{lll}
+  \emphkind{program}&::=&
+        \emphkind{stmt}*\\
+
+  \emphkind{stmt}&::=&  
+         \emphkind{var} := \emphkind{exp}
+     $|$ {\tt jmp}(\emphkind{exp})
+     $|$ {\tt cjmp}(\emphkind{exp},\emphkind{exp},\emphkind{exp})\\
+     &&$|$ {\tt halt}(\emphkind{exp})
+     $|$ {\tt assert}(\emphkind{exp})
+     $|$ {\tt label} \emphkind{label\_kind}
+     $|$ {\tt special}(string)\\
+
+  \emphkind{exp}&::=& 
+         {\tt load}(\emphkind{exp}, \emphkind{exp}, \emphkind{exp},
+         \emphkind{$\tau_{\text{reg}}$})
+        $|$ {\tt store}(\emphkind{exp}, \emphkind{exp},
+        \emphkind{exp},\emphkind{exp},$\tau_{\text{reg}}$ )
+     $|$ \emphkind{exp} $\Diamond_b$ \emphkind{exp}
+     \\
+     & & 
+     $|$ $\Diamond_u$ \emphkind{exp}
+     $|$ \emphkind{var}
+     $|$ {\tt lab}(string)
+     $|$ \emphkind{integer}
+     $|$ {\tt
+       cast}(\emphkind{cast\_kind},$\tau_{\text{reg}}$,\emphkind{exp})
+\\
+     & & $|$ {\tt let} \emphkind{var} {\tt =} \emphkind{exp} {\tt in} \emphkind{exp}
+    
+     $|$ {\tt unknown}(string, $\tau$)
+     $|$ {\tt name}(\emphkind{exp})
+     \\
+
+  \emphkind{label\_kind}&::=&  \emphkind{integer} $|$ string \\
+     
+  \emphkind{cast\_kind}&::=&  
+     {\tt unsigned}
+     $|$ {\tt signed}
+     $|$ {\tt high} 
+     $|$ {\tt low}\\
+
+%   \emphkind{decl}&::=& 
+%          {\tt var} \emphkind{var}\\
+
+
+  \emphkind{var}&::=& 
+         (string, id$_v$, $\tau$)\\
+
+  $\Diamond_b$&::=&
+     $+ , - , * ,  /, /_s , \bmod , \bmod_s , \ll, \gg, \gg_a ,  \&,
+        |, \xor, ==, !=, <, \leq , <_s, \leq_s$\\
+
+  $\Diamond_u$&::=& $-$ (unary minus), $\sim$ (bit-wise not)\\
+
+  \emphkind{value}&::=&  \emphkind{integer}
+       $|$ \emphkind{memory} 
+       $|$ string
+       $|$ $\perp$  \\
+
+  \emphkind{integer}&::=&          $n$ (:$\tau_{\text{reg}})$ \\
+
+
+  \emphkind{memory}&::=&
+        \{ \emphkind{integer} $\rightarrow$ \emphkind{integer}, 
+             \emphkind{integer} $\rightarrow$ \emphkind{integer},
+             \ldots \} (:$\tau_{\text{mem}}$) \\
+
+  \emphkind{$\tau$} &::=&
+          \emphkind{$\tau_{\text{reg}}$} 
+      $|$ \emphkind{$\tau_{\text{mem}}$}\\
+
+  \emphkind{$\tau_{\text{mem}}$} &::=& {\tt mem\_t}($\tau_{\text{reg}}$)
+  $|$ {\tt array\_t}($\tau_{\text{reg}}, \tau_{\text{reg}}$)\\\
+  
+  \emphkind{$\tau_{\text{ reg}}$}&::=&
+         {\tt reg1\_t} 
+      $|$ {\tt reg8\_t} 
+      $|$ {\tt reg16\_t} 
+      $|$ {\tt reg32\_t} 
+      $|$ {\tt reg64\_t}\\
+
+
+
+\end{tabular}
+\caption{The Binary Intermediate Language. Note commas separte
+  operators.}
+\label{vine:syntax}
+\end{table}

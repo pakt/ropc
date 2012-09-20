@@ -1,0 +1,39 @@
+Missing features:
+* CFG coalescing
+* Rebuild compond expressions when converting back from SSA. (mostly (overly?) done)
+* SMT-LIB input/output.
+* C output.
+* Forward symbolic evaluator.
+* VSA (value set analysis)
+* Constant cjmps
+* Update target on indirect constant jumps
+
+Disassembly stuff:
+* .plt disassembles poorly. Into this.
+* Include symbols in disassembly
+* Include section names in disassembly
+* Handle unsupported instructions better, particularly hlt.
+
+
+Design issues:
+* Finish visit_action.
+* Do we want to leave visit_binding in there?
+* Change attributes from attribute list to a set of attribute.
+* When optimizing code, try to keep the more meaningful variable names.
+
+Other:
+* Have example demos of the tools.
+* Fix up documentation.
+* Write more .mli files.
+* Test on/port to OSX
+* Examples/demo.
+* Redo the patched VEX thing properly. (using a vendor branch)
+* Improve Cfg_ast.to_prog with regards to adding BB_Entry to a trace. See
+  wp_test_3.il for an example where it is not ideal.
+
+
+Bigger projects:
+* Move VEX2IL translation into ocaml. (leaving only a small shim layer for bfd)
+* Add support for AMD64 binaries. (after completing the previous item)
+* Update the Vine regression tests to work with BAP and/or write new ones.
+* Trace reader for TEMU traces or some better way of getting traces. (maybe PIN)

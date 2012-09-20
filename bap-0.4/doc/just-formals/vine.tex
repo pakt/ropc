@@ -1,0 +1,33 @@
+\documentclass[11pt,twoside]{article}
+
+\usepackage[draft]{djb}
+\usepackage{shortcuts}
+\usepackage{fullpage}
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\usepackage{code}
+\usepackage{subfig}
+\usepackage{listings}
+
+\newcommand{\doctitle}{\vine Binary Analysis Infrastructure}
+\lhead[\fancyplain{}{\bfseries \thepage}]%
+      {\fancyplain{}{\bfseries\doctitle}}
+\chead[]{}
+\rhead[\fancyplain{}{\bfseries\doctitle}]%
+      {\fancyplain{}{\bfseries \thepage}}
+%\lfoot[{\small\scshape Lecture Notes}]{{\small\scshape Lecture Notes}}
+\cfoot[]{}
+\rfoot[{\small\scshape\date}]{{\small\scshape\date}}
+
+\title{\doctitle}
+\author{David Brumley and Ivan Jager}
+\date{}
+ 
+
+\begin{document}
+
+\maketitle
+
+\input{../syntax-table}
+\input{../operational-semantics-table}
+\end{document}

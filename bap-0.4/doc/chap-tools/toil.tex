@@ -1,0 +1,75 @@
+\section{Lifting Binary Code to \bil}
+
+The {\tt toil} tool lifts binary code to \bil.  The syntax for {\tt
+  toil} is yet to be determined.
+
+
+\section{The internals of {\tt toil}}
+Lifting up binary code to the IL consists of three steps:
+\begin{itemize}\squish
+\item {\bf Step 1.} First, the binary file is disassembled. {\tt toil}
+  currently interfaces with %% two disassemblers: IDA Pro~\cite{idapro},
+  %% a commercial disassembler, and 
+  a linear sweep disassembler built on top of GNU libopcodes.
+  Interfacing with other disassemblers like IDA Pro is straight-forward.
+
+\item {\bf Step 2.} The disassembly is passed to VEX, a third-party
+  library which turns assembly instructions into the VEX intermediate
+  language. The VEX IL is part of the Valgrind dynamic instrumentation
+  tool~\cite{nethercote:2004:phd}.  The VEX IL is also similar to a
+  RISC-based language. As a result, the lifted IL has only a few
+  instruction types, similar to \bap. However, the VEX IL  is
+  insufficient for performing program analysis because it lacks
+  information about the implicit side effects of instructions, e.g., what
+  {\tt eflags} are set by x86 instructions.  This step is mainly
+  performed in order to simplify the development of \bap: we let the
+  existing tool take care of reducing assembly instructions to a
+  basic IL, then step 3 exposes all implicit side-effects so that
+  the analysis is faithful.
+
+  
+
+\item {\bf Step 3.} We lift the VEX IL to \bil.  The resulting \bil
+  IL is intended to be faithful to the semantics of the disassembled
+  assembly instructions. 
+\end{itemize}
+
+Lifted assembly instructions have all of the side-effects explicitly
+exposed.  As a result, a single typical assembly instruction will be
+lifted as a sequence of \bil instructions.  For example, the {\tt add
+  eax,0x2} x86 instruction is lifted as:
+
+\begin{centering}
+\begin{scriptsize}
+\begin{tightcode}
+tmp1 = EAX;
+EAX = EAX + 2;
+//eflags calculation
+CF:reg1\_t = (EAX<tmp1);
+tmp2 = cast(low, EAX, reg8\_t);
+PF = (!cast(low,
+              ((((tmp2>>7)^(tmp2>>6))^((tmp2>>5)^(tmp2>>4)))^
+              (((tmp2>>3)^(tmp2>>2))^((tmp2>>1)^tmp2)))), reg1\_t);
+AF = (1==(16\&(EAX^(tmp1^2))));
+ZF = (EAX==0);
+SF = (1==(1\&(EAX>>31)));
+OF = (1==(1\&(((tmp1^(2^0xFFFFFFFF))\&(tmp1^EAX))>>31)));
+\end{tightcode}
+\end{scriptsize}
+\end{centering}
+
+The lifted \bil code explicitly detail all the side-effects of the
+{\tt add} instruction, including all 6 {\tt eflags} that are updated
+by the operation.  As another example, an instruction with the {\tt
+  rep} prefix (whose semantics are in Figure~\ref{vine:rep}) is lifted
+as a sequence of instructions that form a loop.
+
+In addition to binary files, {\tt toil} can also lift an instruction trace
+to the IL. Conditional branches in a trace are lifted as {\tt assert}
+statements so that the executed branch is followed. This is done to
+prevent branching outside the trace to an unknown instruction. The
+TEMU~\cite{temu} dynamic analysis tool currently supports generating
+traces in the \bap trace format.
+
+
+

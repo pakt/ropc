@@ -1,0 +1,84 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{djb}[2005/09/07 David Brumley's Style File]
+
+
+%% Options available to package, along with default values.
+\newcommand\@draftmark{}
+\newcommand\@nopdf{}
+\DeclareOption{draft}{\renewcommand\@draftmark{1}}
+\DeclareOption{final}{\renewcommand\@draftmark{0}}
+\DeclareOption{nopdf}{\renewcommand\@nopdf{1}}
+\DeclareOption{pdf}{\renewcommand\@nopdf{0}}
+\ExecuteOptions{draft,pdf}
+\ProcessOptions
+
+%% Standard packages
+\RequirePackage{times,epsfig,pifont}
+\RequirePackage{xspace,fullpage,amsfonts,amsmath,amssymb,amsthm}
+\RequirePackage{proof,array,cite,array}
+
+% Make the extra row height in array
+\setlength\extrarowheight{4pt}
+
+\ifnum\@draftmark=1
+\newcommand{\authnote}[2]{{\bf #1 : #2\xspace}}
+\else
+\newcommand{\authnote}[2]{}
+\fi
+
+
+\newcommand{\ignore}[1]{}
+
+% Formatting
+\raggedbottom
+\newcommand{\squish}{
+      \setlength{\topsep}{0pt}
+      \setlength{\itemsep}{0ex}
+      \vspace{-1ex}
+      \setlength{\parskip}{0pt}}
+
+
+%\ifnum\@nopdf=0
+%\RequirePackage[pdftex,colorlinks,linkcolor=blue,filecolor = blue,
+%  citecolor = blue,urlcolor  = blue,
+  % So pdftex doesn't complain about destination with the same
+  % identifer. See TeX FAQ 
+%  plainpages=false]{hyperref}
+%\newcommand{\namedref}[2]{\hyperref[#2]{#1~\ref*{#2}}}
+%\pdfbookmark[1]{Table of contents}{tabOfCont}
+%\else
+%\RequirePackage[colorlinks,linkcolor=blue,filecolor = blue, citecolor
+%  = blue, urlcolor  = blue,plainpages=false]{hyperref}
+%\newcommand{\namedref}[2]{\hyperref[#2]{#1~\ref*{#2}}}
+%\fi
+
+
+%\newtheorem{theorem}{Theorem}[section]
+
+%\theoremstyle{definition}
+%\newtheorem{def}[thm]{Definition}
+
+%\newenvironment{proof}{\trivlist \item[\hskip \labelsep{\bf
+%Proof:}]}{\hfill$\Box$ \endtrivlist}
+
+\theoremstyle{definition} 
+\newtheorem{defn}{Definition}[section]
+\newtheorem{thm}{Theorem}
+
+%\newenvironment{definition}[1][Definition]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+%% \lstset{
+%% language=[GNU]{C++},
+%% alsolanguage=[x86masm]{Assembler},
+%% basicstyle={\small},
+%% numbers=none,
+%% keywordstyle={},
+%% breaklines=true,
+%% breakautoindent=true,
+%% xleftmargin=2em,
+%% frame={},
+%% %stringstyle={\rmfamily},
+%% commentstyle={\rmfamily}
+%% }
+

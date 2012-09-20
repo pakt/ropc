@@ -1,0 +1,49 @@
+OASISFormat: 0.1
+Name:        ounit
+Version:     1.1.0
+Synopsis:    Unit testing framework
+Authors:     Maas-Maarten Zeeman, 
+             Sylvain Le Gall
+Copyrights:  (C) 2002-2008 Maas-Maarten Zeeman,
+             (C) 2010 OCamlCore SARL
+License:     MIT
+LicenseFile: LICENSE.txt 
+Homepage:    http://ounit.forge.ocamlcore.org
+Plugins:     META (0.2.0~alpha1),
+             StdFiles (0.2.0~alpha1),
+             DevFiles (0.2.0~alpha1)
+BuildTools:  ocamlbuild
+
+Description:
+  OUnit is a unit testing framework for OCaml, inspired by the JUnit tool for
+  Java, and the HUnit tool for Haskell.
+  .
+  More information on [HUnit](http://hunit.sourceforge.net)
+
+Flag backtrace 
+  Description: Enable backtrace display in exception 
+
+Library "oUnit"
+  Path:         src
+  Modules:      OUnit, OUnitDiff
+  BuildDepends: unix
+  if flag(backtrace) 
+    ByteOpt: -ppopt -DBACKTRACE
+    NativeOpt: -ppopt -DBACKTRACE
+  
+Executable test
+  Path:   test
+  MainIs: test.ml
+  BuildDepends: oUnit
+  Install: false
+  
+Test main
+  Command: $test
+  
+Document "api-ounit"
+  Title:       API reference for OUnit
+  Type:        ocamlbuild (0.2.0~alpha1)
+  BuildTools+: ocamldoc
+  XOCamlbuildLibraries: oUnit
+  XOCamlbuildPath:      src/
+  

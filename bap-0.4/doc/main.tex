@@ -1,0 +1,69 @@
+\documentclass[11pt,twoside]{book}
+
+\usepackage[draft]{djb}
+\usepackage{shortcuts}
+\usepackage{fullpage}
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\usepackage{code}
+\usepackage{subfig}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+
+\newcommand{\doctitle}{The \bap Handbook}
+\pagestyle{fancy}
+
+\newcommand{\cmdline}[1]{\texttt{#1}}
+
+%\lhead[\fancyplain{}{\bfseries \thepage}]%
+%      {\fancyplain{}{\bfseries\doctitle}}
+%\chead[]{}
+%\rhead[\fancyplain{}{\bfseries\doctitle}]%
+%      {\fancyplain{}{\bfseries \thepage}}
+%\lfoot[{\small\scshape Lecture Notes}]{{\small\scshape Lecture Notes}}
+%\cfoot[]{}
+%\rfoot[{\small\scshape\date}]{{\small\scshape\date}}
+
+\begin{document}
+
+\title{\doctitle}
+\author{David Brumley and Ivan Jager}
+\date{\today}
+ 
+\maketitle
+\thispagestyle{plain}
+
+\frontmatter
+
+%\input{abstract}
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter
+
+%\maketitle
+
+\input{chap-intro}
+
+\input{chap-tools}
+
+\input{chap-formalism}
+
+\input{chap-developer}
+
+\input{chap-examples}
+
+%\input{discussion}
+
+\input{related}
+
+\input{credits}
+
+
+\bibliographystyle{plain}
+\bibliography{bibtex/biblio,bibtex/misc}
+
+\end{document}

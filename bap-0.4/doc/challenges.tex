@@ -1,0 +1,196 @@
+\section{Binary Analysis Challenges}
+\label{sec:goals}
+
+Binary program analysis is attractive because binary code is
+everywhere, and the binary code is faithful to the low-level details
+of what will actually execute on hardware.  However, there are two
+challenges to performing accurate and faithful analysis on modern
+binary code. First, binary code analysis must deal with the complexity
+of modern instruction sets. Second, binary code analysis is different
+than source code analysis, thus we need to develop algorithms suitable
+for binary code.
+
+\subsection{Binary code is complex.} The shear size and complexity of
+instructions which are encoded in a program binary poses a significant
+challenge to analysis.  Not only are there hundreds of instructions,
+but the semantics of each instruction tend to be complex.  Modern
+architectures support single instruction loops, instruction which
+behave differently based upon the operand values, and almost every
+instruction has implicit side-effects such as setting processor flags.
+
+For example, the x86 instruction set contains hundreds of different
+instructions, with more being added at each processor revision.  The
+Intel manuals that describe the semantics of x86~\cite{intel:x86}
+weigh in at over 11 pounds!
+
+More concretely, consider the problem of determining the control flow
+in the following x86 assembly program:
+\begin{small}
+\begin{lstlisting}
+// instruction dst, src
+add a, b   // a = a+b
+shl a, x   // a << x
+jz target   // jump if zero to address target
+\end{lstlisting}
+\end{small}
+
+
+The first instruction, {\tt add a,b}, computes {\tt a := a+b}. The
+second instruction, {\tt shl a,x}, computes {\tt a := a << x}.  The
+last instruction, {\tt jz a}, jumps to address {\tt a} if the
+processor zero flag is set.
+
+One problem is both the {\tt add} and {\tt shl} instruction have
+implicit side effects. Both instructions may calculate up to
+\emph{six} other bits of information that are stored as processor
+status flags.  In particular, they may calculate whether the result is
+zero, the parity of the result, whether there was carry, whether than
+was an auxiliary carry, whether the result is signed, and whether
+overflow occurred are all also calculated and stored as status flags.
+
+Conditional control flow, such as the {\tt jz} instruction, is
+determined by the implicitly calculated processor flags. Thus, either
+the {\tt add} instruction calculates the zero flag, or the {\tt shl}
+will.  However, which instruction, {\tt add} or {\tt shl}, determines
+whether the branch is taken? Answering this question is not
+straight-forward.  The {\tt shl} instruction behaves
+\emph{differently} depending upon the operands: it only updates the
+zero flag if {\tt x} is not zero.  
+
+Thus, understanding the semantics of the instruction set of the binary
+program is a significant engineering challenge.
+
+
+\subsection{Binary code is different than source code.} Binary code
+analysis is different than source code analysis because binary code
+lacks abstractions that are often fundamental to source code.  For
+example, binary code lacks:
+\begin{description}\squish
+\item[Functions.] The function abstraction does not exist at the
+  binary level.  Instead, control flow in a binary program is
+  performed by jumps. For example, the x86 instruction {\tt call x} is
+  just syntactic sugar (i.e., shorthand) for storing the number in the
+  instruction pointer register {\tt eip} at the address named by the
+  register {\tt esp}, then loading the {\tt eip} with number {\tt
+    x}. Indeed, it is perfectly valid in assembly, and sometimes
+  happens in practice, that one may call into the middle of a
+  ``function'', or have a single ``function'' separated into
+  non-contiguous pieces.
+
+\item[Buffers.]  Binary code does not have buffers, it has
+  \emph{memory}.  While the OS may determine a particular memory page
+  is not valid, memory does not have the traditional semantics of a
+  user-specified type and size. One implication of the difference
+  between buffers and memory is that in binary code there is no such
+  thing as a buffer overflow. While we may say a particular store
+  violates a higher-level semantics given by the source code, such
+  facts are inferences with respect to the higher-level semantics, not
+  part of the binary code itself.
+\item[Types.] New types cannot be created or used since there is no
+  such thing as a type constructor in binary code. The only types
+  available are those provided by the hardware: registers and
+  memory. 
+
+  In addition, it is perfectly valid to store values of one type and
+  read them as another.  For example, consider the following x86 which
+  consists of two stores of 4 bytes followed by a read of 2 bytes:
+    \begin{small}
+    \begin{lstlisting}[mathescape=true]
+      // mov {\it size} {\it dst}, {\it src}
+      mov dword [addr], 0xA1B2C3D4
+      mov dword [addr+4], 0x1A2B3C4D
+      mov word  r, [addr+2]  ; (r will now contain 0x4DA1)
+    \end{lstlisting}
+    \end{small}
+    After the first two memory stores , the memory starting at {\tt
+      addr} through {\tt addr+8} contains bytes \{0xD4, 0xC3, 0xB2,
+    0xA1, 0x4D, 0x3C, 0xB2, 0xA1\}.  Note because x86 is little endian
+    the least significant byte is stored in a higher memory
+    address. The final {\tt mov} load is loading a 16-bit value, even
+    though only 32-bit values were written.  The values loaded is
+    0x4DA1 -- the last byte of the second store, and the first byte of
+    the first store.
+\end{description}
+
+Thus, we must develop and only use program analysis that are suitable
+for the unique characteristics of binary code.
+
+
+
+Common program analysis we would like to
+perform as part of security analysis such as vulnerability filter
+generation and APEG include:
+\begin{enumerate}\squish
+
+\item Accurately model the effects of x86 instructions.  In order to
+  understand a set of x86 instructions as a program, we need to
+  understand the semantics of x86 itself.  As we will see, we raise
+  all x86 to an intermediate language to achieve this property.
+
+% \item Finding all paths from a given source to a sync.  Always
+%   performing whole-program analysis is often inefficient. In typical
+%   problems, such as vulnerability filter generation and APEG, much of
+%   our analysis only needs to consider program paths from a given
+%   source to sync.   As we will see, we
+%   provide utilities for performing program \emph{chopping}, which
+%   takes as input a program in \bap, and outputs only those paths from
+%   a given source to a given sync.
+
+\item Refine analysis to particular program paths. If a problem only
+  cares about specific program paths, whole-program analysis would be
+  inefficient. We need techniques that a) allow us to concentrate
+  subsequent analysis on only the relevant program paths, and b)
+  take advantage of the fact we only care about particular paths to
+  simplify subsequent analysis. 
+
+\item Find inputs that execute selected paths. For example, a common
+  problem is to model inputs which reach a particular line of
+  code. For example, in APEG we want to find an input that triggers a
+  new line of code because such inputs are likely exploits.  One
+  approach borrowed from the program verification community is to
+  first build a formula which is satisfied only by inputs which will
+  execute the path. Unfortunately, existing
+  approaches for generating such formulas are either inefficient
+  (e.g., they generate formulas exponential in the size of the
+  program) or do not work with binary code. To address this problem,
+  we needed to create efficient methods for generating formulas for
+  unstructured binary code.
+
+%  \item Given the model of an execution path, generate an input which
+%    will execute a particular path.  Regular expression vulnerability
+%    filter generation and exploit generation both work by finding a
+%    satisfying answer to the formula modeling an exploitable path.  An
+%    exploit is a single satisfying answer, while a regular expression
+%    filter is the disjunction of as many exploit strings as
+%    possible.  As we will see, we provide methods to do this by
+%    interfacing with a decision procedure
+%    (Section~\ref{subsec:bitblaze:stp}) which can solve  execution
+%    path formulas, resulting in an input which executes the given path.
+
+
+%% \item Perform optimizations on programs in \bap.  One aspect of
+%%       analyzing x86 that is challenging is the sheer number of
+%%       instructions in a program. Although one may expect the compiler
+%%       generating the x86 to have sufficiently  optimized the code, it
+%%       turns out that many additional optimizations are possible. For
+%%       example, if we consider only a subset of paths in an x86 program,
+%%       then we may be able to perform an optimization a compiler
+%%       reasoning about all potential code paths could not. 
+
+
+
+\end{enumerate}
+
+In our running example, these correspond to first understanding the
+semantics of x86 well enough to construct the control flow graph shown
+in Figure~\ref{fig:running-example}, being able to identify the paths
+show as relevant to the vulnerability, and finding inputs that execute
+the given paths.
+
+
+
+
+
+
+
+

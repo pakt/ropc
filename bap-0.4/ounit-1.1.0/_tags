@@ -1,0 +1,19 @@
+# OASIS_START
+# DO NOT EDIT (digest: 0088b53de37859f3fccc66e8de54b35e)
+# Library oUnit
+"src": include
+<src/oUnit.{cma,cmxa}>: oasis_library_ounit_byte
+<src/*.ml{,i}>: oasis_library_ounit_byte
+<src/oUnit.{cma,cmxa}>: oasis_library_ounit_native
+<src/*.ml{,i}>: oasis_library_ounit_native
+<src/*.ml{,i}>: pkg_unix
+# Executable test
+"test/test.byte": use_oUnit
+"test/test.byte": pkg_unix
+<test/*.ml{,i}>: use_oUnit
+<test/*.ml{,i}>: pkg_unix
+# OASIS_STOP
+"src/oUnit.ml": syntax_camlp4o, pkg_camlp4.macro
+"src/oUnit.odoc": oasis_document_api_ounit
+"src/oUnit.ml": oasis_document_api_ounit
+"src/api-ounit.docdir": oasis_document_api_ounit

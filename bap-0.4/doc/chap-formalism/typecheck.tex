@@ -1,0 +1,31 @@
+\subsection{\bap Typing}
+\label{vinesec:typecheck}
+\input{typecheck-table}
+
+The \bap IL syntax described in Table~\ref{vine:syntax} is designed
+to be simple. A literal interpretation, however, allows several
+nonsensical operations such as left-shifting two memory variables.  We
+type-check \bap programs using the  rules shown in
+Table~\ref{vine:typecheck} to weed out obviously nonsensical
+operations.  We emphasize that type-checking to show program safety is outside
+the scope of \bap.
+
+The type-checking rules are straight-forward.  \bap requires that
+binary and unary operations be on scalars of the same register type
+(except shifts where the shift amount need only be an integer). We
+type-check {\tt hi} and {\tt low} casts such that the resulting type
+is a smaller register type (in terms of the sub-typing relationship
+{\sc reg-subtype}), as expected.  {\tt unsigned} and {\tt signed}
+casts must be to a wider register type. One issue with un-normalized
+memory is that it may have multi-byte accesses, e.g., a store on x86
+could be of 32, 16, or 8 bits. Normalized memory, on the other hand,
+only allows stores and loads of bytes.  We define an auxiliary
+predicate ``mem\_compat'' to ensure that normalized memory is accessed
+appropriately.  Also note that as a convenience we assume 64-bit
+addressing in the rules, but allow smaller addressable memories via
+the {\tt reg-subtype} sub-typing rule.
+
+A program type-checks if all instructions type-check under the
+declared variable types.  We require all variables be declared because
+explicitly typed languages are easier to check. 
+

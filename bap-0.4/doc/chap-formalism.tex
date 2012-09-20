@@ -1,0 +1,28 @@
+\chapter{Formalization of \bil}
+
+At the core of \bap is the \bap intermediate language, called \bil. In
+this chapter we present a formalization of \bil. The formalization is
+intended to provide an exact description of what we mean by statements
+in the IL.
+
+{\it Note:} In our implementation, as discussed elsewhere, there are
+actually several IL's.  Throughout this chapter we discuss the IL as
+implemented in {\tt ast.ml}.  The other IL's differ in uninteresting
+ways and are variants of the IL discussed here. In particular,
+developers will be interested in {\tt ssa.ml}, which defines the IL in
+SSA form, and also does not allow recursively defined expressions
+(i.e., it is an SSA three-address code).  Thus, this chapter can be
+viewed as a specification for the actual code.
+
+
+
+\input{chap-formalism/language}
+% subsection
+
+%\input{running-example}
+% subsection
+%\input{derived}
+% subsection
+%\input{typecheck}
+% subsection
+\input{chap-formalism/operational-semantics}

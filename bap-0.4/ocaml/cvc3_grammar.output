@@ -1,0 +1,220 @@
+   0  $accept : %entry% $end
+
+   1  main : goodresult assertions EOF
+   2       | badresult EOF
+
+   3  assertions :
+   4             | assertion assertions
+
+   5  assertion : ASSERT LBRACKET VAR EQUAL VAL RBRACKET SEMICOLON
+   6            | ASSERT LBRACKET VAR EQUAL VAR RBRACKET SEMICOLON
+
+   7  goodresult : INVALID PERIOD
+   8             | SAT MODEL
+
+   9  badresult : VALID PERIOD
+
+  10  %entry% : '\001' main
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . main  (10)
+
+	INVALID  shift 3
+	VALID  shift 4
+	SAT  shift 5
+	.  error
+
+	main  goto 6
+	goodresult  goto 7
+	badresult  goto 8
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	goodresult : INVALID . PERIOD  (7)
+
+	PERIOD  shift 9
+	.  error
+
+
+state 4
+	badresult : VALID . PERIOD  (9)
+
+	PERIOD  shift 10
+	.  error
+
+
+state 5
+	goodresult : SAT . MODEL  (8)
+
+	MODEL  shift 11
+	.  error
+
+
+state 6
+	%entry% : '\001' main .  (10)
+
+	.  reduce 10
+
+
+state 7
+	main : goodresult . assertions EOF  (1)
+	assertions : .  (3)
+
+	ASSERT  shift 12
+	EOF  reduce 3
+
+	assertions  goto 13
+	assertion  goto 14
+
+
+state 8
+	main : badresult . EOF  (2)
+
+	EOF  shift 15
+	.  error
+
+
+state 9
+	goodresult : INVALID PERIOD .  (7)
+
+	.  reduce 7
+
+
+state 10
+	badresult : VALID PERIOD .  (9)
+
+	.  reduce 9
+
+
+state 11
+	goodresult : SAT MODEL .  (8)
+
+	.  reduce 8
+
+
+state 12
+	assertion : ASSERT . LBRACKET VAR EQUAL VAL RBRACKET SEMICOLON  (5)
+	assertion : ASSERT . LBRACKET VAR EQUAL VAR RBRACKET SEMICOLON  (6)
+
+	LBRACKET  shift 16
+	.  error
+
+
+state 13
+	main : goodresult assertions . EOF  (1)
+
+	EOF  shift 17
+	.  error
+
+
+state 14
+	assertions : assertion . assertions  (4)
+	assertions : .  (3)
+
+	ASSERT  shift 12
+	EOF  reduce 3
+
+	assertions  goto 18
+	assertion  goto 14
+
+
+state 15
+	main : badresult EOF .  (2)
+
+	.  reduce 2
+
+
+state 16
+	assertion : ASSERT LBRACKET . VAR EQUAL VAL RBRACKET SEMICOLON  (5)
+	assertion : ASSERT LBRACKET . VAR EQUAL VAR RBRACKET SEMICOLON  (6)
+
+	VAR  shift 19
+	.  error
+
+
+state 17
+	main : goodresult assertions EOF .  (1)
+
+	.  reduce 1
+
+
+state 18
+	assertions : assertion assertions .  (4)
+
+	.  reduce 4
+
+
+state 19
+	assertion : ASSERT LBRACKET VAR . EQUAL VAL RBRACKET SEMICOLON  (5)
+	assertion : ASSERT LBRACKET VAR . EQUAL VAR RBRACKET SEMICOLON  (6)
+
+	EQUAL  shift 20
+	.  error
+
+
+state 20
+	assertion : ASSERT LBRACKET VAR EQUAL . VAL RBRACKET SEMICOLON  (5)
+	assertion : ASSERT LBRACKET VAR EQUAL . VAR RBRACKET SEMICOLON  (6)
+
+	VAR  shift 21
+	VAL  shift 22
+	.  error
+
+
+state 21
+	assertion : ASSERT LBRACKET VAR EQUAL VAR . RBRACKET SEMICOLON  (6)
+
+	RBRACKET  shift 23
+	.  error
+
+
+state 22
+	assertion : ASSERT LBRACKET VAR EQUAL VAL . RBRACKET SEMICOLON  (5)
+
+	RBRACKET  shift 24
+	.  error
+
+
+state 23
+	assertion : ASSERT LBRACKET VAR EQUAL VAR RBRACKET . SEMICOLON  (6)
+
+	SEMICOLON  shift 25
+	.  error
+
+
+state 24
+	assertion : ASSERT LBRACKET VAR EQUAL VAL RBRACKET . SEMICOLON  (5)
+
+	SEMICOLON  shift 26
+	.  error
+
+
+state 25
+	assertion : ASSERT LBRACKET VAR EQUAL VAR RBRACKET SEMICOLON .  (6)
+
+	.  reduce 6
+
+
+state 26
+	assertion : ASSERT LBRACKET VAR EQUAL VAL RBRACKET SEMICOLON .  (5)
+
+	.  reduce 5
+
+
+18 terminals, 7 nonterminals
+11 grammar rules, 27 states

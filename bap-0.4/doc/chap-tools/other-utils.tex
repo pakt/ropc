@@ -1,0 +1,48 @@
+\section{Tools from \bil}
+
+\subsection{{\tt topredicate}}
+
+{\tt topredicate} supports program verification in two ways. First,
+{\tt topredicate} can convert the IL into Dijkstra's Guarded Command
+Language (GCL), and calculate the weakest precondition with respect to
+GCL programs~\cite{dijkstra:1976}. The weakest precondition for a
+program with respect to a predicate $q$ is the most general condition
+such that any input satisfying the condition is guaranteed to
+terminate (normally) in a state satisfying $q$.  Currently we only
+support acyclic programs, i.e., we do not support GCL {\tt while}.
+
+{\tt topredicate} also interfaces with decision procedures.  {\tt
+  topredicate} can write out expressions (e.g., weakest preconditions)
+in CVC Lite syntax~\cite{cvclite}, which is supported by several
+decision procedures. In addition, {\tt topredicate} interfaces
+directly with the STP~\cite{ganesh:2007} decision procedure through
+calls from \bap to the STP library.
+
+
+
+\subsection{{\tt ileval}} 
+
+{\tt ileval} evaluates a given \bil
+program using the operational semantics in in~\ref{vine:operational}.
+The evaluator allows us to execute programs without recompiling the IL
+back down to assembly. For example, we can test that a raised program
+is correct by executing the IL on an input $i$, observing the value $v$,
+executing the original binary program on $i$, observing the value
+$v'$, and verifying $v = v'$.
+
+\subsection{{\tt toc}} 
+
+{\tt toc} generates valid C code from the IL.  For example, one could
+use this as a rudimentary decompiler by first raising assembly to
+\bil, then writing it out as valid C.  The ability to export to C also
+provides a way to compile \bil programs: the IL is written as C, then
+compiled with a C compiler.
+
+The C code generator implements memories in the IL as arrays.  A {\tt
+  store} operation is a store on the array, and a {\tt load} is a load
+from the array.  Thus, C-generated code simulates real memory.  For
+example, consider a program that is vulnerable to a buffer overflow
+attack. It is raised to \bil, then written as C and recompiled. An
+out-of-bound write on the original program will be simulated in the
+corresponding C array, but will not lead to a real buffer overflow.
+

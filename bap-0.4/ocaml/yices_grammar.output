@@ -1,0 +1,165 @@
+   0  $accept : %entry% $end
+
+   1  main : goodresult MODEL assertions DASHES EOF
+   2       | badresult EOF
+
+   3  assertions :
+   4             | assertion assertions
+
+   5  assertion : LBRACKET EQUAL VAR VAL RBRACKET
+
+   6  goodresult : INVALID
+
+   7  badresult : VALID
+
+   8  %entry% : '\001' main
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . main  (8)
+
+	INVALID  shift 3
+	VALID  shift 4
+	.  error
+
+	main  goto 5
+	goodresult  goto 6
+	badresult  goto 7
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	goodresult : INVALID .  (6)
+
+	.  reduce 6
+
+
+state 4
+	badresult : VALID .  (7)
+
+	.  reduce 7
+
+
+state 5
+	%entry% : '\001' main .  (8)
+
+	.  reduce 8
+
+
+state 6
+	main : goodresult . MODEL assertions DASHES EOF  (1)
+
+	MODEL  shift 8
+	.  error
+
+
+state 7
+	main : badresult . EOF  (2)
+
+	EOF  shift 9
+	.  error
+
+
+state 8
+	main : goodresult MODEL . assertions DASHES EOF  (1)
+	assertions : .  (3)
+
+	LBRACKET  shift 10
+	DASHES  reduce 3
+
+	assertions  goto 11
+	assertion  goto 12
+
+
+state 9
+	main : badresult EOF .  (2)
+
+	.  reduce 2
+
+
+state 10
+	assertion : LBRACKET . EQUAL VAR VAL RBRACKET  (5)
+
+	EQUAL  shift 13
+	.  error
+
+
+state 11
+	main : goodresult MODEL assertions . DASHES EOF  (1)
+
+	DASHES  shift 14
+	.  error
+
+
+state 12
+	assertions : assertion . assertions  (4)
+	assertions : .  (3)
+
+	LBRACKET  shift 10
+	DASHES  reduce 3
+
+	assertions  goto 15
+	assertion  goto 12
+
+
+state 13
+	assertion : LBRACKET EQUAL . VAR VAL RBRACKET  (5)
+
+	VAR  shift 16
+	.  error
+
+
+state 14
+	main : goodresult MODEL assertions DASHES . EOF  (1)
+
+	EOF  shift 17
+	.  error
+
+
+state 15
+	assertions : assertion assertions .  (4)
+
+	.  reduce 4
+
+
+state 16
+	assertion : LBRACKET EQUAL VAR . VAL RBRACKET  (5)
+
+	VAL  shift 18
+	.  error
+
+
+state 17
+	main : goodresult MODEL assertions DASHES EOF .  (1)
+
+	.  reduce 1
+
+
+state 18
+	assertion : LBRACKET EQUAL VAR VAL . RBRACKET  (5)
+
+	RBRACKET  shift 19
+	.  error
+
+
+state 19
+	assertion : LBRACKET EQUAL VAR VAL RBRACKET .  (5)
+
+	.  reduce 5
+
+
+17 terminals, 7 nonterminals
+9 grammar rules, 20 states

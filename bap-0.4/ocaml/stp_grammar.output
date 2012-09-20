@@ -1,0 +1,210 @@
+   0  $accept : %entry% $end
+
+   1  main : assertions goodresult EOF
+   2       | goodresult assertions EOF
+   3       | badresult EOF
+
+   4  assertions :
+   5             | assertion SEMICOLON assertions
+
+   6  assertion : ASSERT LBRACKET VAR EQUAL VAL RBRACKET
+
+   7  goodresult : INVALID PERIOD
+
+   8  badresult : VALID PERIOD
+
+   9  %entry% : '\001' main
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+1: shift/reduce conflict (shift 4, reduce 4) on INVALID
+state 1
+	%entry% : '\001' . main  (9)
+	assertions : .  (4)
+
+	ASSERT  shift 3
+	INVALID  shift 4
+	VALID  shift 5
+
+	main  goto 6
+	assertions  goto 7
+	goodresult  goto 8
+	badresult  goto 9
+	assertion  goto 10
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	assertion : ASSERT . LBRACKET VAR EQUAL VAL RBRACKET  (6)
+
+	LBRACKET  shift 11
+	.  error
+
+
+state 4
+	goodresult : INVALID . PERIOD  (7)
+
+	PERIOD  shift 12
+	.  error
+
+
+state 5
+	badresult : VALID . PERIOD  (8)
+
+	PERIOD  shift 13
+	.  error
+
+
+state 6
+	%entry% : '\001' main .  (9)
+
+	.  reduce 9
+
+
+state 7
+	main : assertions . goodresult EOF  (1)
+
+	INVALID  shift 4
+	.  error
+
+	goodresult  goto 14
+
+
+state 8
+	main : goodresult . assertions EOF  (2)
+	assertions : .  (4)
+
+	ASSERT  shift 3
+	EOF  reduce 4
+
+	assertions  goto 15
+	assertion  goto 10
+
+
+state 9
+	main : badresult . EOF  (3)
+
+	EOF  shift 16
+	.  error
+
+
+state 10
+	assertions : assertion . SEMICOLON assertions  (5)
+
+	SEMICOLON  shift 17
+	.  error
+
+
+state 11
+	assertion : ASSERT LBRACKET . VAR EQUAL VAL RBRACKET  (6)
+
+	VAR  shift 18
+	.  error
+
+
+state 12
+	goodresult : INVALID PERIOD .  (7)
+
+	.  reduce 7
+
+
+state 13
+	badresult : VALID PERIOD .  (8)
+
+	.  reduce 8
+
+
+state 14
+	main : assertions goodresult . EOF  (1)
+
+	EOF  shift 19
+	.  error
+
+
+state 15
+	main : goodresult assertions . EOF  (2)
+
+	EOF  shift 20
+	.  error
+
+
+state 16
+	main : badresult EOF .  (3)
+
+	.  reduce 3
+
+
+state 17
+	assertions : assertion SEMICOLON . assertions  (5)
+	assertions : .  (4)
+
+	ASSERT  shift 3
+	INVALID  reduce 4
+	EOF  reduce 4
+
+	assertions  goto 21
+	assertion  goto 10
+
+
+state 18
+	assertion : ASSERT LBRACKET VAR . EQUAL VAL RBRACKET  (6)
+
+	EQUAL  shift 22
+	.  error
+
+
+state 19
+	main : assertions goodresult EOF .  (1)
+
+	.  reduce 1
+
+
+state 20
+	main : goodresult assertions EOF .  (2)
+
+	.  reduce 2
+
+
+state 21
+	assertions : assertion SEMICOLON assertions .  (5)
+
+	.  reduce 5
+
+
+state 22
+	assertion : ASSERT LBRACKET VAR EQUAL . VAL RBRACKET  (6)
+
+	VAL  shift 23
+	.  error
+
+
+state 23
+	assertion : ASSERT LBRACKET VAR EQUAL VAL . RBRACKET  (6)
+
+	RBRACKET  shift 24
+	.  error
+
+
+state 24
+	assertion : ASSERT LBRACKET VAR EQUAL VAL RBRACKET .  (6)
+
+	.  reduce 6
+
+
+State 1 contains 1 shift/reduce conflict.
+
+
+15 terminals, 7 nonterminals
+10 grammar rules, 25 states

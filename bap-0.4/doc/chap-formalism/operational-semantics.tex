@@ -1,0 +1,59 @@
+\subsection{Operational Semantics}
+\label{vine:operational}
+
+\input{chap-formalism/operational-semantics-table}
+
+The operational semantics for \bil are shown in
+Table~\ref{vine:taboperational}.  The abstract machine configuration
+is given by the tuple $(\Pi, \Delta, p, i)$ where $\Pi$ is the list of
+instructions, $\Delta$ is the variable context, $p$ is the instruction
+pointer, and $i$ is the current instruction.  We write $\Delta' =
+\Delta[x \leftarrow v]$ to indicate that $\Delta'$ is the same as
+$\Delta$ except that variable $x$ is updated with value $v$.  For
+simplicity, we use $\Delta$ both as a scalar and a memory context. When
+ambiguous, such as in the {\sc store} rule, we indicate the type of
+the variable in $\Delta$ in parentheses. We write $\Pi[p]$ to indicate
+the instruction given by address $p$.
+
+The operational semantics can be read as follows.  Each step of the
+execution is associated with a machine configuration $M = (\Pi,
+\Delta, p, i)$.  A transition is given by $M \leadsto M'$ where the
+current configuration $M$ matches the left side of $\leadsto$ in the
+conclusion (below the horizontal bar), resulting in a state $M'$ to
+the right.  The transformation from $M$ to $M'$ is given by the rule
+premise (above the horizontal bar). 
+
+{\it Note:} \bap and \bil do not analyze dynamically generated
+code. Thus, in a machine state transition $(\Pi, \Delta, p, i)
+\rightarrow (\Pi', \Delta, p, i)$, $\Pi = \Pi'$ always. Since $\Pi$
+(the list of instructions) never changes, we omit $\Pi$ from the rules
+for brevity. One could add support for dynamically generated code by
+adding rules for updating $\Pi$. 
+
+
+{\sc assign} and {\sc label} are sequential instructions that carry
+out the respective operation, then look up and transition to the next
+sequential instruction $p+1$. The semantics of {\sc label} is a no-op:
+we use labels for jump targets.  {\sc assign} updates the variable
+context $\Delta$ resulting in a new context $\Delta'$.  As mentioned,
+there is no rule for {\tt special}; any program with a {\tt special}
+remaining may get stuck.
+
+Control flow is handled by {\tt jmp}%%  (since {\tt cjmp} is a derived
+%% form per Chapter~\ref{vine:derived})
+%% cjmp is not derived in bap?
+. A {\tt jmp} instruction
+evaluates the jump target $e$ to a value $v$, then looks up the
+instruction associated with $v$.  The {\sc no-inst} rule terminates
+the program in the error state when $v$ is not associated with an
+instruction. For example, consider the case when a program reads in
+user input at location $v$, then issues a jump to $v$.  The user input
+will be decoded as instructions at run-time.  However, since the
+instruction comes from user input, we cannot include it in the analysis. In
+\bap, we indicate such possibilities by terminating in error.
+
+
+
+
+%\subsubsection{\bap With Functions Operational Semantics}
+%\input{vine/operational-semantics-functions-table}

@@ -1,0 +1,119 @@
+% Latex Macros for Lisp code in text.
+% Based on macros found in C. Rich's library.
+% JAR hacks, 18 April 88:
+%  -- Put code in small font
+% RWH: update for LaTeX2e: June, 1996
+% FP: update to let \_, \{ and \} stand for tt-family characters: Aug 2006
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{code}
+\RequirePackage{color}
+
+\makeatletter
+
+\DeclareOption{color}{\def\code@color{blue}}
+
+\def\code@color{black}
+\ProcessOptions
+
+% \vobeyspaces turns all spaces into non-breakable spaces.
+% Note: this is like \@vobeyspaces except without spurious space in defn.
+
+{\catcode`\ =\active\gdef\vobeyspaces{\catcode`\ =\active\let =\@xobeysp}}
+
+% \def\vobeytabs turns all tabs into 8 non-breakable spaces
+
+{\catcode`\^^I=\active\gdef\vobeytabs{\catcode`\^^I=\active\let^^I=\xvobeytabs}}
+
+\def\xvobeytabs{\@xobeysp\@xobeysp\@xobeysp\@xobeysp\@xobeysp\@xobeysp\@xobeysp\@xobeysp}
+
+% \vobeylines turns all cr's into non-breakable \par's
+
+{\catcode`\^^M=\active\gdef\vobeylines{\catcode`\^^M=\active\let^^M=\xvobeylines}}
+
+\def\xvobeylines{\par\penalty10000\relax}
+
+% \obeycrsp turns cr's into non-breakable spaces
+
+{\catcode`\^^M=\active\gdef\obeycrsp{\catcode`\^^M=\active\let^^M=\@xobeysp}}
+
+%% \@noligs prevents ?` and !` from being treated as ligatures
+%% added 19 April 86  [copied from Latex sources]
+
+\begingroup
+\catcode``=13
+\gdef\@noligs{\let`=\@lquote}
+\endgroup
+
+% Set up code environment, in which most of the common special characters
+% appearing in code are treated verbatim, namely: _ # & ^ $ ~ @ " %
+%  *** JAR NEEDED $ AND _ IN SOME CODE ***
+
+% Note: \ { } are still enabled so that macros can be called in this
+% environment.  Use \\, \{ and \} to use these characters verbatim
+% in this environment.
+
+% Note: this environment allows no breaking of lines whatsoever; not
+% at spaces or hypens.  To arrange for a break use the standard \- macro,
+% or the \= macro which breaks, but inserts nothing.  This is useful,
+% for example for allowing hypenated identifiers to be broken, e.g.
+% FOO-\=BAR.
+
+\def\setupcode{\parsep=0pt\parindent=0pt%\puny%  +++JAR HACK (removed. Olin)
+  \color{\code@color}%
+  \ttfamily\frenchspacing\catcode``=13\@noligs%
+  \def\\{\char`\\}%
+  \def\_{\char`\_}% +++ fp
+  \def\{{\char`\{}% +++ fp
+  \def\}{\char`\}}% +++ fp
+  %\@makeother\#
+  \@makeother\&\@makeother\^%\@makeother\_%\@makeother\$% rem.Olin
+  \@makeother\`\@makeother\'%
+  \@makeother\~\@makeother\@\@makeother\"\@makeother\%\vobeytabs\vobeyspaces}
+
+% Code environment as described above.  Note that blank lines are
+% not preserved, and lines are not kept on one page.  Code is
+% indented by the same amount as quotes.
+% Note: to increase left margin, use \leftmargini=1in.
+%  was  {\list{}{\parsep=0pt}\item[]\setupcode\obeylines}%
+% then {\list{\parsep=0pt\listparindent=0pt\leftmargin=0pt}{}\item[]\setupcode%
+
+\newenvironment{bigcode}%
+  {\list{}{\parsep=0pt\leftmargin=0pt\labelwidth=0pt\itemindent=0pt%
+\listparindent=0pt}\item[]\setupcode%
+\obeylines}%
+  {\endlist}
+
+% Code is just like bigcode, but everything inside is kept on one page
+% Note: This actually works by setting a huge penalty for breaking
+% between lines of code.
+%  was  {\list{}{\parsep=0pt}\item[]\setupcode\vobeylines}%
+
+\newenvironment{code}%
+  {\list{}{\parsep=0pt\labelwidth=0pt\itemindent=0pt%\leftmargin=0pt%
+\listparindent=0pt}\item[]\setupcode\vobeylines}%
+  {\endlist}
+
+\newenvironment{tightcode}%
+  {\list{}{\parskip=0pt\topsep=0pt\parsep=0pt\labelwidth=0pt\itemindent=0pt%
+\leftmargin=0pt%
+\listparindent=0pt}\item[]\setupcode\vobeylines}%
+  {\endlist}
+
+% Reasonable separation between lines of code
+
+\newcommand{\codeskip}{\penalty0\vspace{2ex}}
+
+% \cd is used to build a code environment in the middle of text.
+% Note: only difference from display code is that cr's are taken
+% as unbreakable spaces instead of \par's.
+
+\def\cd{\begingroup\setupcode\obeycrsp\startcode}
+
+\newcommand{\textcd}[1]{\cd{#1}}
+\newcommand{\mathcd}[1]{\hbox{\textcd{#1}}}
+
+%\newcommand{\startcode}[1]{#1\endgroup}
+\def\startcode#1{#1\endgroup}
+
+\makeatother

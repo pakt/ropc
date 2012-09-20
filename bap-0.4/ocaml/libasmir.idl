@@ -1,0 +1,225 @@
+/*
+  Low level interface to libasmir. Avoid using this directly. Instead, use
+  the Asmir module.
+*/
+
+// #include "libbfd.idl"
+import "libbfd.idl";
+
+typedef [abstract] void* Exp;
+typedef [abstract] void* Stmt;
+typedef [abstract,errorcheck(null_check)] void* asm_program_t;
+typedef [abstract] void* bap_block_t;
+typedef [abstract] void* bap_blocks_t;
+typedef [abstract] void* cval_t;
+typedef [abstract] void* trace_attrs;
+typedef [abstract] void* cval_vec_t;
+typedef [abstract] void* memory_cell_data_t;
+typedef [abstract] void* memory_data_t;
+typedef [abstract] void* trace_frames_t;
+typedef [abstract] void* trace_frame_t;
+typedef [abstract] void* big_val_t;
+
+typedef int threadid_t;
+
+quote(C, " \
+    void null_check(void *ptr) { \
+        if (ptr == NULL) { \
+            caml_failwith(\"Unexpected NULL encountered.\"); \
+        } \
+    } \
+");
+
+[length_is(*num)] asymbol*
+asmir_get_symbols(asm_program_t prog,
+		  [out] long *num);
+
+[length_is(*num)] asymbol*
+asmir_get_all_symbols(asm_program_t prog,
+                      [out] long *num);
+
+[length_is(*num)] section_ptr*
+asmir_get_all_sections(asm_program_t prog,
+                       [out] long *num);
+
+enum frame_type_t {
+  FRM_NONE = 0, FRM_KEY, FRM_STD, FRM_LOADMOD, FRM_SYSCALL, FRM_TAINT, 
+  FRM_STD2, FRM_EXCEPT };
+
+enum exp_type_t {
+  BINOP, UNOP, CONSTANT, MEM, TEMP, PHI, CAST,
+  NAME, UNKNOWN, LET, EXTENSION };
+
+enum reg_t { REG_1, REG_8, REG_16, REG_32, REG_64 };
+
+enum binop_type_t {
+  PLUS = 0, MINUS ,   TIMES ,  DIVIDE,
+  MOD,      LSHIFT,   RSHIFT,  ARSHIFT,
+  LROTATE,  RROTATE,  LOGICAND, LOGICOR,
+  BITAND,  BITOR,       XOR,      EQ,
+  NEQ,  GT,       LT,       GE,
+  LE,SDIVIDE, SMOD    };
+
+enum unop_type_t {NEG, NOT};
+
+typedef __int64 const_val_t;
+
+enum cast_t {
+  CAST_UNSIGNED, CAST_SIGNED, CAST_HIGH, CAST_LOW,
+  CAST_FLOAT, CAST_INTEGER, CAST_RFLOAT, CAST_RINTEGER };
+
+enum stmt_type_t {  JMP,   CJMP, SPECIAL, MOVE,  COMMENT,  LABEL, EXPSTMT, 
+		    VARDECL, CALL, RETURN, FUNCTION, ASSERT};
+
+enum cval_type_t {NONE, BOOL, CHR, INT_16, INT_32, INT_64, INT_128};
+
+enum exp_type_t exp_type( [in] Exp e);
+enum binop_type_t binop_type([in] Exp e);
+Exp binop_lhs([in] Exp e);
+Exp binop_rhs([in] Exp e);
+enum unop_type_t unop_type([in] Exp e);
+Exp unop_subexp([in] Exp e);
+Exp mem_addr([in] Exp e);
+enum reg_t mem_regtype([in] Exp e);
+const_val_t constant_val([in] Exp e);
+enum reg_t constant_regtype([in] Exp e);
+[string] char* phi_phiname([in] Exp e);
+int phi_numnodes([in] Exp e);
+Exp phi_nodeat([in] Exp e, int i);
+enum reg_t temp_regtype([in] Exp e);
+[string] char* temp_name([in] Exp e);
+[string] char* unknown_str([in] Exp e);
+enum reg_t unknown_regtype([in] Exp e);
+enum reg_t cast_width([in] Exp e);
+enum cast_t cast_casttype([in] Exp e);
+Exp cast_subexp([in] Exp e);
+[string] char* name_string([in] Exp e);
+Exp let_var([in] Exp e);
+Exp let_exp([in] Exp e);
+Exp let_in([in] Exp e);
+
+enum stmt_type_t stmt_type([in] Stmt s);
+Exp move_lhs([in] Stmt s);
+Exp move_rhs([in] Stmt s);
+[string] char* label_string([in] Stmt s);
+[string] char* special_string([in] Stmt s);
+[string] char* comment_string([in] Stmt s);
+Exp jmp_target([in] Stmt s);
+Exp cjmp_cond([in] Stmt s);
+Exp cjmp_ttarget([in] Stmt s);
+Exp cjmp_ftarget([in] Stmt s);
+Exp expstmt_exp([in] Stmt s);
+[string] char* vardecl_name([in]Stmt s);
+enum reg_t vardecl_type([in]Stmt s);
+
+// Trace attributes... deprecated.
+trace_attrs stmt_attributes([in] Stmt s);
+threadid_t trace_tid(trace_attrs ta);
+int conc_map_size(trace_attrs ta);
+cval_t get_cval(trace_attrs ta, int i);
+
+// Concrete value helpers
+[string] char* cval_name(cval_t m);
+big_val_t cval_value(cval_t m);
+int cval_value_size(big_val_t v);
+const_val_t cval_value_part(big_val_t v, int i);
+const_val_t cval_ind(cval_t m);
+boolean cval_mem(cval_t m);
+enum cval_type_t cval_type(cval_t m);
+int cval_usage(cval_t m);
+int cval_taint(cval_t m);
+
+boolean call_has_lval([in] Stmt s);
+Exp call_lval_opt([in] Stmt s);
+Exp call_fnname([in] Stmt s);
+[null_terminated] Exp* call_params([in] Stmt s);
+boolean ret_has_exp([in] Stmt s);
+Exp ret_exp([in] Stmt s);
+[string] const char* func_name(Stmt s);
+boolean func_has_rv(Stmt s);
+enum reg_t func_rt(Stmt s);
+[null_terminated] Stmt* func_params(Stmt s);
+boolean func_is_external(Stmt s);
+[null_terminated] Stmt* func_body(Stmt s);
+Exp assert_cond(Stmt s);
+
+void asmir_set_print_warning(boolean value);
+boolean asmir_get_print_warning();
+
+// generated functions for eflags thunks
+//[null_terminated] Stmt* gen_eflags_helpers_c();
+// using simple segments
+void asmir_set_use_simple_segments(boolean value);
+
+
+asm_program_t asmir_open_file([string] char *filename);
+void asmir_close(asm_program_t p);
+[string] char* asmir_string_of_insn(asm_program_t prog, address_t inst);
+enum bfd_architecture asmir_get_asmp_arch(asm_program_t prog);
+
+/* FIXME: How did this get revived? */
+address_t memory_cell_data_address(memory_cell_data_t md);
+int memory_cell_data_value(memory_cell_data_t md);
+memory_data_t get_rodata(asm_program_t prog);
+int memory_data_size(memory_data_t md);
+memory_cell_data_t memory_data_get(memory_data_t md, int i); 
+void destroy_memory_data(memory_data_t md);
+
+
+//bap_blocks_t asmir_asmprogram_to_bap(asm_program_t prog);
+//bap_blocks_t asmir_asmprogram_range_to_bap(asm_program_t prog, address_t start, address_t end);
+boolean asmir_bap_blocks_error(bap_blocks_t b);
+boolean asmir_bap_block_error(bap_block_t b);
+bap_block_t asmir_addr_to_bap(asm_program_t p, address_t addr, [out] address_t *next);
+address_t asmir_get_sec_startaddr(asm_program_t p, [string] const char *sectionname);
+address_t asmir_get_sec_endaddr(asm_program_t p, [string] const char *sectionname);
+int asmir_get_instr_length(asm_program_t p, address_t addr);
+int asmir_bap_blocks_size(bap_blocks_t bs);
+bap_block_t asmir_bap_blocks_get(bap_blocks_t bs, int i);
+void destroy_bap_block(bap_block_t bs);
+void destroy_bap_blocks(bap_blocks_t bs);
+int asmir_bap_block_size(bap_block_t b);
+Stmt asmir_bap_block_get(bap_block_t b, int i);
+address_t asmir_bap_block_address(bap_block_t b);
+[string] const char* asm_string_from_stmt(Stmt s);
+// deprecated, only for old traces code
+[string] const char* asm_string_from_block(bap_block_t b);
+bap_blocks_t asmir_bap_from_trace_file([in,string] char * filename, unsigned __int64 offset, unsigned __int64 numisns, boolean atts, boolean pintrace);
+
+// access trace frames
+trace_frames_t asmir_frames_from_trace_file([in,string] char * filename, unsigned __int64 offset, unsigned __int64 numisns);
+int asmir_frames_length(trace_frames_t tfs);
+trace_frame_t asmir_frames_get(trace_frames_t tfs, int index);
+void asmir_frames_destroy(trace_frames_t tfs);
+enum frame_type_t asmir_frame_type(trace_frame_t tf);
+threadid_t asmir_frame_tid(trace_frame_t tf);
+[length_is(*len)] char* asmir_frame_get_insn_bytes(trace_frame_t tf, [out] address_t *addrout, [out] int *len);
+
+[string] const char* asmir_frame_get_loadmod_info(trace_frame_t tf, [out] address_t *lowout, [out] address_t *highout);
+
+void asmir_frame_get_syscall_info(trace_frame_t tf, [out] int *callno, [out] address_t *addr, [out] threadid_t *tid);
+
+void asmir_frame_get_except_info(trace_frame_t tf, [out] int *exceptno, [out] threadid_t *tid, [out] address_t *from_addr, [out] address_t *to_addr);
+
+
+// frame operands
+cval_vec_t asmir_frame_get_operands(trace_frame_t tf);
+void asmir_frame_destroy_operands(cval_vec_t cv);
+int asmir_frame_operands_length(cval_vec_t cv);
+cval_t asmir_frame_get_operand(cval_vec_t cv, int num);
+
+bfdp asmir_get_bfd(asm_program_t p);
+
+/*
+bap_block_t
+byte_insn_to_ir_c(address_t addr, [size_is(len)] char *bb_bytes, int len);
+*/
+
+// returns a special asm_program which contains only the given instruction
+// takes a char array for historical reasons
+asm_program_t
+byte_insn_to_asmp(enum bfd_architecture arch, address_t addr,
+		  [size_is(len)] char *bb_bytes, int len);
+
+// free vex buffers
+void asmir_free_vex_buffers(void);
