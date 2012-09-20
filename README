@@ -1,0 +1,125 @@
+ROPC
+----
+
+ROPC is an example of a Turing complete ROP compiler. It's not supposed to be
+practical -- generated payloads are too big to be useful (emulating a stack is
+very space consuming).  Generated programs are pure -- nothing is ever executed
+from executable memory. 
+
+Programs for ROPC are written in a 'high-level' language ROPL. Its features
+include:
+- conditional jumps ,
+- functions (even recursive),
+- local variables,
+- labels, pointers, memory derefencing, nested arithmetic operations, etc.
+
+For examples, look in examples-ropl/.
+
+ROPC is a POC, and should be treated as such -- don't expect it to work on apps
+from /usr/bin. Test it on the included synthetic example (test.asm, test.c).
+
+Compiling
+---------
+
+Compile BAP (bap-0.4) as explained in its README/INSTALL files (you will need
+to install some dependencies and die a little inside during this process).
+
+Compile all of ROPC's utils with `make test-all` in ropc/ dir. Expected output:
+
+./a.out compiled.bin
+buf=0x09f34170
+roundup buf=0x09f40000
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+55
+Segmentation fault
+
+(it's supposed to segfault.)
+
+Utils
+-----
+
+gadget - extracts and dynamically classifies gadgets found in a binary. Usage:
+./gadget <exe file> <output file with gadget candidates>
+
+verify - verifies the semantics of gadgets returned by the 'gadget' util. Usage:
+./verify <candidates file> <verified gadgets file>. You will need the STP SAT
+solver to use it.
+
+ropc - actual compiler. Usage; ./ropc <ropl src file> <verified gadgets file>.
+The compiled ROP payload is saved to 'compiled.bin'.
+
+a.out - a synthetic example with gadgets defined in 'test.asm'. Logic is
+defined in 'test.c'. Usage: ./a.out <compiled ROP payload file> - this will
+allocate new stack, copy the payload there and start executing it. It's useful
+for testing compiled ROP programs :).
+
+dumper - dumps contents of gadget files created by 'gadget' or 'verify'. Usage:
+./dumper <gadget file>.
+
+
+How it works
+------------
+
+ROPC is based on Q [1]. Gadget discovery, classification and verification
+algorithms are identical. The approach to compilation is very different though. 
+
+Overview:
+- byte sequences (possible gadget candidates) ending in RET are dynamically
+  classified (like in Q),
+- semantics of found candidates are verified with a SAT solver (like in Q),
+- the AST of the ROPL source file is simplified and flattened to a list of
+  pseudoinstructions (PI).  PIs express complex logic using simpler PIs, or
+  gadgets. 
+- ROPC unrolls all PIs to a list of gadgets, making shure that there are no
+  register conflicts and gadgets will not overwrite registers used by other
+  gadgets.
+
+All of the magic happens during the last two steps. Stack is emulated in the
+.data section of the targeted application. Conditional jumps are implemented
+using lahf / add esp, <reg> gadgets.
+
+See gdtr.wordpress.com for more details.
+
+Performance
+-----------
+
+Emulating x86 from ocaml is very slow. Classifing all gadgets from the 
+included examples takes ~30 secs. 
+
+The compilation process on the other hand is optimal in the sense that
+its running time is O(n), where n is the number of ROPL instructions.
+There's a slight problem with the constant hidden in O(), but it's a
+bit too convoluted to describe here.
+
+The Fibonacci example: examples-ropl/fib.ropl compiles in 2 seconds.
+
+BAP
+---
+
+ROPC relies heavily on BAP [2] for IR handling, symbolic execution and
+interfacing with SAT solvers.  At least you can use ROPC as an example of how
+to use BAP's API :). BAP has so much stuff implemented, that it's a crime not
+to use it :P.
+
+I'd like to thank Edward J. Schwartz from the CMU team, for this helpful
+comments regarding BAP, Q, and other things.
+
+Author
+------
+p_k
+twitter.com/pa_kt
+gdtr.wordpress.com
+
+References
+----------
+1. Q: Exploit Hardening Made Easy, http://users.ece.cmu.edu/~ejschwar/papers/usenix11.pdf
+2. BAP: The Next-Generation Binary Analysis Platform, http://http://bap.ece.cmu.edu/

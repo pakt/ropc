@@ -75,7 +75,7 @@ vg: asm
 	./verify candidates.bin vg.bin
 	./ropc examples-ropl/fib.ropl vg.bin
 
-test-all: gadget verify ropc vg
+test-all: dumper gadget verify ropc vg 
 	./a.out compiled.bin
 
 clean:
