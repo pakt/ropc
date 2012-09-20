@@ -28,7 +28,7 @@ pcre.cmxa: pcre.cmx pcre_stubs.lib
 	ocamlopt -verbose -a -o pcre.cmxa pcre.cmx \
   		-cclib pcre_stubs.lib -cclib libpcre.lib 
 
-install:
+install: pcre.cmxa pcre.cma
 	ocamlfind install pcre META pcre.cma pcre.cmxa pcre.cmi pcre.mli \
 		pcre.lib pcre_stubs.lib
 uninstall:

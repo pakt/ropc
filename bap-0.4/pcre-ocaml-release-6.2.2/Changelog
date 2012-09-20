@@ -1,3 +1,13 @@
+2012-01-04:  Fixed native code debug build target by updating OCamlMakefile.
+
+             Thanks to Stéphane Glondu <glondu@debian.org> for the patch!
+
+2011-12-15:   Fixed a Windows portability bug in the C-bindings.
+
+             Thanks to Evgenii Lepikhin <johnlepikhin@gmail.com> for the patch!
+
+2011-11-09:  Updated OCamlMakefile to fix linking order.
+
 2011-01-16:  Added support for limit recursion flag.
 
              Thanks to Delphin Lecucq <Delphin.LECUCQ@3ds.com> for the patch!

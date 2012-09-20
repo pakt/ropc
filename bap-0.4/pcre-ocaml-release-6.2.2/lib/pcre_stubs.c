@@ -503,7 +503,11 @@ CAMLprim value pcre_exec_stub(value v_opt, value v_rex, value v_ofs,
       if (ret < 0) handle_exec_error("pcre_exec_stub", ret);
       else {
         const int *ovec_src = ovec + subgroups2_1;
+#if _WIN64
+        long long *ovec_dst = (long long *) ovec + subgroups2_1;
+#else
         long int *ovec_dst = (long int *) ovec + subgroups2_1;
+#endif
 
         /* Converts offsets from C-integers to OCaml-Integers
            This is a bit tricky, because there are 32- and 64-bit platforms

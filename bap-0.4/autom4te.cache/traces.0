@@ -629,7 +629,7 @@ m4trace:configure.ac:14: -1- AM_INIT_AUTOMAKE
 m4trace:configure.ac:14: -1- m4_pattern_allow([^AM_[A-Z]+FLAGS$])
 m4trace:configure.ac:14: -1- AM_SET_CURRENT_AUTOMAKE_VERSION
 m4trace:configure.ac:14: -1- AM_AUTOMAKE_VERSION([1.11.1])
-m4trace:configure.ac:14: -1- _AM_AUTOCONF_VERSION([2.67])
+m4trace:configure.ac:14: -1- _AM_AUTOCONF_VERSION([2.68])
 m4trace:configure.ac:14: -1- m4_pattern_allow([^INSTALL_PROGRAM$])
 m4trace:configure.ac:14: -1- m4_pattern_allow([^INSTALL_SCRIPT$])
 m4trace:configure.ac:14: -1- m4_pattern_allow([^INSTALL_DATA$])

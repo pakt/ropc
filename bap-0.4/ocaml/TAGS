@@ -22,7 +22,7 @@ let extractextract144,5070
 let concatconcat151,5223
 let is_zerois_zero164,5557
 
-asmir.mli,1461
+asmir.mli,1687
 Asmir1,0
 exception Disassembly_errorDisassembly_error17,422
 type asmprogramasmprogram19,451
@@ -42,24 +42,29 @@ val all_regsall_regs62,1456
 val open_programopen_program64,1483
 val asmprogram_to_bapasmprogram_to_bap65,1524
 val asm_addr_to_bapasm_addr_to_bap66,1591
-val asmprogram_to_bap_rangeasmprogram_to_bap_range68,1679
-val bap_from_trace_filebap_from_trace_file70,1780
-val bap_stream_from_trace_filebap_stream_from_trace_file72,1856
-val get_symbolsget_symbols74,1952
-val get_function_rangesget_function_ranges76,2012
-val get_all_asectionsget_all_asections78,2091
-val get_section_startaddrget_section_startaddr80,2148
-val get_section_endaddrget_section_endaddr81,2210
-val get_asm_instr_string_rangeget_asm_instr_string_range83,2271
-val is_loadis_load85,2352
-val is_codeis_code86,2386
-val byte_insn_to_bapbyte_insn_to_bap88,2421
-val set_print_warningset_print_warning91,2515
-val get_print_warningget_print_warning93,2553
-val set_use_simple_segmentsset_use_simple_segments95,2591
-val get_prog_contentsget_prog_contents97,2635
+val asmprogram_to_bap_range_richasmprogram_to_bap_range_rich68,1679
+val asmprogram_to_bap_rangeasmprogram_to_bap_range70,1819
+val bap_from_trace_filebap_from_trace_file72,1920
+val bap_stream_from_trace_filebap_stream_from_trace_file74,1996
+val get_symbolsget_symbols76,2092
+val get_function_rangesget_function_ranges78,2152
+val get_all_asectionsget_all_asections80,2231
+val get_section_startaddrget_section_startaddr82,2288
+val get_section_endaddrget_section_endaddr83,2350
+val get_asm_instr_string_rangeget_asm_instr_string_range85,2411
+val is_loadis_load87,2492
+val is_codeis_code88,2526
+val byte_insn_to_bapbyte_insn_to_bap90,2561
+val set_print_warningset_print_warning93,2655
+val get_print_warningget_print_warning95,2693
+val set_use_simple_segmentsset_use_simple_segments97,2731
+val get_prog_contentsget_prog_contents99,2775
+val get_section_startget_section_start102,2840
+val get_section_endget_section_end103,2889
+val is_rw_datais_rw_data104,2936
+val is_bssis_bss105,2973
 
-asmir.ml,3626
+asmir.ml,3858
 Asmir1,0
 module BArrayBArray19,380
 exception Disassembly_errorDisassembly_error21,413
@@ -120,32 +125,37 @@ let get_all_asectionsget_all_asections458,14188
 let bfd_section_sizebfd_section_size461,14241
 let bfd_section_vmabfd_section_vma462,14292
 let bfd_section_namebfd_section_name463,14341
-let is_loadis_load466,14421
-let is_codeis_code471,14548
-let section_contentssection_contents475,14649
-let open_programopen_program503,15558
-let get_asmget_asm512,15915
-let asm_addr_to_bapasm_addr_to_bap543,17069
-let flattenflatten585,18650
-let asmprogram_to_bap_rangeasmprogram_to_bap_range589,18838
-let asmprogram_section_to_bapasmprogram_section_to_bap609,19480
-let asmprogram_to_bapasmprogram_to_bap614,19703
-let byte_insn_to_bapbyte_insn_to_bap626,20063
-let trans_frametrans_frame634,20399
-let alt_bap_from_trace_filealt_bap_from_trace_file660,21739
-let old_bap_from_trace_fileold_bap_from_trace_file712,23349
-let bap_from_trace_filebap_from_trace_file737,24195
-let bap_get_stmt_from_trace_filebap_get_stmt_from_trace_file747,24436
-let bap_stream_from_trace_filebap_stream_from_trace_file761,25151
-let get_symbolsget_symbols764,25298
-let get_function_rangesget_function_ranges770,25483
-let get_section_startaddrget_section_startaddr819,26900
-let get_section_endaddrget_section_endaddr822,26997
-let get_asm_instr_string_rangeget_asm_instr_string_range826,27091
-let set_print_warningset_print_warning838,27375
-let get_print_warningget_print_warning840,27433
-let set_use_simple_segmentsset_use_simple_segments842,27491
-let get_prog_contentsget_prog_contents844,27561
+let get_section_startget_section_start465,14393
+let get_section_endget_section_end466,14433
+let is_loadis_load473,14604
+let is_codeis_code478,14731
+let is_rw_datais_rw_data482,14832
+let is_bssis_bss486,14986
+let section_contentssection_contents490,15071
+let open_programopen_program518,15980
+let get_asmget_asm527,16337
+let asm_addr_to_bapasm_addr_to_bap558,17491
+let flattenflatten600,19072
+let asmprogram_to_bap_range_richasmprogram_to_bap_range_rich604,19260
+let asmprogram_to_bap_rangeasmprogram_to_bap_range626,19924
+let asmprogram_section_to_bapasmprogram_section_to_bap631,20112
+let asmprogram_to_bapasmprogram_to_bap636,20335
+let byte_insn_to_bapbyte_insn_to_bap648,20695
+let trans_frametrans_frame656,21031
+let alt_bap_from_trace_filealt_bap_from_trace_file682,22371
+let old_bap_from_trace_fileold_bap_from_trace_file734,23981
+let bap_from_trace_filebap_from_trace_file759,24827
+let bap_get_stmt_from_trace_filebap_get_stmt_from_trace_file769,25068
+let bap_stream_from_trace_filebap_stream_from_trace_file783,25783
+let get_symbolsget_symbols786,25930
+let get_function_rangesget_function_ranges792,26115
+let get_section_startaddrget_section_startaddr841,27532
+let get_section_endaddrget_section_endaddr844,27629
+let get_asm_instr_string_rangeget_asm_instr_string_range848,27723
+let set_print_warningset_print_warning860,28007
+let get_print_warningget_print_warning862,28065
+let set_use_simple_segmentsset_use_simple_segments864,28123
+let get_prog_contentsget_prog_contents866,28193
 
 asmirconsts.ml,375
 Asmirconsts1,0
@@ -161,7 +171,7 @@ let bsec_codebsec_code23,501
 let bsec_databsec_data25,535
 let bsec_rombsec_rom27,568
 
-ast.ml,1657
+ast.ml,1816
 Ast1,0
 type varvar16,358
 type expexp18,376
@@ -213,16 +223,19 @@ let cjmpcjmp105,3186
 let ncjmpncjmp112,3403
 let num_expnum_exp118,3515
   let getargsgetargs134,3828
-let quick_exp_eqquick_exp_eq151,4747
-let rec full_exp_eqfull_exp_eq174,5573
-let (======195,6457
-let rec compare_expcompare_exp197,6482
-let num_stmtnum_stmt227,7362
-let getargs_stmtgetargs_stmt237,7523
-let quick_stmt_eqquick_stmt_eq249,7918
-let full_stmt_eqfull_stmt_eq273,8741
-let is_trueis_true291,9388
-let is_falseis_false292,9417
+let quick_exp_eqquick_exp_eq152,4748
+let rec full_exp_eqfull_exp_eq175,5574
+let (======196,6458
+let rec compare_expcompare_exp198,6483
+let num_stmtnum_stmt228,7363
+let getargs_stmtgetargs_stmt238,7524
+let getargs_stmt_drop_attrsgetargs_stmt_drop_attrs248,7810
+let quick_stmt_eqquick_stmt_eq254,8014
+let full_stmt_eq'full_stmt_eq'278,8837
+let full_stmt_eqfull_stmt_eq296,9474
+let full_stmt_eq_no_attrsfull_stmt_eq_no_attrs297,9532
+let is_trueis_true300,9612
+let is_falseis_false301,9641
 
 ast_convenience.ml,806
 Ast_convenience1,0
@@ -849,7 +862,7 @@ exception UnimplementedUnimplemented3,34
 let disasm_instrdisasm_instr5,59
 let is_tempis_temp17,530
 
-disasm_i386.ml,4822
+disasm_i386.ml,5002
 Disasm_i3861,0
 module VHVH9,145
 module DD11,168
@@ -1034,7 +1047,12 @@ module ToStrToStr751,22354
 let cc_to_expcc_to_exp835,25321
 let parse_instrparse_instr848,25625
 let parse_prefixesparse_prefixes1227,39069
-let disasm_instrdisasm_instr1243,39544
+type richrich1244,39584
+type rich = RichAsmRichAsm1244,39584
+let get_metaget_meta1246,39651
+let disasm_instr_richdisasm_instr_rich1252,39867
+let disasm_instrdisasm_instr1258,40091
+let rich_eqrich_eq1262,40197
 
 dominator.ml,1585
 Dominator1,0
@@ -1378,7 +1396,7 @@ let exp_from_lexbufexp_from_lexbuf20,472
 let exp_from_stringexp_from_string26,625
 let exp_from_fileexp_from_file29,724
 
-pp.ml,1381
+pp.ml,1474
 Pp1,0
 module VHVH9,94
 module FF10,118
@@ -1396,30 +1414,32 @@ class pppp84,1661
   method typtyp102,2096
   method attrsattrs105,2136
   method attrattr107,2199
-  method labellabel127,3097
-  method intint131,3196
-  method ast_expast_exp165,4247
-  method ast_endianast_endian263,6484
-  method ast_stmtast_stmt270,6663
-  method ast_programast_program311,7348
-  method ssa_valuessa_value318,7505
-  method ssa_endianssa_endian326,7655
-  method ssa_expssa_exp331,7834
-  method ssa_stmtssa_stmt397,9296
-  method ssa_stmtsssa_stmts437,9991
-  method closeclose442,10117
-class pp_ocpp_oc447,10176
-  method closeclose451,10274
-let bufbuf461,10466
-let ftft462,10493
-let strppstrpp468,10728
-let pp2stringpp2string470,10751
-let value_to_stringvalue_to_string479,10919
-let label_to_stringlabel_to_string480,10974
-let ssa_exp_to_stringssa_exp_to_string481,11025
-let ssa_stmt_to_stringssa_stmt_to_string482,11080
-let ast_exp_to_stringast_exp_to_string483,11137
-let ast_stmt_to_stringast_stmt_to_string484,11200
+  method labellabel127,3140
+  method intint131,3239
+  method ast_expast_exp165,4290
+  method ast_endianast_endian263,6527
+  method ast_stmtast_stmt270,6706
+  method ast_stmt_shortast_stmt_short312,7416
+  method ast_programast_program320,7548
+  method ssa_valuessa_value327,7705
+  method ssa_endianssa_endian335,7855
+  method ssa_expssa_exp340,8034
+  method ssa_stmtssa_stmt406,9496
+  method ssa_stmtsssa_stmts446,10191
+  method closeclose451,10317
+class pp_ocpp_oc456,10376
+  method closeclose460,10474
+let bufbuf470,10666
+let ftft471,10693
+let strppstrpp477,10928
+let pp2stringpp2string479,10951
+let value_to_stringvalue_to_string488,11119
+let label_to_stringlabel_to_string489,11174
+let ssa_exp_to_stringssa_exp_to_string490,11225
+let ssa_stmt_to_stringssa_stmt_to_string491,11280
+let ast_exp_to_stringast_exp_to_string492,11337
+let ast_stmt_to_stringast_stmt_to_string493,11400
+let ast_short_dumpast_short_dump495,11458
 
 prune_unreachable.mli,128
 Prune_unreachable1,0
@@ -1910,7 +1930,7 @@ let graph_of_cfggraph_of_cfg59,1396
 let find_backedgesfind_backedges67,1621
 let structural_analysisstructural_analysis83,1967
 
-symbeval.ml,3887
+symbeval.ml,4080
 Symbeval1,0
 module VHVH23,499
 module DD25,526
@@ -1926,97 +1946,102 @@ type label_kindlabel_kind39,991
 type form_typeform_type40,1015
 type form_type = EqualEqual40,1015
 type form_type = Equal | RenameRename40,1015
-type ctxctx49,1384
-  predpred50,1397
-  deltadelta51,1414
-  sigmasigma52,1436
-  lambdalambda53,1470
-  pcpc54,1510
-exception ExcStateExcState58,1566
-exception HaltedHalted61,1687
-exception UnknownLabelUnknownLabel64,1763
-exception AssertFailedAssertFailed67,1827
-let eq_concrete_memeq_concrete_mem79,2315
-let mem_binopmem_binop91,2916
-let empty_memempty_mem97,3139
-let empty_smemempty_smem98,3187
-let val_trueval_true99,3223
-let val_falseval_false100,3256
-let is_true_valis_true_val101,3291
-let is_false_valis_false_val104,3386
-let is_symbolicis_symbolic107,3483
-let is_concreteis_concrete111,3581
-let is_concrete_memis_concrete_mem114,3641
-let concrete_val_tupleconcrete_val_tuple117,3722
-let context_updatecontext_update125,4008
-let context_copycontext_copy126,4040
-let symb_to_expsymb_to_exp129,4097
-let concmem_to_memconcmem_to_mem132,4210
-let symb_to_stringsymb_to_string135,4305
-module type MemLookupMemLookup139,4427
-  val lookup_varlookup_var141,4455
-  val update_memupdate_mem142,4508
-  val lookup_memlookup_mem143,4577
-  val assignassign144,4636
-module type EvalTuneEvalTune147,4693
-  val eval_symb_leteval_symb_let149,4720
-module type ResultResult153,4799
-  val successsuccess155,4824
-  val failed_assertfailed_assert156,4850
-  val failurefailure157,4882
-module type FormulaFormula160,4916
-  val add_to_formulaadd_to_formula162,4942
-  val output_formulaoutput_formula164,5024
-module MakeMake167,5070
-  let byte_typebyte_type170,5143
-  let index_typeindex_type171,5167
-  let inst_fetchinst_fetch174,5238
-  let label_decodelabel_decode177,5300
-  let lookup_varlookup_var190,5796
-  let update_memupdate_mem191,5838
-  let lookup_memlookup_mem192,5880
-  let assignassign193,5922
-  let eval_symb_leteval_symb_let194,5960
-  let add_constraintadd_constraint195,6009
-  let output_formulaoutput_formula196,6055
-  let create_statecreate_state199,6127
-  let initialize_proginitialize_prog206,6429
-  let cleanup_deltacleanup_delta221,6872
-  let build_default_contextbuild_default_context224,6932
-  let print_valuesprint_values231,7103
-  let num_valuesnum_values242,7406
-  let num_mem_locsnum_mem_locs246,7513
-  let print_memprint_mem263,7891
-  let print_varprint_var279,8255
-  let rec eval_expreval_expr292,8571
-  let rec eval_stmteval_stmt463,15059
-  let evaleval517,17071
-  let eval_straightlineeval_straightline541,17882
-module SymbolicMemLSymbolicMemL550,18075
-  let lookup_varlookup_var552,18106
-  let conc2symbconc2symb563,18344
-  let normalizenormalize573,18720
-  let rec update_memupdate_mem575,18794
-  let rec lookup_memlookup_mem585,19130
-  let assignassign598,19603
-module ConcreteMemLConcreteMemL603,19735
-  let lookup_varlookup_var605,19766
-  let normalizenormalize615,19966
-  let rec update_memupdate_mem617,20012
-  let rec lookup_memlookup_mem624,20269
-  let assignassign634,20567
-module FastEvalFastEval639,20699
-  let eval_symb_leteval_symb_let641,20724
-module SlowEvalSlowEval644,20757
-  let eval_symb_leteval_symb_let646,20782
-module StdFormStdForm649,20814
-  let add_to_formulaadd_to_formula651,20838
-  let output_formulaoutput_formula654,20929
-module SymbolicSymbolic657,21000
-module SymbolicSlowSymbolicSlow658,21056
-module ConcreteConcrete660,21117
-let concretely_executeconcretely_execute663,21210
-let eval_expreval_expr691,22056
+let eNABLE_MEM_HAXeNABLE_MEM_HAX42,1048
+let u_MEMSu_MEMS43,1079
+type ctxctx52,1443
+  predpred53,1456
+  deltadelta54,1473
+  sigmasigma55,1495
+  lambdalambda56,1529
+  pcpc57,1569
+  u_memsu_mems61,1784
+exception ExcStateExcState65,1874
+exception HaltedHalted68,1995
+exception UnknownLabelUnknownLabel71,2071
+exception AssertFailedAssertFailed74,2135
+let eq_concrete_memeq_concrete_mem86,2623
+let mem_binopmem_binop98,3224
+let empty_memempty_mem104,3447
+let empty_smemempty_smem105,3495
+let val_trueval_true106,3531
+let val_falseval_false107,3564
+let is_true_valis_true_val108,3599
+let is_false_valis_false_val111,3694
+let is_symbolicis_symbolic114,3791
+let is_concreteis_concrete118,3889
+let is_concrete_memis_concrete_mem121,3949
+let concrete_val_tupleconcrete_val_tuple124,4030
+let context_updatecontext_update132,4316
+let context_copycontext_copy133,4348
+let symb_to_expsymb_to_exp136,4405
+let concmem_to_memconcmem_to_mem139,4518
+let symb_to_stringsymb_to_string142,4613
+module type MemLookupMemLookup146,4735
+  val lookup_varlookup_var148,4763
+  val update_memupdate_mem149,4816
+  val lookup_memlookup_mem150,4885
+  val assignassign151,4944
+module type EvalTuneEvalTune154,5001
+  val eval_symb_leteval_symb_let156,5028
+module type ResultResult160,5107
+  val successsuccess162,5132
+  val failed_assertfailed_assert163,5158
+  val failurefailure164,5190
+module type FormulaFormula167,5224
+  val add_to_formulaadd_to_formula169,5250
+  val output_formulaoutput_formula171,5332
+module MakeMake174,5378
+  let byte_typebyte_type177,5451
+  let index_typeindex_type178,5475
+  let inst_fetchinst_fetch181,5546
+  let label_decodelabel_decode188,5732
+  let lookup_varlookup_var201,6228
+  let update_memupdate_mem202,6270
+  let lookup_memlookup_mem203,6312
+  let assignassign204,6354
+  let eval_symb_leteval_symb_let205,6392
+  let add_constraintadd_constraint206,6441
+  let output_formulaoutput_formula207,6487
+  let create_statecreate_state210,6559
+  let initialize_proginitialize_prog219,6922
+  let cleanup_deltacleanup_delta234,7365
+  let build_default_contextbuild_default_context237,7425
+  let print_valuesprint_values244,7596
+  let num_valuesnum_values255,7899
+  let num_mem_locsnum_mem_locs259,8006
+  let print_memprint_mem276,8384
+  let print_varprint_var292,8748
+  let rec eval_expreval_expr305,9064
+  let rec eval_stmteval_stmt476,15694
+  let evaleval530,17706
+  let eval_straightlineeval_straightline554,18517
+module SymbolicMemLSymbolicMemL563,18710
+  let lookup_varlookup_var565,18741
+  let conc2symbconc2symb576,18979
+  let normalizenormalize586,19355
+  let rec update_memupdate_mem588,19429
+  let rec lookup_memlookup_mem598,19765
+  let assignassign611,20238
+module ConcreteMemLConcreteMemL616,20370
+  let lookup_varlookup_var618,20401
+  let normalizenormalize628,20601
+  let rec update_memupdate_mem630,20647
+    let gen_rnd_bytegen_rnd_byte637,20904
+    let handle_uninit_memhandle_uninit_mem643,21090
+  let rec lookup_memlookup_mem675,22029
+  let assignassign693,22537
+module FastEvalFastEval698,22669
+  let eval_symb_leteval_symb_let700,22694
+module SlowEvalSlowEval703,22727
+  let eval_symb_leteval_symb_let705,22752
+module StdFormStdForm708,22784
+  let add_to_formulaadd_to_formula710,22808
+  let output_formulaoutput_formula713,22899
+module SymbolicSymbolic716,22970
+module SymbolicSlowSymbolicSlow717,23026
+module ConcreteConcrete719,23087
+let concretely_executeconcretely_execute722,23180
+let eval_expreval_expr766,24442
 
 symbeval_search.ml,2182
 Symbeval_search1,0

@@ -28,9 +28,9 @@ vexir.o: vexir.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/xlocale.h /usr/include/i386-linux-gnu/bits/string.h \
  /usr/include/i386-linux-gnu/bits/string2.h \
  /usr/include/i386-linux-gnu/bits/string3.h /usr/include/assert.h \
- /home/p/bap-0.4/VEX/pub/libvex.h \
- /home/p/bap-0.4/VEX/pub/libvex_basictypes.h \
- /home/p/bap-0.4/VEX/pub/libvex_ir.h ../include/vexmem.h
+ /home/p/ropc/bap-0.4/VEX/pub/libvex.h \
+ /home/p/ropc/bap-0.4/VEX/pub/libvex_basictypes.h \
+ /home/p/ropc/bap-0.4/VEX/pub/libvex_ir.h ../include/vexmem.h
 
 /usr/include/stdio.h:
 
@@ -112,10 +112,10 @@ vexir.o: vexir.c /usr/include/stdio.h /usr/include/features.h \
 
 /usr/include/assert.h:
 
-/home/p/bap-0.4/VEX/pub/libvex.h:
+/home/p/ropc/bap-0.4/VEX/pub/libvex.h:
 
-/home/p/bap-0.4/VEX/pub/libvex_basictypes.h:
+/home/p/ropc/bap-0.4/VEX/pub/libvex_basictypes.h:
 
-/home/p/bap-0.4/VEX/pub/libvex_ir.h:
+/home/p/ropc/bap-0.4/VEX/pub/libvex_ir.h:
 
 ../include/vexmem.h:
