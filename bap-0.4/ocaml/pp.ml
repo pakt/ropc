@@ -119,8 +119,8 @@ object (self)
     | Context _ ->
       failwith "Contexts only specify register types"
     | ThreadId i -> pp "@tid \""; pp (string_of_int i); pp "\""
-    | ExnAttr _ (* we could try to print something using Printexc.to_string *)
-    | Pos _ -> () (* ignore position attrs *)
+    | ExnAttr _ -> () (* we could try to print something using Printexc.to_string *)
+    | Pos (_,addr) -> pp ("@pos"^(string_of_int addr)) (* ignore position attrs *)
     | InitRO -> pp "@set \"initro\""
     | Synthetic -> pp "@set \"synthetic\""
 
@@ -308,6 +308,15 @@ object (self)
 	self#attrs a);
     cls();
 
+    (* addr, mnemonic *)
+  method ast_stmt_short s =
+    (match s with
+    | Ast.Label(Addr(x) as l,a) ->
+	self#label l;
+    self#attrs a
+    | _ -> ()
+	);
+
   method ast_program p =
     Format.pp_open_hvbox ft 0;
     List.iter (fun x -> self#ast_stmt x; space()) p;
@@ -482,3 +491,14 @@ let ssa_exp_to_string = pp2string (fun p -> p#ssa_exp)
 let ssa_stmt_to_string = pp2string (fun p -> p#ssa_stmt)
 let ast_exp_to_string = pp2string (fun p -> p#ast_exp ~prec:0)
 let ast_stmt_to_string = pp2string (fun p -> p#ast_stmt)
+
+let ast_short_dump stmts = 
+    let p s = 
+        match s with
+        | Ast.Label(Addr _,_) -> true
+        | _ -> false
+    in
+    let labels = List.filter p stmts in
+    let dumper = pp2string (fun p -> p#ast_stmt_short) in
+    let strings = List.map dumper labels in
+    strings

@@ -1240,9 +1240,35 @@ let parse_prefixes pref op =
   in
   f r32 None [] pref
 
-let disasm_instr g addr =
+(* address, prefixes, opcode, bap ir *)
+type rich = RichAsm of int64 * int list * opcode * Ast.stmt list 
+
+let get_meta g addr = 
   let (pref, op, na) = parse_instr g addr in
   let (_, ss, pref) =  parse_prefixes pref op in
-  let ir = ToIR.to_ir addr na ss pref op in
   let asm = try Some(ToStr.to_string pref op) with Failure _ -> None in
-  (ToIR.add_labels ?asm addr ir, na)
+  (pref, ss, op, asm, na)
+
+let disasm_instr_rich g addr =
+  let (pref, ss, op, asm, na) = get_meta g addr in
+  let ir = ToIR.to_ir addr na ss pref op in
+  let (stmts, na) = (ToIR.add_labels ?asm addr ir, na) in
+  (RichAsm(addr, pref, op, stmts), na)
+
+let disasm_instr g addr =
+    let RichAsm(_,_,_,stmts), na = disasm_instr_rich g addr in
+    (stmts, na)
+
+let rich_eq r1 r2 = 
+    let RichAsm(_, pref1, op1, _) = r1 in        
+    let RichAsm(_, pref2, op2, _) = r2 in        
+    pref1 = pref2 && op1 = op2
+
+(*
+let disasm_range g st en = 
+    let rec aux l addr = 
+        let (rich, n) = disasm_instr_rich g addr in
+        let l = rich::l in
+        if n >= en then
+            l
+*)

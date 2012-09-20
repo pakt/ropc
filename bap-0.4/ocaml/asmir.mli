@@ -65,6 +65,8 @@ val open_program :  string -> asmprogram
 val asmprogram_to_bap : ?init_ro:bool -> asmprogram -> Ast.program
 val asm_addr_to_bap : (*varctx ->*) asmprogram -> address_t -> Ast.program * address_t
 
+val asmprogram_to_bap_range_rich : ?init_ro:bool -> asmprogram -> address_t ->
+    address_t  -> (Ast.program * address_t * address_t) list
 val asmprogram_to_bap_range : ?init_ro:bool -> asmprogram -> address_t -> address_t  -> Ast.program
 
 val bap_from_trace_file : ?atts:bool -> ?pin:bool -> string -> Ast.program
@@ -95,3 +97,9 @@ val get_print_warning : unit -> bool
 val set_use_simple_segments : bool -> unit
 
 val get_prog_contents : asmprogram -> int64 -> char
+
+(* added *)
+val get_section_start : section_ptr -> address_t
+val get_section_end : section_ptr -> address_t
+val is_rw_data : section_ptr -> bool
+val is_bss : section_ptr -> bool

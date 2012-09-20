@@ -146,6 +146,7 @@ let num_exp = function
     | Let(v1,e1,e2) -> [e1;e2], [], [], [], [v1], [], [], []
     | Unknown(s1,t1) -> [], [t1], [], [], [], [s1], [], []
 
+
 (** quick_exp_eq e1 e2 returns true if and only if the subexpressions
     in e1 and e2 are *physically* equal. *)
 let quick_exp_eq e1 e2 =
@@ -244,6 +245,10 @@ let getargs_stmt = function
   | Comment(s,a)
   | Special(s,a) -> [], [], [], [a], [s]
 
+let getargs_stmt_drop_attrs s = 
+    let l1,l2,l3,_,l5 = getargs_stmt s in
+    l1,l2,l3,[],l5
+
 (** quick_stmt_eq returns true if and only if the subexpressions in e1
     and e2 are *physically* equal. *)
 let quick_stmt_eq s1 s2 =
@@ -270,10 +275,10 @@ let quick_stmt_eq s1 s2 =
     This function should be equivalent to =, except that it understands
     Big_int's, which are abstract values.
 *)
-let full_stmt_eq s1 s2 =
+let full_stmt_eq' geta s1 s2 =
   if (num_stmt s1) <> (num_stmt s2) then false else
-    let l1,l2,l3,l4,l5 = getargs_stmt s1 in
-    let r1,r2,r3,r4,r5 = getargs_stmt s2 in
+    let l1,l2,l3,l4,l5 = geta s1 in
+    let r1,r2,r3,r4,r5 = geta s2 in
     let b1 = List.for_all2 (==) l1 r1 in (* e must use == *)
     let b2 = List.for_all2 (=) l2 r2 in
     let b3 = List.for_all2 (=) l3 r3 in
@@ -287,6 +292,10 @@ let full_stmt_eq s1 s2 =
       List.for_all2 full_exp_eq l1 r1
     else
       false
+
+let full_stmt_eq s1 s2 = full_stmt_eq' getargs_stmt s1 s2
+let full_stmt_eq_no_attrs s1 s2 = full_stmt_eq' getargs_stmt_drop_attrs s1 s2
+
 
 let is_true = (===) exp_true
 let is_false = (===) exp_false

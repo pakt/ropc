@@ -462,6 +462,13 @@ let bfd_section_size = Libbfd.bfd_section_get_size
 let bfd_section_vma = Libbfd.bfd_section_get_vma
 let bfd_section_name = Libbfd.bfd_section_get_name
 
+let get_section_start = bfd_section_vma
+let get_section_end s = 
+    let start = bfd_section_vma s in
+    let size = bfd_section_size s in
+    let (+) = Int64.add in 
+    start+size
+
 (** Is section s loaded? *)
 let is_load s =
   let flags = bfd_section_get_flags s in
@@ -471,6 +478,14 @@ let is_load s =
 let is_code s =
   let flags = bfd_section_get_flags s in
   Int64.logand flags Libbfd.sEC_CODE <> 0L
+
+let is_rw_data s = 
+  let flags = bfd_section_get_flags s in
+  Int64.logand flags Libbfd.sEC_DATA <> 0L && (Int64.logand flags Libbfd.sEC_READONLY = 0L)
+
+let is_bss s = 
+  let flags = bfd_section_get_flags s in
+  flags = Libbfd.sEC_ALLOC
 
 let section_contents prog secs =
   let bfd = Libasmir.asmir_get_bfd prog in
@@ -586,7 +601,7 @@ let flatten ll =
 	List.rev (List.fold_left (fun accu l -> List.rev_append l accu) [] ll)
 
 (* asmprogram_to_bap_range p st en will read bytes at [st,en) from p and translate them to bap *)
-let asmprogram_to_bap_range ?(init_ro = false) p st en =
+let asmprogram_to_bap_range_rich ?(init_ro = false) p st en =
   let rec f l s =
     (* This odd structure is to ensure tail-recursion *)
     let t = 
@@ -594,17 +609,24 @@ let asmprogram_to_bap_range ?(init_ro = false) p st en =
       with Memory_error -> None in
     match t with
     | Some(ir, n) ->
-      if n >= en then flatten (List.rev (ir::l))
+      let l = (ir,s,n)::l in
+      if n >= en then 
+          List.rev l
       else
-	f (ir::l) n
+          f l n
     | None ->
       (* If we fail, hopefully it is because there were some random
     	 bytes at the end of the section that we tried to
     	 disassemble *)
       wprintf "Failed to read instruction byte while disassembling at address %#Lx; end of section at %#Lx" s en;
-      flatten (List.rev l)
+      List.rev l
   in
   f [] st
+
+let asmprogram_to_bap_range ?(init_ro = false) p st en =
+    let l = asmprogram_to_bap_range_rich ~init_ro:init_ro p st en in
+    let l = List.map (fun (ir,_,_) -> ir) l in
+    flatten l
 
 let asmprogram_section_to_bap p s =
   let size = bfd_section_size s and vma = bfd_section_vma s in
