@@ -17,9 +17,9 @@ ocaml_helpers.o: ocaml_helpers.c ../include/asm_program.h \
  /usr/include/i386-linux-gnu/bits/stdio2.h /usr/include/bfd.h \
  ../include/common.h /usr/lib/gcc/i686-linux-gnu/4.6.1/include/stdint.h \
  /usr/include/stdint.h /usr/include/i386-linux-gnu/bits/wchar.h \
- ../include/vexmem.h /home/p/ropc/bap-0.4/VEX/pub/libvex.h \
- /home/p/ropc/bap-0.4/VEX/pub/libvex_basictypes.h \
- /home/p/ropc/bap-0.4/VEX/pub/libvex_ir.h
+ ../include/vexmem.h /home/p/ropc-repo/bap-0.4/VEX/pub/libvex.h \
+ /home/p/ropc-repo/bap-0.4/VEX/pub/libvex_basictypes.h \
+ /home/p/ropc-repo/bap-0.4/VEX/pub/libvex_ir.h
 
 ../include/asm_program.h:
 
@@ -79,8 +79,8 @@ ocaml_helpers.o: ocaml_helpers.c ../include/asm_program.h \
 
 ../include/vexmem.h:
 
-/home/p/ropc/bap-0.4/VEX/pub/libvex.h:
+/home/p/ropc-repo/bap-0.4/VEX/pub/libvex.h:
 
-/home/p/ropc/bap-0.4/VEX/pub/libvex_basictypes.h:
+/home/p/ropc-repo/bap-0.4/VEX/pub/libvex_basictypes.h:
 
-/home/p/ropc/bap-0.4/VEX/pub/libvex_ir.h:
+/home/p/ropc-repo/bap-0.4/VEX/pub/libvex_ir.h:

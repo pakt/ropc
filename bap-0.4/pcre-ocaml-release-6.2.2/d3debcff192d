@@ -1,0 +1,125 @@
+
+# HG changeset patch
+# User Markus Mottl <markus.mottl@gmail.com>
+# Date 1320864038 18000
+# Node ID d3debcff192d7911d1c11fc9c148146099ec125d
+# Parent  d241b2419c0d456911ea01e920ee2d3deb8fb266
+Fixed linking order
+
+diff --git a/Changelog b/Changelog
+--- a/Changelog
++++ b/Changelog
+@@ -1,3 +1,5 @@
++2011-11-09:  Updated OCamlMakefile to fix linking order.
++
+ 2011-01-16:  Added support for limit recursion flag.
+ 
+              Thanks to Delphin Lecucq <Delphin.LECUCQ@3ds.com> for the patch!
+diff --git a/OCamlMakefile b/OCamlMakefile
+--- a/OCamlMakefile
++++ b/OCamlMakefile
+@@ -219,6 +219,11 @@
+ endif
+ export OCAMLFIND
+ 
++ifndef OCAML
++  OCAML := ocaml
++endif
++export OCAML
++
+ ifndef OCAMLC
+   OCAMLC := ocamlc
+ endif
+@@ -510,9 +515,10 @@
+ NONEXECS     := $(INTF) $(IMPL_CMO) $(IMPL_CMX) $(IMPL_ASM) $(IMPL_S) \
+ 		$(OBJ_FILES) $(PRE_TARGETS) $(BCRESULT).cma $(NCRESULT).cmxa \
+ 		$(NCRESULT).$(EXT_LIB) $(BCRESULT).cmi $(BCRESULT).cmo \
+-		$(NCRESULT).cmi $(NCRESULT).cmx $(NCRESULT).o \
++		$(NCRESULT).cmi $(NCRESULT).cmx $(NCRESULT).$(EXT_OBJ) \
+ 		$(RES_CLIB) $(IMPL_CMO:.cmo=.annot) \
+-		$(LIB_PACK_NAME).cmi $(LIB_PACK_NAME).cmo $(LIB_PACK_NAME).cmx $(LIB_PACK_NAME).o
++		$(LIB_PACK_NAME).cmi $(LIB_PACK_NAME).cmo $(LIB_PACK_NAME).cmx \
++		$(LIB_PACK_NAME).$(EXT_OBJ)
+ 
+ ifndef STATIC
+   NONEXECS += $(DLLSONAME)
+@@ -911,7 +917,7 @@
+ # packs native-code objects
+ pack-native-code:		$(PRE_TARGETS)
+ 			$(QUIET)$(MAKE) -r -f $(OCAMLMAKEFILE) \
+-				$(NCRESULT).cmx $(NCRESULT).o \
++				$(NCRESULT).cmx $(NCRESULT).$(EXT_OBJ) \
+ 				REAL_RESULT="$(NCRESULT)" \
+ 				REAL_OCAMLC="$(OCAMLOPT)" \
+ 				PACK_LIB=yes make_deps=yes
+@@ -938,7 +944,7 @@
+ $(REAL_RESULT):		$(REAL_IMPL_INTF) $(OBJ_LINK) $(EXTRADEPS) $(RESULTDEPS)
+ 			$(REAL_OCAMLFIND) $(REAL_OCAMLC) \
+ 				$(OCAML_FIND_PACKAGES) $(OCAML_FIND_LINKPKG) \
+-				$(ALL_LDFLAGS) $(OBJS_LIBS) -o $@$(EXE) \
++				$(OBJS_LIBS) $(ALL_LDFLAGS) -o $@$(EXE) \
+ 				$(REAL_IMPL)
+ 
+ nolink:			$(REAL_IMPL_INTF) $(OBJ_LINK)
+@@ -952,7 +958,7 @@
+ %$(TOPSUFFIX):		$(REAL_IMPL_INTF) $(OBJ_LINK) $(EXTRADEPS)
+ 			$(REAL_OCAMLFIND) $(OCAMLMKTOP) \
+ 				$(OCAML_FIND_PACKAGES) $(OCAML_FIND_LINKPKG) \
+-				$(ALL_LDFLAGS) $(OBJS_LIBS) -o $@$(EXE) \
++				$(OBJS_LIBS) $(ALL_LDFLAGS) -o $@$(EXE) \
+ 				$(REAL_IMPL)
+ 
+ .SUFFIXES:		.mli .ml .cmi .cmo .cmx .cma .cmxa .$(EXT_OBJ) \
+@@ -997,27 +1003,35 @@
+ 
+ ifndef LIB_PACK_NAME
+ $(RESULT).cma:		$(REAL_IMPL_INTF) $(MAKEDLL) $(EXTRADEPS) $(RESULTDEPS)
+-			$(REAL_OCAMLFIND) $(REAL_OCAMLC) -a $(ALL_LDFLAGS) $(OBJS_LIBS) -o $@ $(REAL_IMPL)
++			$(REAL_OCAMLFIND) $(REAL_OCAMLC) -a $(OBJS_LIBS) $(ALL_LDFLAGS) -o $@ $(REAL_IMPL)
+ 
+ $(RESULT).cmxa $(RESULT).$(EXT_LIB):	$(REAL_IMPL_INTF) $(EXTRADEPS) $(RESULTDEPS)
+-			$(REAL_OCAMLFIND) $(OCAMLOPT) -a $(ALL_LDFLAGS) $(OBJS_LIBS) -o $@ $(REAL_IMPL)
++			$(REAL_OCAMLFIND) $(OCAMLOPT) -a $(OBJS_LIBS) $(ALL_LDFLAGS) -o $@ $(REAL_IMPL)
+ else
+ # Packing a bytecode library
++LIB_PACK_NAME_MLI = $(wildcard $(LIB_PACK_NAME).mli)
++ifeq ($(LIB_PACK_NAME_MLI),)
++LIB_PACK_NAME_CMI = $(LIB_PACK_NAME).cmi
++else
++# $(LIB_PACK_NAME).mli exists, it likely depends on other compiled interfaces
++LIB_PACK_NAME_CMI =
++$(LIB_PACK_NAME).cmi: $(REAL_IMPL_INTF)
++endif
+ ifdef BYTE_OCAML
+-$(LIB_PACK_NAME).cmi $(LIB_PACK_NAME).cmo: $(REAL_IMPL_INTF)
++$(LIB_PACK_NAME_CMI) $(LIB_PACK_NAME).cmo: $(REAL_IMPL_INTF)
+ 			$(REAL_OCAMLFIND) $(REAL_OCAMLC) -pack -o $(LIB_PACK_NAME).cmo $(OCAMLLDFLAGS) $(REAL_IMPL)
+ # Packing into a unit which can be transformed into a library
+ # Remember the .ml's must have been compiled with -for-pack $(LIB_PACK_NAME)
+ else
+-$(LIB_PACK_NAME).cmi $(LIB_PACK_NAME).cmx: $(REAL_IMPL_INTF)
++$(LIB_PACK_NAME_CMI) $(LIB_PACK_NAME).cmx: $(REAL_IMPL_INTF)
+ 			$(REAL_OCAMLFIND) $(OCAMLOPT) -pack -o $(LIB_PACK_NAME).cmx  $(OCAMLLDFLAGS) $(REAL_IMPL)
+ endif
+ 
+ $(RESULT).cma:		$(LIB_PACK_NAME).cmi $(LIB_PACK_NAME).cmo $(MAKEDLL) $(EXTRADEPS) $(RESULTDEPS)
+-			$(REAL_OCAMLFIND) $(REAL_OCAMLC) -a $(ALL_LDFLAGS) $(OBJS_LIBS) -o $@ $(LIB_PACK_NAME).cmo
++			$(REAL_OCAMLFIND) $(REAL_OCAMLC) -a $(OBJS_LIBS) $(ALL_LDFLAGS) -o $@ $(LIB_PACK_NAME).cmo
+ 
+ $(RESULT).cmxa $(RESULT).$(EXT_LIB):	$(LIB_PACK_NAME).cmi $(LIB_PACK_NAME).cmx $(EXTRADEPS) $(RESULTDEPS)
+-			$(REAL_OCAMLFIND) $(OCAMLOPT) -a $(filter-out -custom, $(ALL_LDFLAGS)) $(OBJS_LIBS) -o $@ $(LIB_PACK_NAME).cmx
++			$(REAL_OCAMLFIND) $(OCAMLOPT) -a $(OBJS_LIBS) $(filter-out -custom, $(ALL_LDFLAGS)) -o $@ $(LIB_PACK_NAME).cmx
+ endif
+ 
+ $(RES_CLIB): 		$(OBJ_LINK)
+diff --git a/lib/META b/lib/META
+--- a/lib/META
++++ b/lib/META
+@@ -1,5 +1,5 @@
+ name="pcre"
+-version="6.2.0"
++version="6.2.1"
+ description="Perl Compatibility Regular Expressions"
+ requires=""
+ archive(byte)="pcre.cma"
+

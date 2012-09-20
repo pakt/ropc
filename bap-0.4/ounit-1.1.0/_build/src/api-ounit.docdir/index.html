@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="OUnit" rel="Chapter" href="OUnit.html">
+<link title="OUnitDiff" rel="Chapter" href="OUnitDiff.html"><title>OUnit user guide</title>
+</head>
+<body>
+<center><h1>OUnit user guide</h1></center>
+<a href="index_types.html">Index of types</a><br>
+<a href="index_values.html">Index of values</a><br>
+<a href="index_modules.html">Index of modules</a><br>
+<a href="index_module_types.html">Index of module types</a><br>
+
+<p>
+
+<span id="2_WhatisunitTesting"><h2>What is unit Testing?</h2></span>
+<p>
+
+A test-oriented methodology for software development is most
+effective whent tests are easy to create, change, and execute. The
+JUnit tool pioneerded for test-first development in Java. OUnit is
+an adaptation of JUnit to OCaml.
+<p>
+
+With OUnit, as with JUnit, you can easily create tests, name them,
+group them into suites, and execute them, with the framework
+checking the results automatically.
+<p>
+
+<span id="2_GettingStarted"><h2>Getting Started</h2></span>
+<p>
+
+The basic principle of a test suite is to have a file <i>test.ml</i> which will
+contain the tests, and an OCaml module under test, named <i>foo.ml</i>.
+<p>
+
+File <i>foo.ml</i>:
+<pre></pre><code class="code"><span class="comment">(*&nbsp;The&nbsp;functions&nbsp;we&nbsp;wish&nbsp;to&nbsp;test&nbsp;*)</span><br>
+<span class="keyword">let</span>&nbsp;unity&nbsp;x&nbsp;=&nbsp;x;;<br>
+<span class="keyword">let</span>&nbsp;funix&nbsp;()=&nbsp;0;;<br>
+<span class="keyword">let</span>&nbsp;fgeneric&nbsp;()&nbsp;=&nbsp;failwith&nbsp;<span class="string">"Not&nbsp;implemented"</span>;;<br>
+</code><pre></pre>
+<p>
+
+The main point of a test is to check that the function under test has the
+expected behavior. You check the behavior using assert functions. The most
+simple one is <a href="OUnit.html#VALassert_equal"><code class="code"><span class="constructor">OUnit</span>.assert_equal</code></a>. This function compares the result of the
+function with an expected result. 
+<p>
+
+The most useful functions are:<ul>
+<li><a href="OUnit.html#VALassert_equal"><code class="code"><span class="constructor">OUnit</span>.assert_equal</code></a> the basic assert function</li>
+<li><a href="OUnit.html#VAL(>:::)"><code class="code"><span class="constructor">OUnit</span>.(&gt;:::)</code></a> to define a list of tests </li>
+<li><a href="OUnit.html#VAL(>::)"><code class="code"><span class="constructor">OUnit</span>.(&gt;::)</code></a> to name a test</li>
+<li><a href="OUnit.html#VALrun_test_tt_main"><code class="code"><span class="constructor">OUnit</span>.run_test_tt_main</code></a> to run the test suite you define</li>
+<li><a href="OUnit.html#VALbracket"><code class="code"><span class="constructor">OUnit</span>.bracket</code></a> that can help to set and clean environment, it is especially
+  useful if you deal with temporary filename.</li>
+</ul>
+
+File <i>test.ml</i>:
+<pre></pre><code class="code"><span class="keyword">open</span>&nbsp;<span class="constructor">OUnit</span>;;<br>
+<br>
+<span class="keyword">let</span>&nbsp;test1&nbsp;()&nbsp;=&nbsp;assert_equal&nbsp;<span class="string">"x"</span>&nbsp;(<span class="constructor">Foo</span>.unity&nbsp;<span class="string">"x"</span>);;&nbsp;<br>
+<br>
+<span class="keyword">let</span>&nbsp;test2&nbsp;()&nbsp;=&nbsp;assert_equal&nbsp;100&nbsp;(<span class="constructor">Foo</span>.unity&nbsp;100);;<br>
+<br>
+<span class="comment">(*&nbsp;Name&nbsp;the&nbsp;test&nbsp;cases&nbsp;and&nbsp;group&nbsp;them&nbsp;together&nbsp;*)</span><br>
+<span class="keyword">let</span>&nbsp;suite&nbsp;=&nbsp;<br>
+<span class="string">"suite"</span>&gt;:::<br>
+&nbsp;[<span class="string">"test1"</span>&gt;::&nbsp;test1;<br>
+&nbsp;&nbsp;<span class="string">"test2"</span>&gt;::&nbsp;test2]<br>
+;;<br>
+<br>
+<span class="keyword">let</span>&nbsp;_&nbsp;=&nbsp;<br>
+&nbsp;&nbsp;run_test_tt_main&nbsp;suite<br>
+;;<br>
+</code><pre></pre>
+<p>
+
+And compile the module
+<p>
+
+<pre></pre><code class="code">$&nbsp;ocamlfind&nbsp;ocamlc&nbsp;-o&nbsp;test&nbsp;-package&nbsp;oUnit&nbsp;-linkpkg&nbsp;-g&nbsp;foo.ml&nbsp;test.ml<br>
+</code><pre></pre>
+<p>
+
+A executable named "test" will be created. When run it produces the
+following output.
+<p>
+
+<pre></pre><code class="code">$&nbsp;./tests<br>
+..<br>
+<span class="constructor">Ran</span>:&nbsp;2&nbsp;tests&nbsp;<span class="keyword">in</span>:&nbsp;0.00&nbsp;<span class="constructor">Seconds</span><br>
+<span class="constructor">OK</span><br>
+</code><pre></pre>
+<p>
+
+When using <a href="OUnit.html#VALrun_test_tt_main"><code class="code"><span class="constructor">OUnit</span>.run_test_tt_main</code></a>, a non zero exit code signals that the
+test suite was not successful.
+<p>
+
+<span id="2_Advancedusage"><h2>Advanced usage</h2></span>
+<p>
+
+The topics, cover here, are only for advanced users who wish to unravel the 
+power of OUnit.
+<p>
+
+<br>
+<table class="indextable">
+<tr><td><a href="OUnit.html">OUnit</a></td><td><div class="info">
+Unit test building blocks
+</div>
+</td></tr>
+<tr><td><a href="OUnitDiff.html">OUnitDiff</a></td><td><div class="info">
+Unit tests for collection of elements
+</div>
+</td></tr>
+</table>
+
+<p>
+
+<span id="3_Errorreporting"><h3>Error reporting</h3></span>
+<p>
+
+The error reporting part of OUnit is quite important. If you want to identify
+the failure, you should tune the display of the value and the test.
+<p>
+
+Here is a list of thing you can display:<ul>
+<li>name of the test: OUnit use numbers to define path's test. But an error
+  reporting about a failed test "0:1:2" is less explicit than
+  "OUnit:0:comparator:1:float_comparator:2"</li>
+<li><code class="code">~msg</code> parameter: it allows you to define say which assert has failed in your
+  test. When you have more than one assert in a test, you should provide a
+  <code class="code">~msg</code> to be able to make the difference</li>
+<li><code class="code">~printer</code> parameter: <a href="OUnit.html#VALassert_equal"><code class="code"><span class="constructor">OUnit</span>.assert_equal</code></a> allows you to define a printer for
+  compared values. A message <code class="code"><span class="string">"abcd"</span> is not equal <span class="keyword">to</span> <span class="string">"defg"</span></code> is better than <code class="code">not
+  equal</code></li>
+</ul>
+
+<pre></pre><code class="code"><span class="keyword">open</span>&nbsp;<span class="constructor">OUnit</span>;;<br>
+<br>
+<span class="keyword">let</span>&nbsp;_&nbsp;=&nbsp;<br>
+&nbsp;&nbsp;<span class="string">"mytest"</span>&gt;::<br>
+&nbsp;&nbsp;(<span class="keyword">fun</span>&nbsp;()&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;assert_equal<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~msg:<span class="string">"int&nbsp;value"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~printer:string_of_int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">Foo</span>.unity&nbsp;1))<br>
+;;<br>
+</code><pre></pre>
+<p>
+
+<span id="3_Commandlinearguments"><h3>Command line arguments</h3></span>
+<p>
+
+<a href="OUnit.html#VALrun_test_tt_main"><code class="code"><span class="constructor">OUnit</span>.run_test_tt_main</code></a> already provides a set of command line argument to 
+help user to run only the test he wants:<ul>
+<li><code class="code">-only-test</code>: skip all the tests except this one, you can use this flag
+  several time to select more than one test to run </li>
+<li><code class="code">-list-test</code>: list all the available tests and exit</li>
+<li><code class="code">-verbose</code>: rather than displaying dots while running the test, be more 
+  verbose</li>
+<li><code class="code">-help</code>: display help message and exit</li>
+</ul>
+
+It is also possible to add your own command-line arguments. You should do it 
+if you want to define some extra arguments. For example:
+<p>
+
+<pre></pre><code class="code"><span class="keyword">open</span>&nbsp;<span class="constructor">OUnit</span>;;<br>
+<br>
+<span class="keyword">let</span>&nbsp;my_program_to_test&nbsp;=&nbsp;<br>
+&nbsp;&nbsp;ref&nbsp;<span class="constructor">None</span><br>
+;;<br>
+<br>
+<span class="keyword">let</span>&nbsp;test1&nbsp;()&nbsp;=<br>
+&nbsp;&nbsp;<span class="keyword">match</span>&nbsp;!my_program_to_test&nbsp;<span class="keyword">with</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">Some</span>&nbsp;prg&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assert_command&nbsp;prg&nbsp;[]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">None</span>&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;skip_if&nbsp;<span class="keyword">true</span>&nbsp;<span class="string">"My&nbsp;program&nbsp;is&nbsp;not&nbsp;defined"</span><br>
+;;<br>
+<br>
+<span class="keyword">let</span>&nbsp;_&nbsp;=&nbsp;<br>
+&nbsp;&nbsp;run_test_tt_main<br>
+&nbsp;&nbsp;&nbsp;&nbsp;~arg_specs:[<span class="string">"-my-program"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Arg</span>.<span class="constructor">String</span>&nbsp;(<span class="keyword">fun</span>&nbsp;fn&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;my_program_to_test&nbsp;:=&nbsp;<span class="constructor">Some</span>&nbsp;fn),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"fn&nbsp;Program&nbsp;to&nbsp;test"</span>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="string">"test1"</span>&nbsp;&gt;::&nbsp;test1)<br>
+;;<br>
+</code><pre></pre>
+<p>
+
+<span id="3_Skipandtodotests"><h3>Skip and todo tests</h3></span>
+<p>
+
+Tests are not always meaningful and can even fail because something is missing 
+in the environment. In order to manage this, you can define a skip condition 
+that will skip the test. 
+<p>
+
+If you start by defining your tests rather than implementing the functions 
+under test, you know that some tests will just fail. You can mark these tests
+as to do tests, this way they will be reported differently in your test suite.
+<p>
+
+<pre></pre><code class="code"><span class="keyword">open</span>&nbsp;<span class="constructor">OUnit</span>;;<br>
+<br>
+<span class="keyword">let</span>&nbsp;_&nbsp;=<br>
+&nbsp;&nbsp;<span class="string">"allfuns"</span>&nbsp;&gt;:::<br>
+&nbsp;&nbsp;[<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"funix"</span>&gt;::<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keyword">fun</span>&nbsp;()&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;skip_if&nbsp;(<span class="constructor">Sys</span>.os_type&nbsp;=&nbsp;<span class="string">"Win32"</span>)&nbsp;<span class="string">"Don't&nbsp;work&nbsp;on&nbsp;Windows"</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assert_equal<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">Foo</span>.funix&nbsp;()));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"fgeneric"</span>&gt;::<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keyword">fun</span>&nbsp;()&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todo&nbsp;<span class="string">"fgeneric&nbsp;not&nbsp;implemented"</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assert_equal<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">Foo</span>.fgeneric&nbsp;()));<br>
+&nbsp;&nbsp;]<br>
+;;<br>
+</code><pre></pre>
+<p>
+
+<span id="3_EffectiveOUnit"><h3>Effective OUnit</h3></span>
+<p>
+
+This section is about general tips about unit testing and OUnit. It is the
+result of some years using OUnit in real world applications.
+<p>
+<ul>
+<li>test everything: the more you create tests, the better chance you have to
+  catch early an error in your program. Every submitted bugs to your application
+  should have a matching tests. This is a good practice, but it is not always
+  easy to implement.</li>
+<li>test only what is really exported: on the long term, you have to maintain your
+  test suite. If you test low-level functions, you'll have a lot of tests to
+  rewrite. You should focus on creating tests for functions for which the
+  behavior shouldn't change.</li>
+<li>test fast: the best test suite is the one that runs after every single build.
+  You should set your default Makefile target to run the test suite. It means
+  that your test suite should be fast to run, typically, a 10s test suite is
+  fine.</li>
+<li>test long: contrary to the former tip, you should also have a complete test
+  suite which can be very long to run. The best way to achieve both tips, is to
+  define a command line arguments <code class="code">-long</code> and skip the tests that are too long in 
+  your test suite according to it. When you do a release, you should use run
+  your long test suite. </li>
+<li>family tests: when testing behavior, most of the time you call exactly the
+  same code with different arguments. In this case <code class="code"><span class="constructor">List</span>.map</code> and
+  <a href="OUnit.html#VAL(>:::)"><code class="code"><span class="constructor">OUnit</span>.(&gt;:::)</code></a> are your friends. For example:</li>
+</ul>
+
+<pre></pre><code class="code"><span class="keyword">open</span>&nbsp;<span class="constructor">OUnit</span>;;<br>
+<br>
+<span class="keyword">let</span>&nbsp;_&nbsp;=<br>
+&nbsp;&nbsp;<span class="string">"Family"</span>&gt;:::<br>
+&nbsp;&nbsp;(<span class="constructor">List</span>.map&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keyword">fun</span>&nbsp;(arg,res)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span>&nbsp;title&nbsp;=&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Printf</span>.sprintf&nbsp;<span class="string">"%s-&gt;%s"</span>&nbsp;arg&nbsp;res<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">in</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title&nbsp;&gt;::<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keyword">fun</span>&nbsp;()&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assert_equal&nbsp;res&nbsp;(<span class="constructor">Foo</span>.unity&nbsp;arg)))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="string">"abcd"</span>,&nbsp;<span class="string">"abcd"</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"defg"</span>,&nbsp;<span class="string">"defg"</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"wxyz"</span>,&nbsp;<span class="string">"wxyz"</span>])<br>
+;;<br>
+</code><pre></pre>
+<p>
+<ul>
+<li>test failures and successes: the most obvious thing you want to test are
+  successes, i.e. that you get the expected behavior in the normal case. But
+  most of the errors arise in corner cases and in the code of the test itself.
+  For example, you can have a partial application of your <a href="OUnit.html#VALassert_equal"><code class="code"><span class="constructor">OUnit</span>.assert_equal</code></a>
+  and never encounter any errors, just because the <code class="code">assert_equal</code> is not called.
+  In this case, if you test errors as well, you will have a missing errors as
+  well.</li>
+<li>set up and clean your environment in the test: you should not set up and clean
+  your test environment outside the test. Ideally, if you run no tests, the
+  program should do nothing. This is also a sane way to be sure that you are
+  always testing in a clean environment, not polluted by the result of failed
+  tests run before.</li>
+</ul>
+
+<pre></pre><code class="code"><span class="keyword">open</span>&nbsp;<span class="constructor">OUnit</span>;;<br>
+<br>
+<span class="keyword">let</span>&nbsp;_&nbsp;=<br>
+&nbsp;&nbsp;<span class="comment">(*&nbsp;We&nbsp;need&nbsp;to&nbsp;call&nbsp;a&nbsp;function&nbsp;in&nbsp;a&nbsp;particular&nbsp;directory&nbsp;*)</span><br>
+&nbsp;&nbsp;<span class="string">"change-dir-and-run"</span>&gt;::<br>
+&nbsp;&nbsp;bracket<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keyword">fun</span>&nbsp;()&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span>&nbsp;pwd&nbsp;=&nbsp;<span class="constructor">Sys</span>.getcwd&nbsp;()&nbsp;<span class="keyword">in</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sys</span>.chdir&nbsp;<span class="string">"test"</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwd)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keyword">fun</span>&nbsp;_&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assert_command&nbsp;<span class="string">"ls"</span>&nbsp;[])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="keyword">fun</span>&nbsp;pwd&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Sys</span>.chdir&nbsp;pwd)<br>
+;;<br>
+</code><pre></pre><ul>
+<li>separate your test: OUnit test code should live outside the code under tests.
+  This allow to drop the dependency on OUnit when distributing your
+  library/application. This also enables people to easily make a difference from
+  what really matters (the main code) and what are only tests. It is possible to
+  have it directly in the code, like in Quickcheck style tests.  </li>
+</ul>
+
+The unit testing scope is always hard to define. Unit testing should be about
+testing a single features. But OUnit can help you to test higher level behavior,
+by running a full program for example. While it isn't real unit testing, you
+can use OUnit to do it and should not hesitate to do it.
+<p>
+
+In term of line of codes, a test suite can represent from 10% to 150% of the
+code under test. With time, your test suite will grow faster than your
+program/library. A good ratio is 33%.<br>
+<b>Author(s):</b> Maas-Maarten Zeeman, Sylvain Le Gall<br>
+</body>
+</html>

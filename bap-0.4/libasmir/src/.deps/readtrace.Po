@@ -111,9 +111,9 @@ readtrace.o: traces/readtrace.cpp /usr/include/c++/4.6/cassert \
  traces/pin_common.h traces/trace_v41.h traces/trace_v50.h \
  ../include/irtoir.h ../include/asm_program.h /usr/include/dis-asm.h \
  /usr/include/bfd.h ../include/vexmem.h \
- /home/p/ropc/bap-0.4/VEX/pub/libvex.h \
- /home/p/ropc/bap-0.4/VEX/pub/libvex_basictypes.h \
- /home/p/ropc/bap-0.4/VEX/pub/libvex_ir.h ../include/stmt.h \
+ /home/p/ropc-repo/bap-0.4/VEX/pub/libvex.h \
+ /home/p/ropc-repo/bap-0.4/VEX/pub/libvex_basictypes.h \
+ /home/p/ropc-repo/bap-0.4/VEX/pub/libvex_ir.h ../include/stmt.h \
  traces/pin_trace.h /usr/include/c++/4.6/memory \
  /usr/include/c++/4.6/bits/stl_tempbuf.h \
  /usr/include/c++/4.6/bits/stl_raw_storage_iter.h \
@@ -441,11 +441,11 @@ traces/trace_v50.h:
 
 ../include/vexmem.h:
 
-/home/p/ropc/bap-0.4/VEX/pub/libvex.h:
+/home/p/ropc-repo/bap-0.4/VEX/pub/libvex.h:
 
-/home/p/ropc/bap-0.4/VEX/pub/libvex_basictypes.h:
+/home/p/ropc-repo/bap-0.4/VEX/pub/libvex_basictypes.h:
 
-/home/p/ropc/bap-0.4/VEX/pub/libvex_ir.h:
+/home/p/ropc-repo/bap-0.4/VEX/pub/libvex_ir.h:
 
 ../include/stmt.h:
 

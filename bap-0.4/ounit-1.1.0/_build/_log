@@ -1,0 +1,16 @@
+### Starting build.
+# Target: src/oUnit.mli.depends, tags: { debug, extension:mli, file:src/oUnit.mli, oasis_library_ounit_byte, oasis_library_ounit_native, ocaml, ocamldep, pkg_unix, quiet, traverse }
+ocamlfind ocamldep -package unix -modules src/oUnit.mli > src/oUnit.mli.depends # cached
+# Target: src/oUnitDiff.mli.depends, tags: { debug, extension:mli, file:src/oUnitDiff.mli, oasis_library_ounit_byte, oasis_library_ounit_native, ocaml, ocamldep, pkg_unix, quiet, traverse }
+ocamlfind ocamldep -package unix -modules src/oUnitDiff.mli > src/oUnitDiff.mli.depends # cached
+# Target: src/oUnit.odoc, tags: { debug, doc, extension:mli, file:src/oUnit.mli, interf, oasis_library_ounit_byte, oasis_library_ounit_native, ocaml, pkg_unix, quiet, traverse }
+ocamlfind ocamldoc -dump src/oUnit.odoc -package unix -I src src/oUnit.mli
+# Target: src/oUnitDiff.odoc, tags: { debug, doc, extension:mli, file:src/oUnitDiff.mli, interf, oasis_library_ounit_byte, oasis_library_ounit_native, ocaml, pkg_unix, quiet, traverse }
+ocamlfind ocamldoc -dump src/oUnitDiff.odoc -package unix -I src src/oUnitDiff.mli
+# Target: src/api-ounit.docdir, tags: {  }
+rm -rf src/api-ounit.docdir
+# Target: src/api-ounit.docdir, tags: {  }
+mkdir -p src/api-ounit.docdir
+# Target: src/api-ounit.docdir, tags: { debug, doc, docdir, extension:docdir, extension:html, file:src/api-ounit.docdir, file:src/api-ounit.docdir/index.html, oasis_document_api_ounit, ocaml, quiet, traverse }
+ocamlfind ocamldoc -load src/oUnit.odoc -load src/oUnitDiff.odoc -html -t 'OUnit user guide' -intro doc/manual.txt -colorize-code -d src/api-ounit.docdir
+# Compilation successful.

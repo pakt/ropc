@@ -1,0 +1,325 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="next" href="OUnitDiff.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="OUnit" rel="Chapter" href="OUnit.html">
+<link title="OUnitDiff" rel="Chapter" href="OUnitDiff.html"><link title="Assertions" rel="Section" href="#2_Assertions">
+<link title="Skipping tests " rel="Section" href="#2_Skippingtests">
+<link title="Compare Functions" rel="Section" href="#2_CompareFunctions">
+<link title="Bracket" rel="Section" href="#2_Bracket">
+<link title="Constructing Tests" rel="Section" href="#2_ConstructingTests">
+<link title="Retrieve Information from Tests" rel="Section" href="#2_RetrieveInformationfromTests">
+<link title="Performing Tests" rel="Section" href="#2_PerformingTests">
+<title>OUnit user guide : OUnit</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="OUnitDiff.html">Next</a>
+</div>
+<center><h1>Module <a href="type_OUnit.html">OUnit</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> OUnit: <code class="code"><span class="keyword">sig</span></code> <a href="OUnit.html">..</a> <code class="code"><span class="keyword">end</span></code></pre>Unit test building blocks<br>
+<b>Author(s):</b> Maas-Maarten Zeeman, Sylvain Le Gall<br>
+<hr width="100%">
+<br>
+<span id="2_Assertions"><h2>Assertions</h2></span> 
+<p>
+
+    Assertions are the basic building blocks of unittests.<br>
+<pre><span id="VALassert_failure"><span class="keyword">val</span> assert_failure</span> : <code class="type">string -> 'a</code></pre><div class="info">
+Signals a failure. This will raise an exception with the specified
+    string.<br>
+<b>Raises</b> <code>Failure</code> signal a failure<br>
+</div>
+<pre><span id="VALassert_bool"><span class="keyword">val</span> assert_bool</span> : <code class="type">string -> bool -> unit</code></pre><div class="info">
+Signals a failure when bool is false. The string identifies the 
+    failure.<br>
+<b>Raises</b> <code>Failure</code> signal a failure<br>
+</div>
+<pre><span id="VAL(@?)"><span class="keyword">val</span> (@?)</span> : <code class="type">string -> bool -> unit</code></pre><div class="info">
+Shorthand for assert_bool<br>
+<b>Raises</b> <code>Failure</code> to signal a failure<br>
+</div>
+<pre><span id="VALassert_string"><span class="keyword">val</span> assert_string</span> : <code class="type">string -> unit</code></pre><div class="info">
+Signals a failure when the string is non-empty. The string identifies the
+    failure.<br>
+<b>Raises</b> <code>Failure</code> signal a failure<br>
+</div>
+<pre><span id="VALassert_command"><span class="keyword">val</span> assert_command</span> : <code class="type">?exit_code:Unix.process_status -><br>       ?sinput:char Stream.t -><br>       ?foutput:(char Stream.t -> unit) -><br>       ?use_stderr:bool -><br>       ?env:string array -> ?verbose:bool -> string -> string list -> unit</code></pre><div class="info">
+<code class="code">assert_command prg args</code> Run the command provided.<br>
+<b>Since</b> 1.1.0<br>
+</div>
+<div class="param_info"><code class="code">exit_code</code> : expected exit code</div>
+<div class="param_info"><code class="code">sinput</code> : provide this <code class="code">char <span class="constructor">Stream</span>.t</code> as input of the process</div>
+<div class="param_info"><code class="code">foutput</code> : run this function on output, it can contains an
+                   <code class="code">assert_equal</code> to check it</div>
+<div class="param_info"><code class="code">use_stderr</code> : redirect <code class="code">stderr</code> to <code class="code">stdout</code></div>
+<div class="param_info"><code class="code">env</code> : Unix environment</div>
+<div class="param_info"><code class="code">verbose</code> : if a failure arise, dump stdout/stderr of the process to stderr</div>
+<pre><span id="VALassert_equal"><span class="keyword">val</span> assert_equal</span> : <code class="type">?cmp:('a -> 'a -> bool) -><br>       ?printer:('a -> string) -><br>       ?pp_diff:(Format.formatter -> 'a * 'a -> unit) -><br>       ?msg:string -> 'a -> 'a -> unit</code></pre><div class="info">
+<code class="code">assert_equal expected real</code> Compares two values, when they are not equal a
+    failure is signaled.<br>
+<b>Version:</b> 1.1.0<br>
+<b>Raises</b> <code>Failure</code> signal a failure<br>
+</div>
+<div class="param_info"><code class="code">cmp</code> : customize function to compare, default is <code class="code">=</code></div>
+<div class="param_info"><code class="code">printer</code> : value printer, don't print value otherwise</div>
+<div class="param_info"><code class="code">pp_diff</code> : if not equal, ask a custom display of the difference
+                using <code class="code">diff fmt exp real</code> where <code class="code">fmt</code> is the formatter to use</div>
+<div class="param_info"><code class="code">msg</code> : custom message to identify the failure</div>
+<pre><span id="VALassert_raises"><span class="keyword">val</span> assert_raises</span> : <code class="type">?msg:string -> exn -> (unit -> 'a) -> unit</code></pre><div class="info">
+Asserts if the expected exception was raised.<br>
+<b>Raises</b> <code>Failure</code> description<br>
+</div>
+<div class="param_info"><code class="code">msg</code> : identify the failure</div>
+<br>
+<span id="2_Skippingtests"><h2>Skipping tests </h2></span> 
+<p>
+
+   In certain condition test can be written but there is no point running it, because they
+   are not significant (missing OS features for example). In this case this is not a failure
+   nor a success. Following functions allow you to escape test, just as assertion but without
+   the same error status.
+<p>
+
+   A test skipped is counted as success. A test todo is counted as failure.<br>
+<pre><span id="VALskip_if"><span class="keyword">val</span> skip_if</span> : <code class="type">bool -> string -> unit</code></pre><div class="info">
+<code class="code">skip cond msg</code> If <code class="code">cond</code> is true, skip the test for the reason explain in <code class="code">msg</code>.
+    For example <code class="code">skip_if (<span class="constructor">Sys</span>.os_type = <span class="string">"Win32"</span>) <span class="string">"Test a doesn't run on windows"</span></code>.<br>
+<b>Since</b> 1.0.3<br>
+</div>
+<pre><span id="VALtodo"><span class="keyword">val</span> todo</span> : <code class="type">string -> unit</code></pre><div class="info">
+The associated test is still to be done, for the reason given.<br>
+<b>Since</b> 1.0.3<br>
+</div>
+<br>
+<span id="2_CompareFunctions"><h2>Compare Functions</h2></span><br>
+<pre><span id="VALcmp_float"><span class="keyword">val</span> cmp_float</span> : <code class="type">?epsilon:float -> float -> float -> bool</code></pre><div class="info">
+Compare floats up to a given relative error.<br>
+</div>
+<div class="param_info"><code class="code">epsilon</code> : if the difference is smaller <code class="code">epsilon</code> values are equal</div>
+<br>
+<span id="2_Bracket"><h2>Bracket</h2></span>
+<p>
+
+    A bracket is a functional implementation of the commonly used
+    setUp and tearDown feature in unittests. It can be used like this:
+<p>
+
+    <code class="code"><span class="string">"MyTestCase"</span> &gt;:: (bracket test_set_up test_fun test_tear_down)</code><br>
+<pre><span id="VALbracket"><span class="keyword">val</span> bracket</span> : <code class="type">(unit -> 'a) -> ('a -> 'b) -> ('a -> 'c) -> unit -> 'c</code></pre><div class="info">
+<code class="code">bracket set_up test tear_down</code> The <code class="code">set_up</code> function runs first, then
+    the <code class="code">test</code> function runs and at the end <code class="code">tear_down</code> runs. The 
+    <code class="code">tear_down</code> function runs even if the <code class="code">test</code> failed and help to clean
+    the environment.<br>
+</div>
+<pre><span id="VALbracket_tmpfile"><span class="keyword">val</span> bracket_tmpfile</span> : <code class="type">?prefix:string -><br>       ?suffix:string -><br>       ?mode:Pervasives.open_flag list -><br>       (string * Pervasives.out_channel -> unit) -> unit -> unit</code></pre><div class="info">
+<code class="code">bracket_tmpfile test</code> The <code class="code">test</code> function takes a temporary filename
+    and matching output channel as arguments. The temporary file is created
+    before the test and removed after the test.<br>
+<b>Since</b> 1.1.0<br>
+</div>
+<div class="param_info"><code class="code">prefix</code> : see <code class="code"><span class="constructor">Filename</span>.open_temp_file</code></div>
+<div class="param_info"><code class="code">suffix</code> : see <code class="code"><span class="constructor">Filename</span>.open_temp_file</code></div>
+<div class="param_info"><code class="code">mode</code> : see <code class="code"><span class="constructor">Filename</span>.open_temp_file</code></div>
+<br>
+<span id="2_ConstructingTests"><h2>Constructing Tests</h2></span><br>
+<pre><span id="TYPEtest_fun"><span class="keyword">type</span> <code class="type"></code>test_fun</span> = <code class="type">unit -> unit</code> </pre>
+<div class="info">
+The type of test function<br>
+</div>
+
+<br><code><span id="TYPEtest"><span class="keyword">type</span> <code class="type"></code>test</span> = </code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">TestCase</span> <span class="keyword">of</span> <code class="type"><a href="OUnit.html#TYPEtest_fun">test_fun</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">TestList</span> <span class="keyword">of</span> <code class="type"><a href="OUnit.html#TYPEtest">test</a> list</code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">TestLabel</span> <span class="keyword">of</span> <code class="type">string * <a href="OUnit.html#TYPEtest">test</a></code></code></td>
+
+</tr></table>
+
+<div class="info">
+The type of tests<br>
+</div>
+
+<pre><span id="VAL(>:)"><span class="keyword">val</span> (&gt;:)</span> : <code class="type">string -> <a href="OUnit.html#TYPEtest">test</a> -> <a href="OUnit.html#TYPEtest">test</a></code></pre><div class="info">
+Create a TestLabel for a test<br>
+</div>
+<pre><span id="VAL(>::)"><span class="keyword">val</span> (&gt;::)</span> : <code class="type">string -> <a href="OUnit.html#TYPEtest_fun">test_fun</a> -> <a href="OUnit.html#TYPEtest">test</a></code></pre><div class="info">
+Create a TestLabel for a TestCase<br>
+</div>
+<pre><span id="VAL(>:::)"><span class="keyword">val</span> (&gt;:::)</span> : <code class="type">string -> <a href="OUnit.html#TYPEtest">test</a> list -> <a href="OUnit.html#TYPEtest">test</a></code></pre><div class="info">
+Create a TestLabel for a TestList<br>
+</div>
+<br>
+Some shorthands which allows easy test construction.
+<p>
+
+   Examples:
+<p>
+<ul>
+<li><code class="code"><span class="string">"test1"</span> &gt;: <span class="constructor">TestCase</span>((<span class="keyword">fun</span> _ <span class="keywordsign">-&gt;</span> ()))</code> =&gt;  
+   <code class="code"><span class="constructor">TestLabel</span>(<span class="string">"test2"</span>, <span class="constructor">TestCase</span>((<span class="keyword">fun</span> _ <span class="keywordsign">-&gt;</span> ())))</code></li>
+<li><code class="code"><span class="string">"test2"</span> &gt;:: (<span class="keyword">fun</span> _ <span class="keywordsign">-&gt;</span> ())</code> =&gt; 
+   <code class="code"><span class="constructor">TestLabel</span>(<span class="string">"test2"</span>, <span class="constructor">TestCase</span>((<span class="keyword">fun</span> _ <span class="keywordsign">-&gt;</span> ())))</code></li>
+<li><code class="code"><span class="string">"test-suite"</span> &gt;::: [<span class="string">"test2"</span> &gt;:: (<span class="keyword">fun</span> _ <span class="keywordsign">-&gt;</span> ());]</code> =&gt;
+   <code class="code"><span class="constructor">TestLabel</span>(<span class="string">"test-suite"</span>, <span class="constructor">TestSuite</span>([<span class="constructor">TestLabel</span>(<span class="string">"test2"</span>, <span class="constructor">TestCase</span>((<span class="keyword">fun</span> _ <span class="keywordsign">-&gt;</span> ())))]))</code></li>
+</ul>
+<br>
+<pre><span id="VALtest_decorate"><span class="keyword">val</span> test_decorate</span> : <code class="type">(<a href="OUnit.html#TYPEtest_fun">test_fun</a> -> <a href="OUnit.html#TYPEtest_fun">test_fun</a>) -> <a href="OUnit.html#TYPEtest">test</a> -> <a href="OUnit.html#TYPEtest">test</a></code></pre><div class="info">
+<code class="code">test_decorate g tst</code> Apply <code class="code">g</code> to test function contains in <code class="code">tst</code> tree.<br>
+<b>Since</b> 1.0.3<br>
+</div>
+<pre><span id="VALtest_filter"><span class="keyword">val</span> test_filter</span> : <code class="type">?skip:bool -> string list -> <a href="OUnit.html#TYPEtest">test</a> -> <a href="OUnit.html#TYPEtest">test</a> option</code></pre><div class="info">
+<code class="code">test_filter paths tst</code> Filter test based on their path string representation.<br>
+<b>Since</b> 1.0.3<br>
+</div>
+<br>
+<span id="2_RetrieveInformationfromTests"><h2>Retrieve Information from Tests</h2></span><br>
+<pre><span id="VALtest_case_count"><span class="keyword">val</span> test_case_count</span> : <code class="type"><a href="OUnit.html#TYPEtest">test</a> -> int</code></pre><div class="info">
+Returns the number of available test cases<br>
+</div>
+<br><code><span id="TYPEnode"><span class="keyword">type</span> <code class="type"></code>node</span> = </code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">ListItem</span> <span class="keyword">of</span> <code class="type">int</code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">Label</span> <span class="keyword">of</span> <code class="type">string</code></code></td>
+
+</tr></table>
+
+<div class="info">
+Types which represent the path of a test<br>
+</div>
+
+<pre><span id="TYPEpath"><span class="keyword">type</span> <code class="type"></code>path</span> = <code class="type"><a href="OUnit.html#TYPEnode">node</a> list</code> </pre>
+<div class="info">
+The path to the test (in reverse order).<br>
+</div>
+
+<pre><span id="VALstring_of_node"><span class="keyword">val</span> string_of_node</span> : <code class="type"><a href="OUnit.html#TYPEnode">node</a> -> string</code></pre><div class="info">
+Make a string from a node<br>
+</div>
+<pre><span id="VALstring_of_path"><span class="keyword">val</span> string_of_path</span> : <code class="type"><a href="OUnit.html#TYPEpath">path</a> -> string</code></pre><div class="info">
+Make a string from a path. The path will be reversed before it is 
+    tranlated into a string<br>
+</div>
+<pre><span id="VALtest_case_paths"><span class="keyword">val</span> test_case_paths</span> : <code class="type"><a href="OUnit.html#TYPEtest">test</a> -> <a href="OUnit.html#TYPEpath">path</a> list</code></pre><div class="info">
+Returns a list with paths of the test<br>
+</div>
+<br>
+<span id="2_PerformingTests"><h2>Performing Tests</h2></span><br>
+<br><code><span id="TYPEtest_result"><span class="keyword">type</span> <code class="type"></code>test_result</span> = </code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">RSuccess</span> <span class="keyword">of</span> <code class="type"><a href="OUnit.html#TYPEpath">path</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">RFailure</span> <span class="keyword">of</span> <code class="type"><a href="OUnit.html#TYPEpath">path</a> * string</code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">RError</span> <span class="keyword">of</span> <code class="type"><a href="OUnit.html#TYPEpath">path</a> * string</code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">RSkip</span> <span class="keyword">of</span> <code class="type"><a href="OUnit.html#TYPEpath">path</a> * string</code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">RTodo</span> <span class="keyword">of</span> <code class="type"><a href="OUnit.html#TYPEpath">path</a> * string</code></code></td>
+
+</tr></table>
+
+<div class="info">
+The possible results of a test<br>
+</div>
+
+<br><code><span id="TYPEtest_event"><span class="keyword">type</span> <code class="type"></code>test_event</span> = </code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">EStart</span> <span class="keyword">of</span> <code class="type"><a href="OUnit.html#TYPEpath">path</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">EEnd</span> <span class="keyword">of</span> <code class="type"><a href="OUnit.html#TYPEpath">path</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">EResult</span> <span class="keyword">of</span> <code class="type"><a href="OUnit.html#TYPEtest_result">test_result</a></code></code></td>
+
+</tr></table>
+
+<div class="info">
+Events which occur during a test run<br>
+</div>
+
+<pre><span id="VALperform_test"><span class="keyword">val</span> perform_test</span> : <code class="type">(<a href="OUnit.html#TYPEtest_event">test_event</a> -> 'a) -> <a href="OUnit.html#TYPEtest">test</a> -> <a href="OUnit.html#TYPEtest_result">test_result</a> list</code></pre><div class="info">
+Perform the test, allows you to build your own test runner<br>
+</div>
+<pre><span id="VALrun_test_tt"><span class="keyword">val</span> run_test_tt</span> : <code class="type">?verbose:bool -> <a href="OUnit.html#TYPEtest">test</a> -> <a href="OUnit.html#TYPEtest_result">test_result</a> list</code></pre><div class="info">
+A simple text based test runner. It prints out information
+    during the test.<br>
+</div>
+<div class="param_info"><code class="code">verbose</code> : print verbose message</div>
+<pre><span id="VALrun_test_tt_main"><span class="keyword">val</span> run_test_tt_main</span> : <code class="type">?arg_specs:(Arg.key * Arg.spec * Arg.doc) list -><br>       ?set_verbose:(bool -> unit) -> <a href="OUnit.html#TYPEtest">test</a> -> <a href="OUnit.html#TYPEtest_result">test_result</a> list</code></pre><div class="info">
+Main version of the text based test runner. It reads the supplied command 
+    line arguments to set the verbose level and limit the number of test to 
+    run.<br>
+<b>Version:</b> 1.1.0<br>
+</div>
+<div class="param_info"><code class="code">arg_specs</code> : add extra command line arguments</div>
+<div class="param_info"><code class="code">set_verbose</code> : call a function to set verbosity</div>
+</body></html>

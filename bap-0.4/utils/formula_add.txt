@@ -1,0 +1,16 @@
+% free variables:
+R_ECX_7 : BITVECTOR(32);
+R_EDX_8 : BITVECTOR(32);
+% end free variables.
+
+ASSERT(
+0bin1 =
+(LET initial_edx_76_0 = R_EDX_8 IN
+(LET initial_ecx_77_1 = R_ECX_7 IN
+(LET R_EDX_78_2 = BVPLUS(32, R_EDX_8,R_ECX_7) IN
+(LET final_edx_109_3 = R_EDX_78_2 IN
+IF (NOT(final_edx_109_3=
+BVPLUS(32, initial_edx_76_0,initial_ecx_77_1))) THEN 0bin1 ELSE 0bin0 ENDIF))))
+);
+QUERY(FALSE);
+COUNTEREXAMPLE;

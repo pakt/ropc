@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="OUnit.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="OUnit" rel="Chapter" href="OUnit.html">
+<link title="OUnitDiff" rel="Chapter" href="OUnitDiff.html"><link title="Signatures" rel="Section" href="#2_Signatures">
+<link title="Implementations" rel="Section" href="#2_Implementations">
+<title>OUnit user guide : OUnitDiff</title>
+</head>
+<body>
+<div class="navbar"><a href="OUnit.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;</div>
+<center><h1>Module <a href="type_OUnitDiff.html">OUnitDiff</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> OUnitDiff: <code class="code"><span class="keyword">sig</span></code> <a href="OUnitDiff.html">..</a> <code class="code"><span class="keyword">end</span></code></pre>Unit tests for collection of elements
+<p>
+
+    This module allows to define a more precise way to display differences
+    between collection of elements. When collection differ, the tester is 
+    interested by what are the missing/extra elements. This module provides
+    a <code class="code">diff</code> operation to spot the difference quickly between two sets of
+    elements.
+<p>
+
+    Example:
+<pre></pre><code class="code"><span class="keyword">open</span>&nbsp;<span class="constructor">OUnit</span>;;<br>
+<br>
+<span class="keyword">module</span>&nbsp;<span class="constructor">EInt</span>&nbsp;=&nbsp;<br>
+<span class="keyword">struct</span>&nbsp;<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;t&nbsp;=&nbsp;int<br>
+&nbsp;&nbsp;<span class="keyword">let</span>&nbsp;compare&nbsp;=&nbsp;(&nbsp;-&nbsp;)<br>
+&nbsp;&nbsp;<span class="keyword">let</span>&nbsp;pp_print&nbsp;=&nbsp;<span class="constructor">Format</span>.pp_print_int<br>
+&nbsp;&nbsp;<span class="keyword">let</span>&nbsp;pp_print_sep&nbsp;=&nbsp;<span class="constructor">OUnitDiff</span>.comma_separator<br>
+<span class="keyword">end</span><br>
+<br>
+<span class="keyword">module</span>&nbsp;<span class="constructor">ListInt</span>&nbsp;=&nbsp;<span class="constructor">OUnitDiff</span>.<span class="constructor">ListSimpleMake</span>(<span class="constructor">EInt</span>);;<br>
+<br>
+<span class="keyword">let</span>&nbsp;test_diff&nbsp;()&nbsp;=&nbsp;<br>
+&nbsp;&nbsp;<span class="constructor">ListInt</span>.assert_equal<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[1;&nbsp;2;&nbsp;3;&nbsp;4;&nbsp;5]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[1;&nbsp;2;&nbsp;5;&nbsp;4]<br>
+;;<br>
+<br>
+<span class="keyword">let</span>&nbsp;_&nbsp;=&nbsp;<br>
+&nbsp;&nbsp;run_test_tt_main&nbsp;(<span class="string">"test_diff"</span>&nbsp;&gt;::&nbsp;test_diff)<br>
+;;<br>
+</code><pre></pre>
+<p>
+
+when run this test outputs:
+<pre></pre><code class="code"><span class="constructor">OUnit</span>:&nbsp;expected:&nbsp;1,&nbsp;2,&nbsp;3,&nbsp;4,&nbsp;5&nbsp;but&nbsp;got:&nbsp;1,&nbsp;2,&nbsp;5,&nbsp;4<br>
+differences:&nbsp;element&nbsp;number&nbsp;2&nbsp;differ&nbsp;(3&nbsp;&lt;&gt;&nbsp;5)<br>
+</code><pre></pre><br>
+<b>Author(s):</b> Sylvain Le Gall<br>
+<b>Since</b> 1.1.0<br>
+<hr width="100%">
+<br>
+<span id="2_Signatures"><h2>Signatures</h2></span><br>
+<pre><span class="keyword">module type</span> <a href="OUnitDiff.DIFF_ELEMENT.html">DIFF_ELEMENT</a> = <code class="code"><span class="keyword">sig</span></code> <a href="OUnitDiff.DIFF_ELEMENT.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Definition of an element
+</div>
+<pre><span class="keyword">module type</span> <a href="OUnitDiff.S.html">S</a> = <code class="code"><span class="keyword">sig</span></code> <a href="OUnitDiff.S.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Definition of standard operations
+</div>
+<br>
+<span id="2_Implementations"><h2>Implementations</h2></span><br>
+<pre><span class="keyword">module</span> <a href="OUnitDiff.SetMake.html">SetMake</a>: <div class="sig_block"><code class="code"><span class="keyword">functor</span> (</code><code class="code"><span class="constructor">D</span></code><code class="code"> : </code><code class="type"><a href="OUnitDiff.DIFF_ELEMENT.html">DIFF_ELEMENT</a></code><code class="code">) <span class="keywordsign">-&gt;</span> </code><code class="type"><a href="OUnitDiff.S.html">S</a></code><code class="type">  
+  with type e = D.t</code></div></pre><div class="info">
+Collection of elements based on a Set, elements order doesn't matter
+</div>
+<pre><span class="keyword">module</span> <a href="OUnitDiff.ListSimpleMake.html">ListSimpleMake</a>: <div class="sig_block"><code class="code"><span class="keyword">functor</span> (</code><code class="code"><span class="constructor">D</span></code><code class="code"> : </code><code class="type"><a href="OUnitDiff.DIFF_ELEMENT.html">DIFF_ELEMENT</a></code><code class="code">) <span class="keywordsign">-&gt;</span> </code><code class="type"><a href="OUnitDiff.S.html">S</a></code><code class="type">  
+  with type e = D.t and type t = D.t list</code></div></pre><div class="info">
+Collection of elements based on a List, order matters but difference display
+    is very simple.
+</div>
+<pre><span id="VALpp_comma_separator"><span class="keyword">val</span> pp_comma_separator</span> : <code class="type">Format.formatter -> unit -> unit</code></pre></body></html>

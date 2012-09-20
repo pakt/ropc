@@ -1,0 +1,73 @@
+<html><head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="OUnit" rel="Chapter" href="OUnit.html">
+<link title="OUnitDiff" rel="Chapter" href="OUnitDiff.html"><title>OUnit user guide : OUnit</title>
+</head>
+<body>
+<code class="code"><span class="keyword">sig</span><br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;assert_failure&nbsp;:&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;assert_bool&nbsp;:&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;(&nbsp;@?&nbsp;)&nbsp;:&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;assert_string&nbsp;:&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;assert_command&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?exit_code:<span class="constructor">Unix</span>.process_status&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?sinput:char&nbsp;<span class="constructor">Stream</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?foutput:(char&nbsp;<span class="constructor">Stream</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit)&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?use_stderr:bool&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?env:string&nbsp;array&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;?verbose:bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;assert_equal&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?cmp:(<span class="keywordsign">'</span>a&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool)&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?printer:(<span class="keywordsign">'</span>a&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string)&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?pp_diff:(<span class="constructor">Format</span>.formatter&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;*&nbsp;<span class="keywordsign">'</span>a&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit)&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?msg:string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;assert_raises&nbsp;:&nbsp;?msg:string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;exn&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;skip_if&nbsp;:&nbsp;bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;todo&nbsp;:&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;cmp_float&nbsp;:&nbsp;?epsilon:float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;bracket&nbsp;:&nbsp;(unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>a&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>b)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="keywordsign">'</span>a&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>c)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>c<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;bracket_tmpfile&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?prefix:string&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?suffix:string&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?mode:<span class="constructor">Pervasives</span>.open_flag&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(string&nbsp;*&nbsp;<span class="constructor">Pervasives</span>.out_channel&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;test_fun&nbsp;=&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;test&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">TestCase</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">OUnit</span>.test_fun<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">TestList</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">OUnit</span>.test&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">TestLabel</span>&nbsp;<span class="keyword">of</span>&nbsp;string&nbsp;*&nbsp;<span class="constructor">OUnit</span>.test<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;(&nbsp;&gt;:&nbsp;)&nbsp;:&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;(&nbsp;&gt;::&nbsp;)&nbsp;:&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test_fun&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;(&nbsp;&gt;:::&nbsp;)&nbsp;:&nbsp;string&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;test_decorate&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">OUnit</span>.test_fun&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test_fun)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;test_filter&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?skip:bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test&nbsp;option<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;test_case_count&nbsp;:&nbsp;<span class="constructor">OUnit</span>.test&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;int<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;node&nbsp;=&nbsp;<span class="constructor">ListItem</span>&nbsp;<span class="keyword">of</span>&nbsp;int&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">Label</span>&nbsp;<span class="keyword">of</span>&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;path&nbsp;=&nbsp;<span class="constructor">OUnit</span>.node&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;string_of_node&nbsp;:&nbsp;<span class="constructor">OUnit</span>.node&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;string_of_path&nbsp;:&nbsp;<span class="constructor">OUnit</span>.path&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;test_case_paths&nbsp;:&nbsp;<span class="constructor">OUnit</span>.test&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.path&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;test_result&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">RSuccess</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">OUnit</span>.path<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">RFailure</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">OUnit</span>.path&nbsp;*&nbsp;string<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">RError</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">OUnit</span>.path&nbsp;*&nbsp;string<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">RSkip</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">OUnit</span>.path&nbsp;*&nbsp;string<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">RTodo</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">OUnit</span>.path&nbsp;*&nbsp;string<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;test_event&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">EStart</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">OUnit</span>.path<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">EEnd</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">OUnit</span>.path<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">EResult</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">OUnit</span>.test_result<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;perform_test&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="constructor">OUnit</span>.test_event&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test_result&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;run_test_tt&nbsp;:&nbsp;?verbose:bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test_result&nbsp;list<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;run_test_tt_main&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?arg_specs:(<span class="constructor">Arg</span>.key&nbsp;*&nbsp;<span class="constructor">Arg</span>.spec&nbsp;*&nbsp;<span class="constructor">Arg</span>.doc)&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;?set_verbose:(bool&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">OUnit</span>.test_result&nbsp;list<br>
+<span class="keyword">end</span></code></body></html>
