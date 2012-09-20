@@ -1,0 +1,13 @@
+*.o
+*.cmo
+*.cma
+*.cmxa
+*.so
+*.cmx
+*.cmi
+*.zip
+*.a
+*.cmxs
+*.dbg
+*.bin
+a.out

@@ -1,0 +1,1 @@
+run compiled.bin
