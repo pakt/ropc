@@ -19,7 +19,7 @@ VERIFY_OBJS = common.cmo int_utils.cmo gdefs.cmo
 
 OPTS = 
 
-all: ropc gadget
+all: dumper verify gadget ropc
 	
 ropc: common.cmo lexer.cmo cdefs.cmo analysis.cmo main.cmo 
 	ocamlfind ocamlc -package extlib -linkpkg -o ropc common.cmo ast.cmo lexer.cmo parser.cmo cdefs.cmo analysis.cmo main.cmo
