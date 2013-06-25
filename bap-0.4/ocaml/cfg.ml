@@ -124,6 +124,7 @@ struct
     let mem_edge     x = G'.mem_edge     x.g
     let mem_edge_e   x = G'.mem_edge_e   x.g
     let find_edge    x = G'.find_edge	 x.g  
+    let find_all_edges   x = G'.find_all_edges  x.g
     let succ	     x = G'.succ	 x.g  
     let pred	     x = G'.pred	 x.g  
     let succ_e	     x = G'.succ_e	 x.g  
